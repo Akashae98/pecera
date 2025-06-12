@@ -138,7 +138,6 @@ public class Fish {
                 }
             }
         }
-        
          // Eye
             gc.setFill(Color.WHITE);
             gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
