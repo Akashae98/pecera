@@ -13,15 +13,17 @@ import javafx.scene.paint.Color;
  * and maybe other movements...
  */
 public class Bubble {
-      double x, y, radio, speed;
+     double x, y, radio, speed;
       int CANVAS_WIDTH = 600;
       int CANVAS_HEIGHT = 400;
+      private Movement m;
 
     public Bubble(double x, double y) {
         this.x = x;
         this.y = y;
         this.radio = 3 + Math.random() * 3;/*bubble ratio using Math.random for variability*/
         this.speed = 0.5 + Math.random(); /*speed of the movement using variability with random.*/
+        this.m= new Movement ();
     }
 
     public void mover() {
