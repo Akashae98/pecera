@@ -8,34 +8,31 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
- * This class represents bubbles. 
- * Controls its position, change of posifition and draws simulating movement upwards,
- * and maybe other movements...
+ *
+ * @author ivani
  */
 public class Bubble {
-     double x, y, radio, speed;
-      int CANVAS_WIDTH = 600;
-      int CANVAS_HEIGHT = 400;
-      private Movement m;
+
+    double x, y, radio, speed;
+    int CANVAS_WIDTH = 600;
+    int CANVAS_HEIGHT = 400;
+    private Movement m;
 
     public Bubble(double x, double y) {
         this.x = x;
         this.y = y;
         this.radio = 3 + Math.random() * 3;/*bubble ratio using Math.random for variability*/
-        this.speed = 0.5 + Math.random(); /*speed of the movement using variability with random.*/
-        this.m= new Movement ();
+        this.speed = 0.5 + Math.random();
+        /*speed of the movement using variability with random.*/
+        this.m = new Movement();
     }
 
     public void mover() {
-        //the position of y decreases starting on the bottom,that makes bubbles GO UP.
+        //the position of y decreases
         y -= speed;
-        if (y + radio < 0) { //If bubble passes the top, returns down to canvas height
-            y = CANVAS_HEIGHT + Math.random() * 50;
-        //remember 400 is the height and the down limit of the aquarium.
-        //with random, bubbles dont appear in the same position of y, so the flow its more natural.
-       /* } else{
-            x = Math.random() * CANVAS_WIDTH; //this adds a watercourse
-       */ }
+        //the position of y returns to the bottom
+        this.y = m.moviAscend(y, radio);
+        
     }
 
     public void dibujar(GraphicsContext gc) {

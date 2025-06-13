@@ -25,7 +25,7 @@ public class Movement {
     }  
     return newDirection;
 }
-    public double moviAscend(double y, int radio) {    
+    public double moviAscend(double y, double radio) {    
      // if position + ratio exceeds the top...
         if (y + radio < 0) { 
             y = height + Math.random() * 50;
