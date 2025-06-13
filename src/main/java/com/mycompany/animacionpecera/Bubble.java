@@ -25,7 +25,7 @@ public class Bubble {
         this.m = new Movement();
     }
 
-    public void mover() {
+    public void move() {
         //the position of y decreases to the top
         y -= speed;
         //the position of y returns to the bottom
@@ -33,7 +33,7 @@ public class Bubble {
         
     }
 
-    public void dibujar(GraphicsContext gc) {
+    public void draw(GraphicsContext gc) {
         gc.setFill(Color.rgb(255, 255, 255, 0.3)); //white color semitransparent
         gc.fillOval(x, y, radio, radio);//fills with color the inside of bubble
         gc.setStroke(Color.rgb(255, 255, 255, 0.5));//white color for the bubble edge

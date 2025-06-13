@@ -61,8 +61,8 @@ public class Animation extends Application {
             
             //draws/animates bubbles
             for (Bubble b : bubbleList) {
-                b.mover();
-                b.dibujar(gc);
+                b.move();
+                b.draw(gc);
             }
             //draws/animates fishes
             fishTank.animate(gc, (int)canvas.getWidth(), (int)canvas.getHeight());
