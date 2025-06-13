@@ -19,15 +19,7 @@ public class FishTank {
     public FishTank() {
         this.fishesList = new ArrayList<>();
     }
-
-    public static int getCANVAS_WIDTH() {
-        return CANVAS_WIDTH;
-    }
-
-    public static int getCANVAS_HEIGH() {
-        return CANVAS_HEIGH;
-    }
-
+ 
     // Adds a fish in the array and creates a fish in a position
     public void addFish(double x, double y) {
         fishesList.add(new Fish(x, y));
