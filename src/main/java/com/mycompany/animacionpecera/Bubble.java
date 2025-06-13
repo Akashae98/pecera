@@ -14,6 +14,10 @@ import javafx.scene.paint.Color;
 public class Bubble {
 
     double x, y, radio, speed;
+
+    int CANVAS_WIDTH = 600;
+    int CANVAS_HEIGHT = 400;
+
     private Movement movement;
 
     public Bubble(double x, double y) {
