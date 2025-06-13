@@ -22,7 +22,7 @@ public class Fish {
     private static final Random random = new Random(); //Instance of random
     private final boolean hasFishFin; //defines if it has a fish fin.
     private final double size;
-    private Movement m;
+    private Movement movement;
 
     public Fish(double x, double y) {
         this.x = x;
@@ -32,7 +32,7 @@ public class Fish {
         this.color = colorGenerator(); //Assigns a color
         this.hasFishFin = random.nextBoolean(); //decides by random true or false 
         this.size = 0.5 + random.nextDouble();
-              this.m = new Movement();
+              this.movement = new Movement();
 
     }
     // Method for generating blue, pink, purple or default: coral
@@ -68,7 +68,7 @@ public class Fish {
     public void move(int width, int height) {
         x += dx; // horizontal movement
         y += dy; // vertical move
-        double[] newDirect = m.rebound(x, y, dx, dy);
+        double[] newDirect = movement.rebound(x, y, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
     }
