@@ -28,7 +28,7 @@ public class Bubble {
     }
 
     public void mover() {
-        //the position of y decreases
+        //the position of y decreases to the top
         y -= speed;
         //the position of y returns to the bottom
         this.y = m.moviAscend(y, radio);
