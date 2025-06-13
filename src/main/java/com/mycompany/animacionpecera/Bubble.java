@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 public class Bubble {
 
     double x, y, radio, speed;
-    private Movement m;
+    private Movement movement;
 
     public Bubble(double x, double y) {
         this.x = x;
@@ -22,14 +22,14 @@ public class Bubble {
         this.radio = 3 + Math.random() * 3;/*bubble ratio using Math.random for variability*/
         this.speed = 0.5 + Math.random();
         /*speed of the movement using variability with random.*/
-        this.m = new Movement();
+        this.movement = new Movement();
     }
 
     public void move() {
         //the position of y decreases to the top
         y -= speed;
         //the position of y returns to the bottom
-        this.y = m.moviAscend(y, radio);
+        this.y = movement.moviAscend(y, radio);
         
     }
 
