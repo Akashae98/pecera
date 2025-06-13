@@ -31,7 +31,7 @@ public class Animation extends Application {
     @Override
     public void start(Stage stage) {
         // Canvas of 600x400 pixels habilitates to draw
-        Canvas canvas = new Canvas(600, 400);
+        Canvas canvas = new Canvas(FishTank.CANVAS_WIDTH,FishTank.CANVAS_HEIGH);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
         fishTank = new FishTank(); //instance of FishTank
         
