@@ -11,14 +11,15 @@ import javafx.scene.canvas.GraphicsContext;
  This class manages a list of fishes.
  */
 public class FishTank {
-    // list that contains the fishes
+    public final static int CANVAS_WIDTH = 600;
+    public final static int CANVAS_HEIGH = 400;
     private ArrayList<Fish> fishesList;
 
     // Constructor: intitialize array list
     public FishTank() {
         this.fishesList = new ArrayList<>();
     }
-
+ 
     // Adds a fish in the array and creates a fish in a position
     public void addFish(double x, double y) {
         fishesList.add(new Fish(x, y));
