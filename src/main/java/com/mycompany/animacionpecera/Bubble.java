@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 public class Bubble {
 
     double x, y, radio, speed;
-    private Movement movement;
+    private final Movement movement;
 
     public Bubble(double x, double y) {
         this.x = x;

@@ -17,15 +17,13 @@ public abstract class AnimationFishIdle {
     protected double size;
     protected boolean hasFishFin;
     
-
     public AnimationFishIdle(double x, double y, double size, boolean hasFishFin) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.hasFishFin= hasFishFin;
     }
-
-   
+ 
     // Abstract method for each subclass
     public abstract void draw(GraphicsContext gc);
     
@@ -61,8 +59,6 @@ public abstract class AnimationFishIdle {
         drawEye(gc);
     }
         
-
-
     protected void drawFishFin(GraphicsContext gc, Color color) {
         gc.setStroke(color.darker());
         gc.setLineWidth(2 * size);

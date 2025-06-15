@@ -13,7 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class FishTank {
     public final static int CANVAS_WIDTH = 600;
     public final static int CANVAS_HEIGH = 400;
-    private ArrayList<Fish> fishesList;
+    private final ArrayList<Fish> fishesList;
 
     // Constructor: intitialize array list
     public FishTank() {

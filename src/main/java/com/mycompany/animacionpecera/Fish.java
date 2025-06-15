@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
  *
  */
 public class Fish extends AnimationFishIdle {
-
    
     private double dx, dy;    //Direction for movement
     private final Color color;
