@@ -32,7 +32,7 @@ public class Fish {
         this.color = colorGenerator(); //Assigns a color
         this.hasFishFin = random.nextBoolean(); //decides by random true or false 
         this.size = 0.5 + random.nextDouble();
-              this.movement = new Movement();
+        this.movement = new Movement();
 
     }
     // Method for generating blue, pink, purple or default: coral
