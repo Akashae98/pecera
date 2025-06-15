@@ -23,6 +23,7 @@ public class Fish {
     private final boolean hasFishFin; //defines if it has a fish fin.
     private final double size;
     private Movement movement;
+    private boolean dibujarPezRojo;
 
     public Fish(double x, double y) {
         this.x = x;
@@ -33,6 +34,7 @@ public class Fish {
         this.hasFishFin = random.nextBoolean(); //decides by random true or false 
         this.size = 0.5 + random.nextDouble();
         this.movement = new Movement();
+        this.dibujarPezRojo= dibujarPezRojo();
 
     }
     // Method for generating blue, pink, purple or default: coral
@@ -62,6 +64,13 @@ public class Fish {
             default:
                 return Color.CORAL;
         }
+    }
+
+    public boolean dibujarPezRojo() {
+        if (this.color == Color.CORAL) {
+            return true;
+        }
+        return false;
     }
 
     //Method of movement
@@ -116,7 +125,7 @@ public class Fish {
             gc.setFill(brighterTransparent);
 
             double scaleWidth = 6 * size * 0.4;   //ajusted width and height
-            double scaleHeight = 3 * size * 0.5;  
+            double scaleHeight = 3 * size * 0.5;
             int scalesPerRow = 6;    //6 scales in the body per row
             int rowCount = 3;        //number of rows in the body
 
@@ -127,8 +136,8 @@ public class Fish {
             //margin between scales in the body ajusted to the size
             double spacing = 5 * size;  //horiz.
             double rowSpacing = 4 * size;  //vertical
-            
-             //Loop to draw the scales
+
+            //Loop to draw the scales
             for (int row = 0; row < rowCount; row++) {
                 for (int i = 0; i < scalesPerRow; i++) {
                     // position of every scale
@@ -138,8 +147,8 @@ public class Fish {
                 }
             }
         }
-         // Eye
-            gc.setFill(Color.WHITE);
-            gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
+        // Eye
+        gc.setFill(Color.WHITE);
+        gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }
 }
