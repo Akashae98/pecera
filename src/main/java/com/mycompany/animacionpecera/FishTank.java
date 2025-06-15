@@ -13,7 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class FishTank {
     public final static int CANVAS_WIDTH = 600;
     public final static int CANVAS_HEIGH = 400;
-    private ArrayList<Fish> fishesList;
+    private final ArrayList<Fish> fishesList;
 
     // Constructor: intitialize array list
     public FishTank() {
@@ -32,7 +32,7 @@ public class FishTank {
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
             fish.move(width, height);   
-            fish.dibujar(gc);            
+            fish.draw(gc);            
         }
     }
 }
