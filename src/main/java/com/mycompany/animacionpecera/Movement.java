@@ -10,7 +10,7 @@ package com.mycompany.animacionpecera;
  */
 public class Movement {
    //limits of the aquarium
-    int width= FishTank.CANVAS_WIDTH;
+    int width = FishTank.CANVAS_WIDTH;
     int height = FishTank.CANVAS_HEIGH;
     
     //this method changes direction before object passes the limits
