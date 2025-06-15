@@ -32,7 +32,7 @@ public class FishTank {
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
             fish.move(width, height);   
-            fish.dibujar(gc);            
+            fish.draw(gc);            
         }
     }
 }
