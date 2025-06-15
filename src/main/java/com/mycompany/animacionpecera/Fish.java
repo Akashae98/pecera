@@ -20,23 +20,23 @@ public class Fish extends AnimationFishIdle {
     private final Color color;
     private static final Random random = new Random(); //Instance of random
     private Movement movement;
-    private boolean dibujarPezRojo;
+    private boolean isCoral;
+ 
 
     public Fish(double x, double y) {
         super(x, y, 
              0.5 + random.nextDouble(),//for size 
-             random.nextBoolean());//decides by fishfin random true or false 
+             random.nextBoolean());//decides fishfin random true or false 
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
         this.color = colorGenerator();
-        this.dibujarPezRojo= dibujarPezRojo();
-
+        this.isCoral = CoralFish();
     }
     // Method for generating blue, pink, purple or default: coral
 
     private Color colorGenerator() {
-        int selector = random.nextInt(3);//selects between 0, 1 o 2
+        int selector = random.nextInt(4);//selects between 0, 1 o 2
 
         switch (selector) {
             case 0: //Blue colors
@@ -62,11 +62,8 @@ public class Fish extends AnimationFishIdle {
         }
     }
 
-    public boolean dibujarPezRojo() {
-        if (this.color == Color.CORAL) {
-            return true;
-        }
-        return false;
+    public final boolean CoralFish() {
+        return this.isCoral= this.color.equals(Color.CORAL);
     }
 
     //Method of movement
@@ -80,6 +77,9 @@ public class Fish extends AnimationFishIdle {
 
     //Method for drawing
     public void draw(GraphicsContext gc) {
+        if (isCoral){
+            drawCoralFish(gc);
+        }
         drawNormalFish(gc, this.color);
     }
     

@@ -5,6 +5,7 @@
 package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -16,17 +17,35 @@ public abstract class AnimationFishIdle {
     protected double x, y;
     protected double size;
     protected boolean hasFishFin;
+    protected boolean isCoralFish;
+    protected Image image;
     
     public AnimationFishIdle(double x, double y, double size, boolean hasFishFin) {
         this.x = x;
         this.y = y;
         this.size = size;
-        this.hasFishFin= hasFishFin;
-    }
+        this.hasFishFin = hasFishFin;
+} 
+    
  
     // Abstract method for each subclass
     public abstract void draw(GraphicsContext gc);
     
+     private void chargeDraw() {
+        try {
+            this.image = new Image(getClass().getResourceAsStream("/Images/sketchPezCoral.png"));
+        } catch (Exception e) {
+            System.err.println("Error al cargar imagen de pez coral: " + e.getMessage());
+        }
+    }
+     
+     protected void drawCoralFish(GraphicsContext gc) {
+           chargeDraw();
+            double ancho = image.getWidth() * size;
+            double alto = image.getHeight() * size;
+            gc.drawImage(image, x, y, ancho, alto);
+    }
+
     //Method for drawing
     public void drawNormalFish(GraphicsContext gc, Color color) {
         gc.setFill(color);
