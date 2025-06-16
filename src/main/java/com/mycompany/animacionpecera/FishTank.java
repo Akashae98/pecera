@@ -13,7 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class FishTank {
     public final static int CANVAS_WIDTH = 600;
     public final static int CANVAS_HEIGH = 400;
-    private ArrayList<Fish> fishesList;
+    private final ArrayList<Fish> fishesList;
 
     // Constructor: intitialize array list
     public FishTank() {
@@ -22,7 +22,8 @@ public class FishTank {
  
     // Adds a fish in the array and creates a fish in a position
     public void addFish(double x, double y) {
-        fishesList.add(new Fish(x, y));
+        Animation anim = new AnimationFishIdle(x, y); 
+        fishesList.add(new Fish(x, y, anim));
     }
 
     // To animate fishes first we change its position and then we draw
@@ -32,7 +33,7 @@ public class FishTank {
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
             fish.move(width, height);   
-            fish.dibujar(gc);            
+            fish.draw(gc);            
         }
     }
 }
