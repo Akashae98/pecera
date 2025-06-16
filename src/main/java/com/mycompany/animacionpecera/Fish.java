@@ -6,6 +6,7 @@ package com.mycompany.animacionpecera;
 
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This class let us create fishes with position, velocity and random colors,
@@ -18,6 +19,7 @@ public class Fish {
     private double dx, dy;    //Direction for movement
     private final Movement movement;
     private final Animation animation;
+    private Color color;
 
     public Fish(double x, double y, Animation animation) {
         this.x= x;
@@ -30,6 +32,11 @@ public class Fish {
          /**
         Color color = animation.getColor();
         boolean isCoral = color.equals(Color.CORAL); 
+        if (isCoral) {
+        this.animation = new AnimationCoralFish(x, y);
+        } else {
+        this.animation = new AnimationFishIdle(x, y);
+        }
         */  
     }
     

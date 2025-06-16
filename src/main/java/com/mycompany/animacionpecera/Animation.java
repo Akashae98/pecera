@@ -41,7 +41,7 @@ public abstract class Animation {
     }
     
     private Color colorGenerator() {
-        int selector = random.nextInt(3);//selects between 0, 1 o 2
+        int selector = random.nextInt(4);//selects between 0, 1 o 2
 
         switch (selector) {
             case 0: //Blue colors
