@@ -4,6 +4,7 @@
  */
 package com.mycompany.animacionpecera;
 
+import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -11,24 +12,19 @@ import javafx.scene.paint.Color;
  *
  * @author carol
  */
-public abstract class AnimationFishIdle {
+public class AnimationFishIdle extends Animation {
     
-    protected double x, y;
-    protected double size;
     protected boolean hasFishFin;
+    private static final Random random = new Random(); //Instance of random
     
-    public AnimationFishIdle(double x, double y, double size, boolean hasFishFin) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        this.hasFishFin= hasFishFin;
+   public AnimationFishIdle(double x, double y) {
+        super(x, y);
+        this.hasFishFin = random.nextBoolean();
     }
  
-    // Abstract method for each subclass
-    public abstract void draw(GraphicsContext gc);
-    
     //Method for drawing
-    public void drawNormalFish(GraphicsContext gc, Color color) {
+    @Override
+    public void draw(GraphicsContext gc) {
         gc.setFill(color);
         int baseFishWidth = 36;
         int baseFishHeight = 22;
@@ -93,4 +89,5 @@ public abstract class AnimationFishIdle {
         gc.setFill(Color.WHITE);
         gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }
+    
 }

@@ -14,6 +14,7 @@ public class FishTank {
     public final static int CANVAS_WIDTH = 600;
     public final static int CANVAS_HEIGH = 400;
     private final ArrayList<Fish> fishesList;
+    private Animation anim;
 
     // Constructor: intitialize array list
     public FishTank() {
@@ -22,7 +23,8 @@ public class FishTank {
  
     // Adds a fish in the array and creates a fish in a position
     public void addFish(double x, double y) {
-        fishesList.add(new Fish(x, y));
+        Animation anim = new AnimationFishIdle(x, y); 
+        fishesList.add(new Fish(x, y, anim));
     }
 
     // To animate fishes first we change its position and then we draw
