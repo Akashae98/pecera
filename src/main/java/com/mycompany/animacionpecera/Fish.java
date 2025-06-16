@@ -21,23 +21,21 @@ public class Fish {
     private final Animation animation;
     private Color color;
 
-    public Fish(double x, double y, Animation animation) {
+    public Fish(double x, double y) {
         this.x= x;
         this.y= y;
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        this.animation = animation;
-        this.animation.setPosition(x, y);
-         /**
-        Color color = animation.getColor();
-        boolean isCoral = color.equals(Color.CORAL); 
-        if (isCoral) {
+        //we use a temporary instance to choose betwen coralfish  or fishidle
+        AnimationFishIdle temp = new AnimationFishIdle(x,y);
+        Color color = temp.getColor();
+        if (color.equals(Color.CORAL)) {
         this.animation = new AnimationCoralFish(x, y);
         } else {
         this.animation = new AnimationFishIdle(x, y);
         }
-        */  
+        this.animation.setPosition(x, y);
     }
     
 
@@ -52,7 +50,7 @@ public class Fish {
         animation.setPosition(x, y);
     }
 
-    //Method for drawing
+    //Method for drawing overrided
     public void draw(GraphicsContext gc) {
         animation.draw(gc);
     }
