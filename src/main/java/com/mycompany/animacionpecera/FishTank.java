@@ -14,7 +14,6 @@ public class FishTank {
     public final static int CANVAS_WIDTH = 600;
     public final static int CANVAS_HEIGH = 400;
     private final ArrayList<Fish> fishesList;
-    private Animation anim;
 
     // Constructor: intitialize array list
     public FishTank() {

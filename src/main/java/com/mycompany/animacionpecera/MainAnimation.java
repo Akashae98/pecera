@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 public class MainAnimation extends Application {
     private FishTank fishTank;// Object controlling fishes
     private GraphicsContext gc; //Graphic context to draw in the canvas
-    private List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
+    private final List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
 
 
     @Override

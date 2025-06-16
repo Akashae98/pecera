@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
  */
 public class AnimationFishIdle extends Animation {
     
-    private boolean hasFishFin;
+    private final boolean hasFishFin;
     private static final Random random = new Random(); //Instance of random
     
    public AnimationFishIdle(double x, double y) {
