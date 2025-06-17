@@ -6,7 +6,6 @@ package com.mycompany.animacionpecera;
 
 import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -14,19 +13,21 @@ import javafx.scene.paint.Color;
  * @author carol
  */
 public class AnimationFishIdle extends Animation {
-    
+   
     private final boolean hasFishFin;
+    private ColorRandom color;
     private static final Random random = new Random(); //Instance of random
     
-   public AnimationFishIdle(double x, double y) {
-        super(x, y);
+   public AnimationFishIdle(double size, ColorRandom color) {
+        super(size);
         this.hasFishFin = random.nextBoolean();
+        this.color= color;
     }
  
     //Method for drawing
     @Override
-    public void draw(GraphicsContext gc) {
-        gc.setFill(color);
+    public void draw(GraphicsContext gc, double x, double y) {
+        gc.setFill(color.getColor());
         int baseFishWidth = 36;
         int baseFishHeight = 22;
         double fishWidth = baseFishWidth * size;
@@ -48,22 +49,22 @@ public class AnimationFishIdle extends Animation {
         };
         gc.fillPolygon(tailX, tailY, 3);
          if (hasFishFin) {
-            drawFishFin(gc, color);
+            drawFishFin(gc, x, y, color);
         } else {
-            drawScales(gc, color);
+            drawScales(gc,x,y, color);
         }
 
-        drawEye(gc);
+        drawEye(gc, x, y);
     }
         
-    protected void drawFishFin(GraphicsContext gc, Color color) {
-        gc.setStroke(color.darker());
+    protected void drawFishFin(GraphicsContext gc, double x, double y, ColorRandom color) {
+        gc.setStroke(color.getColor().darker());
         gc.setLineWidth(2 * size);
         gc.strokeLine(x + 10 * size, y - 8 * size, x + 20 * size, y - 17 * size);
     }
 
-    protected void drawScales(GraphicsContext gc, Color color) {
-        Color bright = color.brighter();
+    protected void drawScales(GraphicsContext gc,double x, double y, ColorRandom color) {
+        Color bright = color.getColor().brighter();
         Color brighterTransparent = new Color(bright.getRed(), bright.getGreen(), bright.getBlue(), 0.8);
         gc.setFill(brighterTransparent);
 
@@ -86,7 +87,7 @@ public class AnimationFishIdle extends Animation {
         }
     }
 
-    protected void drawEye(GraphicsContext gc) {
+    protected void drawEye(GraphicsContext gc, double x, double y) {
         gc.setFill(Color.WHITE);
         gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }

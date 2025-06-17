@@ -5,6 +5,7 @@
 package com.mycompany.animacionpecera;
 
 import java.util.ArrayList;
+import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -14,6 +15,7 @@ public class FishTank {
     public final static int CANVAS_WIDTH = 600;
     public final static int CANVAS_HEIGH = 400;
     private final ArrayList<Fish> fishesList;
+    private static final Random random = new Random();
 
     // Constructor: intitialize array list
     public FishTank() {
@@ -22,7 +24,7 @@ public class FishTank {
  
     // Adds a fish in the array and creates a fish in a position
     public void addFish(double x, double y) { 
-        fishesList.add(new Fish(x, y));
+        fishesList.add(new Fish(x, y, 0.5 + random.nextDouble()));
     }
 
     // To animate fishes first we change its position and then we draw

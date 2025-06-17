@@ -4,7 +4,7 @@
  */
 package com.mycompany.animacionpecera;
 
-
+import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -15,29 +15,23 @@ import javafx.scene.paint.Color;
  *
  */
 public class Fish {
+
     private double x, y;
     private double dx, dy;    //Direction for movement
-    private final Movement movement;
-    private final Animation animation;
-    private Color color;
+    private Movement movement;
+    private final Animation anim;
+    private static final Random random = new Random(); //Instance of random 
+    private ColorRandom color = new ColorRandom();
 
-    public Fish(double x, double y) {
-        this.x= x;
-        this.y= y;
+    public Fish(double x, double y, double size) {
+        this.x = x;
+        this.y = y;
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        //we use a temporary instance to choose betwen coralfish  or fishidle
-        AnimationFishIdle temp = new AnimationFishIdle(x,y);
-        Color color = temp.getColor();
-        if (color.equals(Color.CORAL)) {
-        this.animation = new AnimationCoralFish(x, y);
-        } else {
-        this.animation = new AnimationFishIdle(x, y);
-        }
-        this.animation.setPosition(x, y);
+        this.anim = new AnimationFishIdle(size, this.color);
+     
     }
-    
 
     //Method of movement
     public void move(int width, int height) {
@@ -46,13 +40,12 @@ public class Fish {
         double[] newDirect = movement.rebound(x, y, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
-        
-        animation.setPosition(x, y);
+
     }
 
-    //Method for drawing overrided
+    //Method for drawing
     public void draw(GraphicsContext gc) {
-        animation.draw(gc);
+        anim.draw(gc, x, y);
     }
-    
+
 }
