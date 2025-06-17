@@ -13,29 +13,20 @@ import javafx.scene.paint.Color;
  * @author carol
  */
 public abstract class Animation {
-
-    protected double x;
-    protected double y;
+ 
     protected double size;
     protected Color color;
     private static final Random random = new Random(); //Instance of random    
 
-    public Animation(double x, double y) {
-        this.x = x;
-        this.y = y;
-        this.size = 0.5 + random.nextDouble();
+    public Animation(double size) {
+        this.size = size;
         this.color = colorGenerator();
     }
 
     // Abstract method for each subclass
-    public abstract void draw(GraphicsContext gc);
+    public abstract void draw(GraphicsContext gc, double x, double y);
 
-
-    public void setPosition(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-    
+ 
     public Color getColor() {
         return color;
     }

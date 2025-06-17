@@ -22,8 +22,8 @@ public class FishTank {
  
     // Adds a fish in the array and creates a fish in a position
     public void addFish(double x, double y) {
-        Animation anim = new AnimationFishIdle(x, y); 
-        fishesList.add(new Fish(x, y, anim));
+        
+        fishesList.add(new Fish(x, y));
     }
 
     // To animate fishes first we change its position and then we draw

@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  Controls the animation of fishes and bubbles. 
  You can add fishes with a click on the mousse. 
  */
-public class MainAnimation extends Application {
+public class MainScene extends Application {
     private FishTank fishTank;// Object controlling fishes
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
@@ -48,7 +48,7 @@ public class MainAnimation extends Application {
         bubbleList.add(new Bubble(Math.random() * canvas.getWidth(), 
                              Math.random() * canvas.getHeight()));
         }
-        // Creates MainAnimation
+        // Creates MainScene
         new AnimationTimer() {
             @Override
             public void handle(long now) {

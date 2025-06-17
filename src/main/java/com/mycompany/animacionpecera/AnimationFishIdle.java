@@ -13,18 +13,18 @@ import javafx.scene.paint.Color;
  * @author carol
  */
 public class AnimationFishIdle extends Animation {
-    
+   
     private final boolean hasFishFin;
     private static final Random random = new Random(); //Instance of random
     
-   public AnimationFishIdle(double x, double y) {
-        super(x, y);
+   public AnimationFishIdle(double size) {
+        super(size);
         this.hasFishFin = random.nextBoolean();
     }
  
     //Method for drawing
     @Override
-    public void draw(GraphicsContext gc) {
+    public void draw(GraphicsContext gc, double x, double y) {
         gc.setFill(color);
         int baseFishWidth = 36;
         int baseFishHeight = 22;
@@ -47,21 +47,21 @@ public class AnimationFishIdle extends Animation {
         };
         gc.fillPolygon(tailX, tailY, 3);
          if (hasFishFin) {
-            drawFishFin(gc, color);
+            drawFishFin(gc, x, y, color);
         } else {
-            drawScales(gc, color);
+            drawScales(gc,x,y, color);
         }
 
-        drawEye(gc);
+        drawEye(gc, x, y);
     }
         
-    protected void drawFishFin(GraphicsContext gc, Color color) {
+    protected void drawFishFin(GraphicsContext gc, double x, double y, Color color) {
         gc.setStroke(color.darker());
         gc.setLineWidth(2 * size);
         gc.strokeLine(x + 10 * size, y - 8 * size, x + 20 * size, y - 17 * size);
     }
 
-    protected void drawScales(GraphicsContext gc, Color color) {
+    protected void drawScales(GraphicsContext gc,double x, double y, Color color) {
         Color bright = color.brighter();
         Color brighterTransparent = new Color(bright.getRed(), bright.getGreen(), bright.getBlue(), 0.8);
         gc.setFill(brighterTransparent);
@@ -85,7 +85,7 @@ public class AnimationFishIdle extends Animation {
         }
     }
 
-    protected void drawEye(GraphicsContext gc) {
+    protected void drawEye(GraphicsContext gc, double x, double y) {
         gc.setFill(Color.WHITE);
         gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }
