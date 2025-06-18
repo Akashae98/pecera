@@ -44,9 +44,18 @@ public class MainScene extends Application {
         }
         /* Creates 30 random bubbles at the bottom of the canvas by passing to the y
         the method .getHeight. Math.random generates a number between 0.0 and <1.0 */
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 25; i++) {
             bubbleList.add(new Bubble(Math.random() * canvas.getWidth(),
                     Math.random() * canvas.getHeight(), 3 + Math.random() * 3, 0.5 + Math.random()));
+        }
+        
+        for (int i = 0; i < 10; i++) {
+            bubbleList.add(new Bubble(Math.random() * canvas.getWidth(),
+                    Math.random() * canvas.getHeight(), 6 + Math.random() * 3, 0.4 + Math.random()));
+        }
+        for (int i = 0; i < 4; i++) {
+            bubbleList.add(new Bubble(Math.random() * canvas.getWidth(),
+                    Math.random() * canvas.getHeight(), 10 + Math.random() * 3, 0.4 + Math.random()));
         }
         // Creates MainScene
         new AnimationTimer() {
