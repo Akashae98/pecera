@@ -6,7 +6,6 @@ package com.mycompany.animacionpecera;
 
 import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /**
  * This class let us create fishes with position, velocity and random colors,
@@ -20,7 +19,6 @@ public class Fish {
     private double dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
-    private static final Random random = new Random(); //Instance of random 
     private ColorRandom color = new ColorRandom();
 
     public Fish(double x, double y, double size) {
@@ -29,7 +27,7 @@ public class Fish {
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        this.anim = new AnimationFishIdle(size, this.color);
+        this.anim = new AnimationFishIdle(size,FishTank.getRandomPoint().nextBoolean(), this.color);
      
     }
 

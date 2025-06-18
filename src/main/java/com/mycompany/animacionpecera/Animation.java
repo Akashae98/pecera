@@ -20,5 +20,6 @@ public abstract class Animation {
 
     // Abstract method for each subclass
     public abstract void draw(GraphicsContext gc, double x, double y);
-  
+
+    
 }

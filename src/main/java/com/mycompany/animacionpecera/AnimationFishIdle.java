@@ -16,11 +16,11 @@ public class AnimationFishIdle extends Animation {
    
     private final boolean hasFishFin;
     private ColorRandom color;
-    private static final Random random = new Random(); //Instance of random
+
     
-   public AnimationFishIdle(double size, ColorRandom color) {
+   public AnimationFishIdle(double size, boolean hasFishFin, ColorRandom color) {
         super(size);
-        this.hasFishFin = random.nextBoolean();
+        this.hasFishFin = hasFishFin;
         this.color= color;
     }
  

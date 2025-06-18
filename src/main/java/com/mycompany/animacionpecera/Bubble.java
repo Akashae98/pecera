@@ -5,24 +5,23 @@
 package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
-/**  ;speed
- * 
+/**
+ *
  * @author ivani
  */
 public class Bubble {
 
     double x, y, size, speed;
-    private  Movement movement;
+    private Movement movement;
     private Animation anim;
 
     public Bubble(double x, double y, double size, double speed) {
         this.x = x;
         this.y = y;
         this.movement = new Movement();
-        this.size= size;
-        this.speed= speed;
+        this.size = size;
+        this.speed = speed;
         this.anim = new AnimationBubbleIdle(size);
 
     }
@@ -32,7 +31,7 @@ public class Bubble {
         y -= speed;
         //the position of y returns to the bottom
         this.y = movement.moviAscend(y, size);
-        
+
     }
 
     //Method for drawing
