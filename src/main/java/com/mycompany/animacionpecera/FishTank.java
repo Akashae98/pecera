@@ -7,6 +7,7 @@ package com.mycompany.animacionpecera;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.util.Pair;
 
 /**
  This class manages a list of fishes.
@@ -23,7 +24,13 @@ public class FishTank {
         this.fishesList = new ArrayList<>();
     }
     
-    public static Random getRandomPoint(){
+    public static Pair<Double, Double> getRandomPoint(){
+        double x = random.nextDouble()* CANVAS_WIDTH;
+        double y = random.nextDouble() * CANVAS_HEIGH;
+        return new Pair<>(x,y);
+    }
+    
+    public static Random getRandom(){
         return random;
     }
     

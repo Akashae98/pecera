@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 public class ColorRandom {
     
     public Color color;
-    private static final Random random = FishTank.getRandomPoint();
+    private static final Random random = FishTank.getRandom();
 
     public ColorRandom() {
         this.color = colorGenerator();

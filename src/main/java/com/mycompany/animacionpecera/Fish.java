@@ -27,7 +27,7 @@ public class Fish {
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        this.anim = new AnimationFishIdle(size,FishTank.getRandomPoint().nextBoolean(), this.color);
+        this.anim = new AnimationFishIdle(size,FishTank.getRandom().nextBoolean(), this.color);
      
     }
 

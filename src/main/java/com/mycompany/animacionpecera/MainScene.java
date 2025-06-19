@@ -16,6 +16,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 /**
  * Principal Class wich creates the window and the canvas to draw the animation.
@@ -45,18 +46,21 @@ public class MainScene extends Application {
         /* Creates 30 random bubbles at the bottom of the canvas by passing to the y
         the method .getHeight. Math.random generates a number between 0.0 and <1.0 */
         for (int i = 0; i < 25; i++) {
-            bubbleList.add(new Bubble(Math.random() * canvas.getWidth(),
-                    Math.random() * canvas.getHeight(), 3 + Math.random() * 3, 0.6 + Math.random()));
+            Pair<Double, Double> point = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
+                    3 + Math.random() * 3, 0.6 + Math.random()));
         }
-        
         for (int i = 0; i < 10; i++) {
-            bubbleList.add(new Bubble(Math.random() * canvas.getWidth(),
-                    Math.random() * canvas.getHeight(), 6 + Math.random() * 3, 0.4 + Math.random()));
+            Pair<Double, Double> point = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
+                    6 + Math.random() * 3, 0.4 + Math.random()));
         }
         for (int i = 0; i < 4; i++) {
-            bubbleList.add(new Bubble(Math.random() * canvas.getWidth(),
-                    Math.random() * canvas.getHeight(), 10 + Math.random() * 3, 0.2 + Math.random()));
+            Pair<Double, Double> point = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
+                    10 + Math.random() * 3, 0.2 + Math.random()));
         }
+       
         // Creates MainScene
         new AnimationTimer() {
             @Override

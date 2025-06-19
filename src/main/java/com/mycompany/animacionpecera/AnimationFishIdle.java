@@ -4,7 +4,7 @@
  */
 package com.mycompany.animacionpecera;
 
-import java.util.Random;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
