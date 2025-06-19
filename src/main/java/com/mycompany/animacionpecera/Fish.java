@@ -22,6 +22,7 @@ public class Fish {
     private ColorRandom color = new ColorRandom();
 
     public Fish(double x, double y, double size) {
+        
         this.x = x;
         this.y = y;
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
@@ -31,11 +32,17 @@ public class Fish {
      
     }
 
+    public double getsize() {
+        double size;  
+        //esta bien recoger cada size de la abstracta no?
+        return size = anim.size;
+    }
+
     //Method of movement
-    public void move(int width, int height) {
+    public void move(int width, int height, double size) {
         x += dx; // horizontal movement
         y += dy; // vertical move
-        double[] newDirect = movement.rebound(x, y, dx, dy);
+        double[] newDirect = movement.rebound(x, y, size, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
 

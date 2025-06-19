@@ -17,6 +17,7 @@ public class FishTank {
     public final static int CANVAS_HEIGH = 400;
     private final ArrayList<Fish> fishesList;
     private static final Random random = new Random();
+    
 
     // Constructor: intitialize array list
     public FishTank() {
@@ -38,7 +39,7 @@ public class FishTank {
 
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
-            fish.move(width, height);   
+            fish.move(width, height, fish.getsize());   
             fish.draw(gc);            
         }
     }
