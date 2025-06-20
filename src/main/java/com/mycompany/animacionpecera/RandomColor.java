@@ -10,12 +10,12 @@ import javafx.scene.paint.Color;
  *
  * @author User
  */
-public class ColorRandom {
+public class RandomColor {
     
     public Color color;
     private static final Random random = FishTank.getRandom();
 
-    public ColorRandom() {
+    public RandomColor() {
         this.color = colorGenerator();
     }
     
