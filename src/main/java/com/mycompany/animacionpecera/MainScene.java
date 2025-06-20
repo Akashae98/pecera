@@ -43,8 +43,7 @@ public class MainScene extends Application {
                     Math.random() * canvas.getHeight()
             );
         }
-        /* Creates 30 random bubbles at the bottom of the canvas by passing to the y
-        the method .getHeight. Math.random generates a number between 0.0 and <1.0 */
+        /* The loops create random bubbles at the canvas */
         for (int i = 0; i < 25; i++) {
             Pair<Double, Double> point = FishTank.getRandomPoint();
             bubbleList.add(new Bubble(point.getKey(), point.getValue(),

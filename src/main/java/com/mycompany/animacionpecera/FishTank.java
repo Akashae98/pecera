@@ -10,10 +10,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Pair;
 
 /**
- This class manages a list of fishes.
+ * This class manages a list of fishes.
  */
 public class FishTank {
-    
+
     public final static int CANVAS_WIDTH = 600;
     public final static int CANVAS_HEIGH = 400;
     private final ArrayList<Fish> fishesList;
@@ -23,19 +23,19 @@ public class FishTank {
     public FishTank() {
         this.fishesList = new ArrayList<>();
     }
-    
-    public static Pair<Double, Double> getRandomPoint(){
-        double x = random.nextDouble()* CANVAS_WIDTH;
+
+    public static Pair<Double, Double> getRandomPoint() {
+        double x = random.nextDouble() * CANVAS_WIDTH;
         double y = random.nextDouble() * CANVAS_HEIGH;
-        return new Pair<>(x,y);
+        return new Pair<>(x, y);
     }
-    
-    public static Random getRandom(){
+
+    public static Random getRandom() { //for methods nextBoolean, nextDouble, etc
         return random;
     }
-    
+
     // Adds a fish in the array and creates a fish in a position
-    public void addFish(double x, double y) { 
+    public void addFish(double x, double y) {
         fishesList.add(new Fish(x, y, 0.5 + random.nextDouble()));
     }
 
@@ -45,10 +45,9 @@ public class FishTank {
 
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
-            fish.move(width, height);   
-            fish.draw(gc);            
+            fish.move(width, height);
+            fish.draw(gc);
         }
     }
-    
-    
+
 }
