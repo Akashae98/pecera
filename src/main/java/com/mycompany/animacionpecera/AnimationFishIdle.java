@@ -20,7 +20,7 @@ public class AnimationFishIdle extends Animation {
    public AnimationFishIdle(double size, boolean hasFishFin, Color color) {
         super(size);
         this.hasFishFin = hasFishFin;
-        this.color= color;
+        this.color = color;
     }
 
  

@@ -34,7 +34,7 @@ public class MainScene extends Application {
         // Canvas of 600x400 pixels habilitates to draw
         Canvas canvas = new Canvas(FishTank.CANVAS_WIDTH, FishTank.CANVAS_HEIGH);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
-        fishTank = new FishTank(); //instance of FishTank
+        fishTank = new FishTank(); 
 
         // At initiate Adds 5 fishes in random places 
         for (int i = 0; i < 5; i++) {
@@ -45,18 +45,18 @@ public class MainScene extends Application {
         }
         /* The loops create random bubbles at the canvas */
         for (int i = 0; i < 25; i++) {
-            Pair<Double, Double> point = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
+            Pair<Double, Double> position = FishTank.getRandomPair();
+            bubbleList.add(new Bubble(position.getKey(), position.getValue(),
                     3 + Math.random() * 3, 0.6 + Math.random()));
         }
         for (int i = 0; i < 10; i++) {
-            Pair<Double, Double> point = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
+            Pair<Double, Double> position = FishTank.getRandomPair();
+            bubbleList.add(new Bubble(position.getKey(), position.getValue(),
                     6 + Math.random() * 3, 0.4 + Math.random()));
         }
         for (int i = 0; i < 4; i++) {
-            Pair<Double, Double> point = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
+            Pair<Double, Double> position = FishTank.getRandomPair();
+            bubbleList.add(new Bubble(position.getKey(), position.getValue(),
                     10 + Math.random() * 3, 0.2 + Math.random()));
         }
 

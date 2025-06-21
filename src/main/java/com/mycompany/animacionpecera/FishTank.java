@@ -10,7 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Pair;
 
 /**
- * This class manages a list of fishes.
+ * This class manages a list of fishes and util methods for the project
  */
 public class FishTank {
 
@@ -23,15 +23,16 @@ public class FishTank {
     public FishTank() {
         this.fishesList = new ArrayList<>();
     }
-
-    public static Pair<Double, Double> getRandomPoint() {
+    //to get a position(x,y) inside the canvas
+    public static Pair<Double, Double> getRandomPair() {
         double x = random.nextDouble() * CANVAS_WIDTH;
         double y = random.nextDouble() * CANVAS_HEIGH;
-        Pair<Double, Double> Position = new Pair<>(x, y); // Aquí le asignas el nombre "Position"
+        Pair<Double, Double> Position = new Pair<>(x, y); 
         return Position;
     }
-
-    public static Random getRandom() { //for methods nextBoolean, nextDouble, etc
+    
+    //for methods using a instance of random nextBoolean, nextDouble, etc
+    public static Random getRandom() { 
         return random;
     }
 

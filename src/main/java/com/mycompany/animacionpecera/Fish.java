@@ -15,9 +15,9 @@ import javafx.scene.paint.Color;
  */
 public class Fish {
 
-    private double x, y, size, dx, dy;    //Direction for movement
+    private double x, y, size, dx, dy;    //dx abd dy are directions for movement
     private Movement movement;
-    private final Animation anim;
+    private final Animation animation;
     private Color color;
 
     public Fish(double x, double y, double size, Color color) {
@@ -28,7 +28,7 @@ public class Fish {
         this.movement = new Movement();
         this.size = size;
         this.color = color;
-        this.anim = new AnimationFishIdle(size, FishTank.getRandom().nextBoolean(), color);
+        this.animation = new AnimationFishIdle(size, FishTank.getRandom().nextBoolean(), color);
 
     }
 
@@ -36,10 +36,9 @@ public class Fish {
         return size;
     }
 
-    //Method of movement
     public void move(int width, int height, double size) {
         x += dx; // horizontal movement
-        y += dy; // vertical move
+        y += dy; // vertical movement
         double[] newDirect = movement.rebound(x, y, size, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
@@ -48,7 +47,7 @@ public class Fish {
 
     //Method for drawing
     public void draw(GraphicsContext gc) {
-        anim.draw(gc, x, y);
+        animation.draw(gc, x, y);
     }
 
 }

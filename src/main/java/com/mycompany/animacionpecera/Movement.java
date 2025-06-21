@@ -10,18 +10,17 @@ package com.mycompany.animacionpecera;
  */
 public class Movement {
     //limits of the aquarium
-
     int width = FishTank.CANVAS_WIDTH;
     int height = FishTank.CANVAS_HEIGH;
 
-    //this method changes direction before object passes the limits
+    //this method changes direction before the object passes the limits
     public double[] rebound(double x, double y, double size, double currentDx, double currentDy) {
-        //array that returns two variables
+        
         double[] newDirection = {currentDx, currentDy};
-        if (x < 0 || x + 35 * size > width) {
+        if (x < 0 || x  > width - 37 * size) {
             newDirection[0] *= -1;
         }
-        if (y < 0 || y + 25 * size > height) {
+        if (y < 9 * size || y  > height - 12 * size) {
             newDirection[1] *= -1;
         }
         return newDirection;
@@ -31,7 +30,7 @@ public class Movement {
         // if position + ratio exceeds the top...
         if (y + radio < 0) {
             y = height + Math.random() * 50;
-            // the bubble goes to the bottom + random numbeer.
+            // the bubble goes to the bottom + random number.
         }
         return y;
     }
