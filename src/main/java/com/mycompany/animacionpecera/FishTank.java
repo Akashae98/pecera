@@ -27,7 +27,7 @@ public class FishTank {
     public static Pair<Double, Double> getRandomPoint() {
         double x = random.nextDouble() * CANVAS_WIDTH;
         double y = random.nextDouble() * CANVAS_HEIGH;
-        Pair<Double, Double> Position = new Pair<>(x, y);
+        Pair<Double, Double> Position = new Pair<>(x, y); // Aquí le asignas el nombre "Position"
         return Position;
     }
 

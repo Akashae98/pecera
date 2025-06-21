@@ -16,8 +16,7 @@ import javafx.scene.paint.Color;
  */
 public class Fish {
 
-    private double x, y;
-    private double dx, dy;    //Direction for movement
+    private double x, y, size, dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
     private Color color;
@@ -28,6 +27,7 @@ public class Fish {
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
+        this.size= size;
         this.color = color;
         this.anim = new AnimationFishIdle(size,FishTank.getRandom().nextBoolean(),color);
      
