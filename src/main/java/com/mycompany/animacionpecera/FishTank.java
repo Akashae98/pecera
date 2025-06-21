@@ -18,7 +18,6 @@ public class FishTank {
     public final static int CANVAS_HEIGH = 400;
     private final ArrayList<Fish> fishesList;
     private static final Random random = new Random();
-    
 
     // Constructor: intitialize array list
     public FishTank() {
@@ -28,7 +27,8 @@ public class FishTank {
     public static Pair<Double, Double> getRandomPoint() {
         double x = random.nextDouble() * CANVAS_WIDTH;
         double y = random.nextDouble() * CANVAS_HEIGH;
-        return new Pair<>(x, y);
+        Pair<Double, Double> Position = new Pair<>(x, y);
+        return Position;
     }
 
     public static Random getRandom() { //for methods nextBoolean, nextDouble, etc
