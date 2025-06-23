@@ -16,7 +16,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 /**
  * Principal Class wich creates the window and the canvas to draw the animation.
@@ -38,28 +37,26 @@ public class MainScene extends Application {
 
         // At initiate Adds 5 fishes in random places 
         for (int i = 0; i < 5; i++) {
-            fishTank.addFish(
-                    Math.random() * canvas.getWidth(),
-                    Math.random() * canvas.getHeight()
-            );
+            Position pos = FishTank.getRandomPoint();
+            fishTank.addFish(pos.x, pos.y);
         }
         /* The loops create random bubbles at the canvas */
         for (int i = 0; i < 25; i++) {
-            Pair<Double, Double> point = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
-                    3 + Math.random() * 3, 0.6 + Math.random()));
+            Position pos = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(pos.x, pos.y, 3 + Math.random() * 3,
+            0.6 + Math.random()));
         }
         for (int i = 0; i < 10; i++) {
-            Pair<Double, Double> point = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
-                    6 + Math.random() * 3, 0.4 + Math.random()));
+            Position pos = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(pos.x, pos.y, 6 + Math.random() * 3,
+            0.4 + Math.random()));
         }
         for (int i = 0; i < 4; i++) {
-            Pair<Double, Double> point = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(point.getKey(), point.getValue(),
-                    10 + Math.random() * 3, 0.2 + Math.random()));
+            Position pos = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(pos.x, pos.y, 10 + Math.random() * 3,
+            0.2 + Math.random()));
         }
-       
+
         // Creates MainScene
         new AnimationTimer() {
             @Override
