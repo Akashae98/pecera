@@ -23,7 +23,7 @@ public class FishTank {
         this.fishesList = new ArrayList<>();
     }
 
-    public static Position getRandomPoint() {
+    public static Position getRandomPoint() { //to obtain a position inside canvas
         double x = random.nextDouble() * CANVAS_WIDTH;
         double y = random.nextDouble() * CANVAS_HEIGH;
         return new Position(x, y);
