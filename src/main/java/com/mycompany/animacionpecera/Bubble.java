@@ -5,7 +5,6 @@
 package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /**
  *
@@ -13,31 +12,33 @@ import javafx.scene.paint.Color;
  */
 public class Bubble {
 
-    double x, y, radio, speed;
+    double x, y, size, speed;
     private Movement movement;
+    private Animation anim;
+    private Position position;
 
-    public Bubble(double x, double y) {
-        this.x = x;
-        this.y = y;
-        this.radio = 3 + Math.random() * 3;/*bubble ratio using Math.random for variability*/
-        this.speed = 0.5 + Math.random();
-        /*speed of the movement using variability with random.*/
+    public Bubble(Position position, double size, double speed) {
+        this.x = position.x;
+        this.y = position.y;
         this.movement = new Movement();
+        this.size = size;
+        this.speed = speed;
+        this.anim = new AnimationBubbleIdle(size);
+
     }
 
     public void move() {
         //the position of y decreases to the top
         y -= speed;
+        this.position = new Position(x, y);
         //the position of y returns to the bottom
-        this.y = movement.moviAscend(y, radio);
-        
+        this.y = movement.moviAscend(position, size);
+
     }
 
+    //Method for drawing
     public void draw(GraphicsContext gc) {
-        gc.setFill(Color.rgb(255, 255, 255, 0.3)); //white color semitransparent
-        gc.fillOval(x, y, radio, radio);//fills with color the inside of bubble
-        gc.setStroke(Color.rgb(255, 255, 255, 0.5));//white color for the bubble edge
-        gc.strokeOval(x, y, radio, radio);//fills with color
+        anim.draw(gc, x, y);
     }
 
 }

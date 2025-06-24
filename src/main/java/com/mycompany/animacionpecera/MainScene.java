@@ -1,0 +1,96 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
+package com.mycompany.animacionpecera;
+
+import java.util.ArrayList;
+import java.util.List;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.stage.Stage;
+
+/**
+ * Principal Class wich creates the window and the canvas to draw the animation.
+ * Controls the animation of fishes and bubbles. You can add fishes with a click
+ * on the mousse.
+ */
+public class MainScene extends Application {
+
+    private FishTank fishTank;// Object controlling fishes
+    private GraphicsContext gc; //Graphic context to draw in the canvas
+    private final List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
+
+    @Override
+    public void start(Stage stage) {
+        // Canvas of 600x400 pixels habilitates to draw
+        Canvas canvas = new Canvas(FishTank.CANVAS_WIDTH, FishTank.CANVAS_HEIGH);
+        gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
+        fishTank = new FishTank(); //instance of FishTank
+
+        // At initiate Adds 5 fishes in random places 
+        for (int i = 0; i < 5; i++) {
+            Position position = FishTank.getRandomPoint();
+            fishTank.addFish(position);
+        }
+        /* The loops create random bubbles at the canvas */
+        for (int i = 0; i < 25; i++) {
+            Position pos = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(pos, 3 + Math.random() * 3,
+                    0.6 + Math.random()));
+        }
+        for (int i = 0; i < 10; i++) {
+            Position pos = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(pos, 6 + Math.random() * 3,
+                    0.4 + Math.random()));
+        }
+        for (int i = 0; i < 4; i++) {
+            Position pos = FishTank.getRandomPoint();
+            bubbleList.add(new Bubble(pos, 10 + Math.random() * 3,
+                    0.2 + Math.random()));
+        }
+
+        // Creates MainScene
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                // Gradient background simulates water 
+                LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.rgb(70, 130, 180)), //Darkerblue
+                        new Stop(1, Color.rgb(127, 240, 220))); //Lighter blue
+                gc.setFill(fondo);
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+                //draws/animates bubbles
+                for (Bubble b : bubbleList) {
+                    b.move();
+                    b.draw(gc);
+                }
+                //draws/animates fishes
+                fishTank.animate(gc, (int) canvas.getWidth(), (int) canvas.getHeight());
+            }
+        }.start();
+
+        // User interaction: adds fishes with a click
+        canvas.setOnMouseClicked(e -> {
+            Position position = new Position(e.getX(), e.getY());
+            fishTank.addFish(position);
+        });
+        // Shows the canvas in a window
+        stage.setScene(new Scene(new StackPane(canvas)));
+        stage.setTitle("Acuario JavaFX");
+        stage.show();
+    }
+
+    // Principal method to throw the application
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

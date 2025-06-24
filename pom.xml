@@ -43,7 +43,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.mycompany.animacionpecera.Animation</mainClass>
+                    <mainClass>com.mycompany.animacionpecera.MainScene</mainClass>
                 </configuration>
                 <executions>
                     <execution>
