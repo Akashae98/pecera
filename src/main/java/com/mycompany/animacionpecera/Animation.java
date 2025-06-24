@@ -14,7 +14,7 @@ public abstract class Animation {
  
     protected double size;
 
-    public Animation(double size) {
+    protected Animation(double size) {
         this.size = size;
     }
 

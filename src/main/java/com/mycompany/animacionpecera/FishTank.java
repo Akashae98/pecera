@@ -9,28 +9,34 @@ import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
- This class manages a list of fishes.
+ * This class manages a list of fishes.
  */
 public class FishTank {
-    
-    public final static int CANVAS_WIDTH = 600;
-    public final static int CANVAS_HEIGH = 400;
+
+    public static final int CANVAS_WIDTH = 600;
+    public static final int CANVAS_HEIGH = 400;
     private final ArrayList<Fish> fishesList;
     private static final Random random = new Random();
-    
 
     // Constructor: intitialize array list
     public FishTank() {
         this.fishesList = new ArrayList<>();
     }
-    
-    public static Random getRandomPoint(){
+
+    public static Position getRandomPoint() { //to obtain a position inside canvas
+        double x = random.nextDouble() * CANVAS_WIDTH;
+        double y = random.nextDouble() * CANVAS_HEIGH;
+        return new Position(x, y);
+    }
+
+    public static Random getRandom() { //for methods nextBoolean, nextDouble, etc
         return random;
     }
-    
+
     // Adds a fish in the array and creates a fish in a position
-    public void addFish(double x, double y) { 
-        fishesList.add(new Fish(x, y, 0.5 + random.nextDouble()));
+    public void addFish(double x, double y) {
+        RandomColor randomColor = new RandomColor();
+        fishesList.add(new Fish(x, y, 0.5 + random.nextDouble(), randomColor.getColor()));
     }
 
     // To animate fishes first we change its position and then we draw
@@ -39,10 +45,9 @@ public class FishTank {
 
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
-            fish.move(width, height, fish.getsize());   
-            fish.draw(gc);            
+            fish.move(width, height);
+            fish.draw(gc);
         }
     }
-    
-    
+
 }

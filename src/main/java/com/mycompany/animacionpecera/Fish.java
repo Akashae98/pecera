@@ -4,8 +4,9 @@
  */
 package com.mycompany.animacionpecera;
 
-import java.util.Random;
+
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This class let us create fishes with position, velocity and random colors,
@@ -15,34 +16,28 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Fish {
 
-    private double x, y;
-    private double dx, dy;    //Direction for movement
+    private double x, y, dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
-    private ColorRandom color = new ColorRandom();
+    private Position position;
+   
 
-    public Fish(double x, double y, double size) {
-        
+    public Fish(double x, double y, double size, Color color) {
         this.x = x;
         this.y = y;
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        this.anim = new AnimationFishIdle(size,FishTank.getRandomPoint().nextBoolean(), this.color);
-     
-    }
-
-    public double getsize() {
-        double size;  
-        //esta bien recoger cada size de la abstracta no?
-        return size = anim.size;
+        this.anim = new AnimationFishIdle(size,FishTank.getRandom().nextBoolean(),color);
+    
     }
 
     //Method of movement
-    public void move(int width, int height, double size) {
+    public void move(int width, int height) {
         x += dx; // horizontal movement
         y += dy; // vertical move
-        double[] newDirect = movement.rebound(x, y, size, dx, dy);
+        this.position= new Position(x,y);
+        double[] newDirect = movement.rebound(position, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
 

@@ -4,6 +4,7 @@
  */
 package com.mycompany.animacionpecera;
 
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -14,20 +15,19 @@ import javafx.scene.paint.Color;
 public class AnimationFishIdle extends Animation {
    
     private final boolean hasFishFin;
-    private ColorRandom color;
+    private Color color;
 
     
-   public AnimationFishIdle(double size, boolean hasFishFin, ColorRandom color) {
+   public AnimationFishIdle(double size, boolean hasFishFin, Color color) {
         super(size);
         this.hasFishFin = hasFishFin;
         this.color= color;
     }
-
  
     //Method for drawing
     @Override
     public void draw(GraphicsContext gc, double x, double y) {
-        gc.setFill(color.getColor());
+        gc.setFill(color);
         int baseFishWidth = 36;
         int baseFishHeight = 22;
         double fishWidth = baseFishWidth * size;
@@ -49,7 +49,7 @@ public class AnimationFishIdle extends Animation {
         };
         gc.fillPolygon(tailX, tailY, 3);
          if (hasFishFin) {
-            drawFishFin(gc, x, y, color);
+            drawFishFin(gc, x, y,color);
         } else {
             drawScales(gc,x,y, color);
         }
@@ -57,14 +57,14 @@ public class AnimationFishIdle extends Animation {
         drawEye(gc, x, y);
     }
         
-    protected void drawFishFin(GraphicsContext gc, double x, double y, ColorRandom color) {
-        gc.setStroke(color.getColor().darker());
+    protected void drawFishFin(GraphicsContext gc, double x, double y, Color color) {
+        gc.setStroke(color.darker());
         gc.setLineWidth(2 * size);
         gc.strokeLine(x + 10 * size, y - 8 * size, x + 20 * size, y - 17 * size);
     }
 
-    protected void drawScales(GraphicsContext gc,double x, double y, ColorRandom color) {
-        Color bright = color.getColor().brighter();
+    protected void drawScales(GraphicsContext gc,double x, double y, Color color) {
+        Color bright = color.brighter();
         Color brighterTransparent = new Color(bright.getRed(), bright.getGreen(), bright.getBlue(), 0.8);
         gc.setFill(brighterTransparent);
 
