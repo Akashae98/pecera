@@ -16,10 +16,11 @@ import javafx.scene.paint.Color;
  */
 public class Fish {
 
-    private double x, y, size, dx, dy;    //Direction for movement
+    private double x, y, dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
-    private Color color;
+    private Position position;
+   
 
     public Fish(double x, double y, double size, Color color) {
         this.x = x;
@@ -27,17 +28,16 @@ public class Fish {
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        this.size = size;
-        this.color = color;
         this.anim = new AnimationFishIdle(size,FishTank.getRandom().nextBoolean(),color);
-     
+    
     }
 
     //Method of movement
     public void move(int width, int height) {
         x += dx; // horizontal movement
         y += dy; // vertical move
-        double[] newDirect = movement.rebound(x, y, dx, dy);
+        this.position= new Position(x,y);
+        double[] newDirect = movement.rebound(position, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
 
