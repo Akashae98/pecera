@@ -37,24 +37,24 @@ public class MainScene extends Application {
 
         // At initiate Adds 5 fishes in random places 
         for (int i = 0; i < 5; i++) {
-            Position pos = FishTank.getRandomPoint();
-            fishTank.addFish(pos.x, pos.y);
+            Position position = FishTank.getRandomPoint();
+            fishTank.addFish(position);
         }
         /* The loops create random bubbles at the canvas */
         for (int i = 0; i < 25; i++) {
             Position pos = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(pos.x, pos.y, 3 + Math.random() * 3,
-            0.6 + Math.random()));
+            bubbleList.add(new Bubble(pos, 3 + Math.random() * 3,
+                    0.6 + Math.random()));
         }
         for (int i = 0; i < 10; i++) {
             Position pos = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(pos.x, pos.y, 6 + Math.random() * 3,
-            0.4 + Math.random()));
+            bubbleList.add(new Bubble(pos, 6 + Math.random() * 3,
+                    0.4 + Math.random()));
         }
         for (int i = 0; i < 4; i++) {
             Position pos = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(pos.x, pos.y, 10 + Math.random() * 3,
-            0.2 + Math.random()));
+            bubbleList.add(new Bubble(pos, 10 + Math.random() * 3,
+                    0.2 + Math.random()));
         }
 
         // Creates MainScene
@@ -80,7 +80,8 @@ public class MainScene extends Application {
 
         // User interaction: adds fishes with a click
         canvas.setOnMouseClicked(e -> {
-            fishTank.addFish(e.getX(), e.getY());
+            Position position = new Position(e.getX(), e.getY());
+            fishTank.addFish(position);
         });
         // Shows the canvas in a window
         stage.setScene(new Scene(new StackPane(canvas)));

@@ -4,7 +4,6 @@
  */
 package com.mycompany.animacionpecera;
 
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -20,23 +19,22 @@ public class Fish {
     private Movement movement;
     private final Animation anim;
     private Position position;
-   
 
-    public Fish(double x, double y, double size, Color color) {
-        this.x = x;
-        this.y = y;
+    public Fish(Position pos, double size, Color color) {
+        this.x = pos.x;
+        this.y = pos.y;
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        this.anim = new AnimationFishIdle(size,FishTank.getRandom().nextBoolean(),color);
-    
+        this.anim = new AnimationFishIdle(size, FishTank.getRandom().nextBoolean(), color);
+
     }
 
     //Method of movement
     public void move(int width, int height) {
         x += dx; // horizontal movement
         y += dy; // vertical move
-        this.position= new Position(x,y);
+        this.position = new Position(x, y);
         double[] newDirect = movement.rebound(position, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];

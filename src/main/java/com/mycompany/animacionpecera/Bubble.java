@@ -17,9 +17,9 @@ public class Bubble {
     private Animation anim;
     private Position position;
 
-    public Bubble(double x, double y, double size, double speed) {
-        this.x = x;
-        this.y = y;
+    public Bubble(Position position, double size, double speed) {
+        this.x = position.x;
+        this.y = position.y;
         this.movement = new Movement();
         this.size = size;
         this.speed = speed;
@@ -30,7 +30,7 @@ public class Bubble {
     public void move() {
         //the position of y decreases to the top
         y -= speed;
-        this.position= new Position(x,y);
+        this.position = new Position(x, y);
         //the position of y returns to the bottom
         this.y = movement.moviAscend(position, size);
 
