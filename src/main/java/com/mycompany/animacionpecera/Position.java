@@ -10,8 +10,8 @@ package com.mycompany.animacionpecera;
  */
 public class Position {
 
-    public final double x;
-    public final double y;
+    public  double x;
+    public  double y;
 
     //Object without logic, and getters or setters to online get a position x and y.
     public Position(double x, double y) {

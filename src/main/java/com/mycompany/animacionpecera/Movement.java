@@ -15,15 +15,17 @@ public class Movement {
     int height = FishTank.CANVAS_HEIGH;
 
     //this method changes direction before object passes the limits
-    public double[] rebound(Position pos, double currentDx, double currentDy) {
+    public double[] rebound(BoundingBox box, double currentDx, double currentDy) {
         //array that returns two variables
         double[] newDirection = {currentDx, currentDy};
-        if (pos.x < 0 || pos.x > width) {
+
+        if (box.getLeft() < 0 || box.getRight() > width) {
             newDirection[0] *= -1;
         }
-        if (pos.y < 0 || pos.y > height) {
+        if (box.getTop() < 0 || box.getBottom() > height) {
             newDirection[1] *= -1;
         }
+
         return newDirection;
     }
 
