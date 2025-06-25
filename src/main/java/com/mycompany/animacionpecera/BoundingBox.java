@@ -21,8 +21,8 @@ public class BoundingBox {
     private double size;
     private double heightFishTail;
 
-    public BoundingBox(Position position, double baseWidth, double baseHeight, double heightFishTail,
-            double size) {
+    public BoundingBox(Position position, double baseWidth, double baseHeight, 
+            double heightFishTail,double size) {
         this.position = position;
         this.baseWidth = baseWidth;
         this.baseHeight = baseHeight;
