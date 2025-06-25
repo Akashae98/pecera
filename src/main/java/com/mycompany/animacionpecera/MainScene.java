@@ -33,7 +33,7 @@ public class MainScene extends Application {
         // Canvas of 600x400 pixels habilitates to draw
         Canvas canvas = new Canvas(FishTank.CANVAS_WIDTH, FishTank.CANVAS_HEIGH);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
-        fishTank = new FishTank(); //instance of FishTank
+        fishTank = new FishTank(); 
 
         // At initiate Adds 5 fishes in random places 
         for (int i = 0; i < 5; i++) {

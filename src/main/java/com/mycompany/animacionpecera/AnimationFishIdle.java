@@ -4,7 +4,6 @@
  */
 package com.mycompany.animacionpecera;
 
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -21,8 +20,9 @@ public class AnimationFishIdle extends Animation {
    public AnimationFishIdle(double size, boolean hasFishFin, Color color) {
         super(size);
         this.hasFishFin = hasFishFin;
-        this.color= color;
+        this.color = color;
     }
+
  
     //Method for drawing
     @Override
