@@ -4,71 +4,71 @@
  */
 package com.mycompany.animacionpecera;
 
-/**
- *
- * @author carol
+/*
+ * BoundingBox represents the area occupied by a fish.
+ * It calculates the fish's real position and dimensions
+ * based on its size and position including margins.
+
+ Note that the actual position of the fish,its center or its position (0,0)
+ its on the center left of the object, so we must add a boundingbox that takes a
+ displacement to the top, righ and bottom.
  */
 public class BoundingBox {
 
-    private Position position; // real position of fish
-    private double baseWidth;
-    private double baseHeight;
+    private Position position;
+    private double baseWidth;      // Base width 
+    private double baseHeight;     // Base height
     private double size;
 
-    private double offsetX; // for margin left
-    private double offsetY; // for margin right
-
     public BoundingBox(Position position, double baseWidth, double baseHeight,
-        double size, double offsetX, double offsetY) {
+            double size) {
         this.position = position;
         this.baseWidth = baseWidth;
         this.baseHeight = baseHeight;
         this.size = size;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+
     }
 
     public double getX() {
-        return position.x + offsetX * size;
+        return position.x;
     }
 
     public double getY() {
-        return position.y + offsetY * size;
+        return position.y;
     }
 
+    // Scaled width 
     public double getWidth() {
         return baseWidth * size;
     }
 
+    // Scaled height 
     public double getHeight() {
         return baseHeight * size;
     }
 
+    // Left boundary of the fish (used for collision detection)
     public double getLeft() {
-        return getX();
+        return position.x;
     }
 
+    // Right boundary 
     public double getRight() {
-        return getX() + getWidth();
+        return position.x + (getWidth() * size);
     }
 
-   public double getTop() {
-        return position.y - offsetY * size;  
+    // Top boundary, we substract offsetY to get a position on top of the center of the object
+    public double getTop() {
+        return position.y - ((getHeight() / 2) * size);
     }
 
+    // Bottom boundary, adding the height scaled with size
     public double getBottom() {
-        return position.y + baseHeight * size; 
+        return position.y + (baseHeight * size);
     }
 
     public void setPosition(Position position) {
         this.position = position;
     }
 
-    public void setSize(double size) {
-        this.size = size;
-    }
-
-    public double getSize() {
-        return size;
-    }
 }
