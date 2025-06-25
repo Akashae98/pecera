@@ -10,15 +10,16 @@ package com.mycompany.animacionpecera;
  */
 public class BoundingBox {
 
-    private Position position; // posición real del pez
+    private Position position; // real position of fish
     private double baseWidth;
     private double baseHeight;
     private double size;
 
-    private double offsetX; // margen izquierdo
-    private double offsetY; // margen superior
+    private double offsetX; // for margin left
+    private double offsetY; // for margin right
 
-    public BoundingBox(Position position, double baseWidth, double baseHeight, double size, double offsetX, double offsetY) {
+    public BoundingBox(Position position, double baseWidth, double baseHeight,
+        double size, double offsetX, double offsetY) {
         this.position = position;
         this.baseWidth = baseWidth;
         this.baseHeight = baseHeight;
