@@ -54,7 +54,7 @@ public class BoundingBox {
 
     // Right boundary 
     public double getRight() {
-        return position.x + (getWidth());
+        return position.x + getWidth();
     }
 
     // Top boundary, we substract offsetY to get a position on top of the center of the object
@@ -64,7 +64,7 @@ public class BoundingBox {
 
     // Bottom boundary, we get the bottom adding the height scaled with size
     public double getBottom() {
-        return position.y + (getHeight());
+        return position.y + getHeight();
     }
 
     public void setPosition(Position position) {
