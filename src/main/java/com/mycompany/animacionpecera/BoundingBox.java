@@ -47,7 +47,8 @@ public class BoundingBox {
         return baseHeight * size;
     }
 
-    // Left boundary of the fish (used for collision detection)
+    //These getters are used for the detection of the collision of the object:
+    // Left boundary 
     public double getLeft() {
         return position.x;
     }
