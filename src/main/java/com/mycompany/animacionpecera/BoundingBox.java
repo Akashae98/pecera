@@ -19,13 +19,15 @@ public class BoundingBox {
     private double baseWidth;      // Base width 
     private double baseHeight;     // Base height
     private double size;
+    private double heightFishTail;
 
-    public BoundingBox(Position position, double baseWidth, double baseHeight,
+    public BoundingBox(Position position, double baseWidth, double baseHeight, double heightFishTail,
             double size) {
         this.position = position;
         this.baseWidth = baseWidth;
         this.baseHeight = baseHeight;
         this.size = size;
+        this.heightFishTail = heightFishTail;
 
     }
 
@@ -65,7 +67,7 @@ public class BoundingBox {
 
     // Bottom boundary, we get the bottom adding the height scaled with size
     public double getBottom() {
-        return position.y + getHeight();
+        return position.y + (getHeight() / 2) + (this.heightFishTail * size);
     }
 
     public void setPosition(Position position) {
