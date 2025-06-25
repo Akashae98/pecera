@@ -7,12 +7,13 @@ package com.mycompany.animacionpecera;
 /*
  * BoundingBox represents the area occupied by a fish.
  * It calculates the fish's real position and dimensions
- * based on its size and position including margins.
+ * based on its size and position.
 
- Note that the actual position of the fish,its center or its position (0,0)
- its on the center left of the object, so we must add a boundingbox that takes a
- displacement to the top, righ and bottom.
+ * Note: the fish's actual position (0,0) refers to the center-left point of the object.
+ * Therefore, the bounding box must account for displacement toward the top, right, and bottom
+ * to fully cover the fish's visual area.
  */
+
 public class BoundingBox {
 
     private Position position;
@@ -62,7 +63,7 @@ public class BoundingBox {
         return position.y - ((getHeight() / 2) * size);
     }
 
-    // Bottom boundary, adding the height scaled with size
+    // Bottom boundary, we get the bottom adding the height scaled with size
     public double getBottom() {
         return position.y + (baseHeight * size);
     }
