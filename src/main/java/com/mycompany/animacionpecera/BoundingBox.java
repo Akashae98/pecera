@@ -13,7 +13,6 @@ package com.mycompany.animacionpecera;
  * Therefore, the bounding box must account for displacement toward the top, right, and bottom
  * to fully cover the fish's visual area.
  */
-
 public class BoundingBox {
 
     private Position position;
@@ -55,17 +54,17 @@ public class BoundingBox {
 
     // Right boundary 
     public double getRight() {
-        return position.x + (getWidth() * size);
+        return position.x + (getWidth());
     }
 
     // Top boundary, we substract offsetY to get a position on top of the center of the object
     public double getTop() {
-        return position.y - ((getHeight() / 2) * size);
+        return position.y - (getHeight() / 2);
     }
 
     // Bottom boundary, we get the bottom adding the height scaled with size
     public double getBottom() {
-        return position.y + (baseHeight * size);
+        return position.y + (getHeight());
     }
 
     public void setPosition(Position position) {

@@ -27,7 +27,7 @@ public class Fish {
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
         this.anim = new AnimationFishIdle(size, FishTank.getRandom().nextBoolean(), color);
-        this.boundingBox = new BoundingBox(pos, 37, 19, size);
+        this.boundingBox = new BoundingBox(pos, 39, 20, size);
 
     }
 
