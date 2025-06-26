@@ -35,7 +35,7 @@ public class Fish {
     public void move(int width, int height) {
         position.x += dx; // horizontal movement
         position.y += dy; // vertical move
-        boundingBox.setPosition(position);
+        boundingBox = anim.getBoundingBox(position);
         double[] newDirect = movement.rebound(boundingBox, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];

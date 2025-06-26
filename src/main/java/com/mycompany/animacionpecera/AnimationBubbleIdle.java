@@ -20,11 +20,15 @@ public class AnimationBubbleIdle extends Animation {
     @Override
     public BoundingBox getBoundingBox(Position position) {
 
-        double baseWidth = size;
-        double baseHeight = size;
-        double heightFishTail = 0;
+        double Width = 10 * size;
+        double Height = 10 * size;
 
-        return new BoundingBox(position, baseWidth, baseHeight, heightFishTail, size);
+        double left = position.x;
+        double right = position.x + Width;
+        double top = position.y - (Height / 2);
+        double bottom = position.y + (Height / 2);
+
+        return new BoundingBox(left, top, right, bottom);
     }
 
     @Override

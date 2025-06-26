@@ -8,70 +8,39 @@ package com.mycompany.animacionpecera;
  * BoundingBox represents the area occupied by a fish.
  * It calculates the fish's real position and dimensions
  * based on its size and position.
-
- * Note: the fish's actual position (0,0) refers to the center-left point of the object.
- * Therefore, the bounding box must account for displacement toward the top, right, and bottom
- * to fully cover the fish's visual area.
- */
+*/
 public class BoundingBox {
 
-    private Position position;
-    private double baseWidth;      // Base width 
-    private double baseHeight;     // Base height
-    private double size;
-    private double heightFishTail;
+    private double left;
+    private double top;
+    private double right;
+    private double bottom;
 
-    public BoundingBox(Position position, double baseWidth, double baseHeight, 
-            double heightFishTail, double size) {
-        this.position = position;
-        this.baseWidth = baseWidth;
-        this.baseHeight = baseHeight;
-        this.size = size;
-        this.heightFishTail = heightFishTail;
-
+    public BoundingBox(double left, double top, double right, double bottom) {
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
     }
 
-    public double getX() {
-        return position.x;
-    }
-
-    public double getY() {
-        return position.y;
-    }
-
-    // Scaled width 
-    public double getWidth() {
-        return baseWidth * size;
-    }
-
-    // Scaled height 
-    public double getHeight() {
-        return baseHeight * size;
-    }
-
-    //These getters are used for the detection of the collision of the object:
-    // Left boundary 
     public double getLeft() {
-        return position.x;
+        return left;
     }
 
-    // Right boundary 
-    public double getRight() {
-        return position.x + getWidth();
-    }
-
-    // Top boundary, we substract getHeight/2 to get a position on top of the center of the object
     public double getTop() {
-        return position.y - (getHeight() / 2);
+        return top;
     }
 
-    // Bottom boundary, we get the bottom adding the height scaled with size
+    public double getRight() {
+        return right;
+    }
+
     public double getBottom() {
-        return position.y + (getHeight() / 2) + (this.heightFishTail * size);
+        return bottom;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public boolean isInside(Position point) {
+        return point.x >= left && point.x <= right &&
+               point.y >= top && point.y <= bottom;
     }
-
 }

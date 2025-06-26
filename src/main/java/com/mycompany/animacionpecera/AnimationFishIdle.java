@@ -22,16 +22,25 @@ public class AnimationFishIdle extends Animation {
         this.color = color;
     }
 
+    /*Note: the fish's actual position (0,0) refers to the center-left point of the object.
+    * Therefore, the bounding box must account for displacement toward only the top,
+    * right, and bottom to fully cover the fish's visual area.
+     */
     @Override
     public BoundingBox getBoundingBox(Position position) {
         //the base of the bodyfish is 37 + width fishtail: 41
-        double Width = 41;
+        double bodyWidth = 36 * size;
         //the height of the body: 20
-        double Height = 20;
+        double bodyHeight = 20 * size;
         //the height of the fishtail: 11
-        double heightFishTail = 11;
+        double tailHeight = 9 * size;
 
-        return new BoundingBox(position, Width, Height, heightFishTail, size);
+        double left = position.x;
+        double right = position.x + bodyWidth;
+        double top = position.y - (bodyHeight / 2);
+        double bottom = position.y + (bodyHeight / 2) + tailHeight;
+
+        return new BoundingBox(left, top, right, bottom);
     }
 
     //Method for drawing
