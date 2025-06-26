@@ -35,6 +35,7 @@ public class MainScene extends Application {
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
         fishTank = new FishTank(); 
 
+
         // At initiate Adds 5 fishes in random places 
         for (int i = 0; i < 5; i++) {
             Position position = FishTank.getRandomPoint();

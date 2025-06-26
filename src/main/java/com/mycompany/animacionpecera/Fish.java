@@ -15,11 +15,11 @@ import javafx.scene.paint.Color;
  */
 public class Fish {
 
-    private double dx, dy;    //Direction for movement
+    private double x, y, dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
     private Position position;
-    private BoundingBox boundingBox;
+    public BoundingBox boundingBox;
 
     public Fish(Position pos, double size, Color color) {
         this.position = pos;
@@ -39,7 +39,6 @@ public class Fish {
         double[] newDirect = movement.rebound(boundingBox, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
-
     }
 
     //Method for drawing
