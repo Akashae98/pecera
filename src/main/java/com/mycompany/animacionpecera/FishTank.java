@@ -25,8 +25,8 @@ public class FishTank {
     }
 
     public static Position getRandomPoint() { //to obtain a position inside canvas
-        double x = random.nextDouble() * CANVAS_WIDTH;
-        double y = random.nextDouble() * CANVAS_HEIGH;
+        double x = random.nextDouble() * (CANVAS_WIDTH - 40);
+        double y = random.nextDouble() * (CANVAS_HEIGH - 40);
         return new Position(x, y);
     }
 
@@ -37,7 +37,7 @@ public class FishTank {
     // Adds a fish in the array and creates a fish in a position
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
-        fishesList.add(new Fish(position, 0.5 + random.nextDouble(), randomColor.getColor()));
+        fishesList.add(new Fish(position, 0.5 + random.nextDouble(1), randomColor.getColor()));
     }
 
     // To animate fishes first we change its position and then we draw

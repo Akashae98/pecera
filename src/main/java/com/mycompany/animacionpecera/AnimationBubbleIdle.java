@@ -23,12 +23,27 @@ public class AnimationBubbleIdle extends Animation {
         double Width = 10 * size;
         double Height = 10 * size;
 
-        double left = position.x;
-        double right = position.x + Width;
-        double top = position.y - (Height / 2);
-        double bottom = position.y + (Height / 2);
+        Position topLeft = new Position(
+                position.x,
+                position.y - (Height / 2)
+        );
 
-        return new BoundingBox(left, top, right, bottom);
+        Position topRight = new Position(
+                position.x + Width,
+                position.y - (Height / 2)
+        );
+
+        Position bottomRight = new Position(
+                position.x + Width,
+                position.y + (Height / 2) + Height
+        );
+
+        Position bottomLeft = new Position(
+                position.x,
+                position.y + (Height / 2) + Height
+        );
+
+        return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
     }
 
     @Override

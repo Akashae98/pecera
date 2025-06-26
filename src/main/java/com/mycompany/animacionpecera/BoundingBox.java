@@ -4,43 +4,64 @@
  */
 package com.mycompany.animacionpecera;
 
-/*
- * BoundingBox represents the area occupied by a fish.
- * It calculates the fish's real position and dimensions
- * based on its size and position.
+/**
+ * Boundinbox represents a rectangular box defined by four corner positions. Can
+ * be used to check if points are contained within the box and to get the
+ * boundaries of the box.
  */
 public class BoundingBox {
 
-    private double left;
-    private double top;
-    private double right;
-    private double bottom;
+    //Corners positions:
+    private final Position topLeft;
+    private final Position topRight;
+    private final Position bottomRight;
+    private final Position bottomLeft;
 
-    public BoundingBox(double left, double top, double right, double bottom) {
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
+    public BoundingBox(Position topLeft, Position topRight,
+            Position bottomRight, Position bottomLeft) {
+        this.topLeft = topLeft;
+        this.topRight = topRight;
+        this.bottomRight = bottomRight;
+        this.bottomLeft = bottomLeft;
     }
 
+    // Getters for the corners:
+    public Position getTopLeft() {
+        return topLeft;
+    }
+
+    public Position getTopRight() {
+        return topRight;
+    }
+
+    public Position getBottomRight() {
+        return bottomRight;
+    }
+
+    public Position getBottomLeft() {
+        return bottomLeft;
+    }
+
+    //Getters for boundaries and for the method isInside:
     public double getLeft() {
-        return left;
+        return topLeft.x;
     }
 
     public double getTop() {
-        return top;
+        return topLeft.y;
     }
 
     public double getRight() {
-        return right;
+        return bottomRight.x;
     }
 
     public double getBottom() {
-        return bottom;
+        return bottomRight.y;
     }
+    // Checks if a given point is inside this bounding box.
 
     public boolean isInside(Position point) {
-        return point.x >= left && point.x <= right
-                && point.y >= top && point.y <= bottom;
+        return point.x >= getLeft() && point.x <= getRight()
+                && point.y >= getTop() && point.y <= getBottom();
     }
 }
