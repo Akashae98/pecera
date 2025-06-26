@@ -28,11 +28,11 @@ public class AnimationFishIdle extends Animation {
     */
     @Override
     public BoundingBox getBoundingBox(Position position) {
-        //the base of the bodyfish is 37 + width fishtail: 41
+        //the base of the bodyfish 
         double bodyWidth = 36 * size;
-        //the height of the body: 20
+        //the height of the bodyfish
         double bodyHeight = 20 * size;
-        //the height of the fishtail: 9
+        //the height of the fishtail
         double tailHeight = 9 * size;
 
         double left = position.x;
