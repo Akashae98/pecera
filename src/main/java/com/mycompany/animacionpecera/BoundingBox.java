@@ -8,7 +8,7 @@ package com.mycompany.animacionpecera;
  * BoundingBox represents the area occupied by a fish.
  * It calculates the fish's real position and dimensions
  * based on its size and position.
-*/
+ */
 public class BoundingBox {
 
     private double left;
@@ -40,7 +40,7 @@ public class BoundingBox {
     }
 
     public boolean isInside(Position point) {
-        return point.x >= left && point.x <= right &&
-               point.y >= top && point.y <= bottom;
+        return point.x >= left && point.x <= right
+                && point.y >= top && point.y <= bottom;
     }
 }
