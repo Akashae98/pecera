@@ -18,8 +18,10 @@ public abstract class Animation {
         this.size = size;
     }
 
-    // Abstract method for each subclass
+    // Abstract methods for each subclass
     public abstract void draw(GraphicsContext gc, double x, double y);
+    
+    public abstract BoundingBox getBoundingBox(Position position);
 
     
 }

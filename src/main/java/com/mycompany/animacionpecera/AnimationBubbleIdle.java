@@ -13,9 +13,18 @@ import javafx.scene.paint.Color;
  */
 public class AnimationBubbleIdle extends Animation {
 
-  
     public AnimationBubbleIdle(double size) {
         super(size);
+    }
+
+    @Override
+    public BoundingBox getBoundingBox(Position position) {
+
+        double baseWidth = size;
+        double baseHeight = size;
+        double heightFishTail = 0;
+
+        return new BoundingBox(position, baseWidth, baseHeight, heightFishTail, size);
     }
 
     @Override

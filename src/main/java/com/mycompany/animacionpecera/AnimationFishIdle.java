@@ -12,18 +12,28 @@ import javafx.scene.paint.Color;
  * @author carol
  */
 public class AnimationFishIdle extends Animation {
-   
+
     private final boolean hasFishFin;
     private Color color;
 
-    
-   public AnimationFishIdle(double size, boolean hasFishFin, Color color) {
+    public AnimationFishIdle(double size, boolean hasFishFin, Color color) {
         super(size);
         this.hasFishFin = hasFishFin;
         this.color = color;
     }
 
- 
+    @Override
+    public BoundingBox getBoundingBox(Position position) {
+        //the base of the bodyfish is 37 + width fishtail: 41
+        double Width = 41;
+        //the height of the body: 20
+        double Height = 20;
+        //the height of the fishtail: 11
+        double heightFishTail = 11;
+
+        return new BoundingBox(position, Width, Height, heightFishTail, size);
+    }
+
     //Method for drawing
     @Override
     public void draw(GraphicsContext gc, double x, double y) {
@@ -48,22 +58,22 @@ public class AnimationFishIdle extends Animation {
             y + 20 * size
         };
         gc.fillPolygon(tailX, tailY, 3);
-         if (hasFishFin) {
-            drawFishFin(gc, x, y,color);
+        if (hasFishFin) {
+            drawFishFin(gc, x, y, color);
         } else {
-            drawScales(gc,x,y, color);
+            drawScales(gc, x, y, color);
         }
 
         drawEye(gc, x, y);
     }
-        
+
     protected void drawFishFin(GraphicsContext gc, double x, double y, Color color) {
         gc.setStroke(color.darker());
         gc.setLineWidth(2 * size);
         gc.strokeLine(x + 10 * size, y - 8 * size, x + 20 * size, y - 17 * size);
     }
 
-    protected void drawScales(GraphicsContext gc,double x, double y, Color color) {
+    protected void drawScales(GraphicsContext gc, double x, double y, Color color) {
         Color bright = color.brighter();
         Color brighterTransparent = new Color(bright.getRed(), bright.getGreen(), bright.getBlue(), 0.8);
         gc.setFill(brighterTransparent);
@@ -91,5 +101,5 @@ public class AnimationFishIdle extends Animation {
         gc.setFill(Color.WHITE);
         gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }
-    
+
 }
