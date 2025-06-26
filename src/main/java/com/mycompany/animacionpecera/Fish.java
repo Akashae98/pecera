@@ -15,14 +15,14 @@ import javafx.scene.paint.Color;
  */
 public class Fish {
 
-    private double dx, dy;    //Direction for movement
+    private double x, y, dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
     private Position position;
-    private BoundingBox boundingBox;
 
     public Fish(Position pos, double size, Color color) {
-        this.position = pos;
+        this.x = pos.x;
+        this.y = pos.y;
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
@@ -30,8 +30,7 @@ public class Fish {
         //the base of the bodyfish is 37 + width fishtail= 41
         //the height of the body= 20
         //the height of the fishtail= 10
-        this.boundingBox = new BoundingBox(pos, 41, 20, 10, size);
-
+        this.boundingBox = new BoundingBox(pos, 41, 20, 10, size)
     }
 
     //Method of movement
@@ -42,7 +41,6 @@ public class Fish {
         double[] newDirect = movement.rebound(boundingBox, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
-
     }
 
     //Method for drawing
