@@ -29,38 +29,41 @@ public class AnimationFishIdle extends Animation {
     @Override
     public BoundingBox getBoundingBox(Position position) {
         //the base of the bodyfish 
-        double bodyWidth = 38 * size;
+        double bodyWidth = 36 * size;
         //the height of the bodyfish
         double bodyHeight = 20 * size;
         //the height of the fishtail
-        double tailHeight = 9 * size;
+        double tail_displacement = 10 * size;
+        //displacement to left
+        double left_displacement = 5 * size;
 
         Position topLeft = new Position(
-                position.x,
+                position.x - (left_displacement),
                 position.y - (bodyHeight / 2)
         );
 
         Position topRight = new Position(
-                position.x + bodyWidth,
+                position.x + bodyWidth + tail_displacement,
                 position.y - (bodyHeight / 2)
         );
 
         Position bottomRight = new Position(
-                position.x + bodyWidth,
-                position.y + (bodyHeight / 2) + tailHeight
+                position.x + bodyWidth + tail_displacement,
+                position.y + (bodyHeight / 2) + tail_displacement
         );
 
         Position bottomLeft = new Position(
-                position.x,
-                position.y + (bodyHeight / 2) + tailHeight
+                position.x - (left_displacement),
+                position.y + (bodyHeight / 2) + tail_displacement
         );
 
         return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
+
     }
 
     //Method for drawing
     @Override
-    public void draw(GraphicsContext gc, double x, double y) {
+    public void draw(GraphicsContext gc, Position position) {
         gc.setFill(color);
         int baseFishWidth = 36;
         int baseFishHeight = 22;
@@ -68,27 +71,30 @@ public class AnimationFishIdle extends Animation {
         double fishHeight = baseFishHeight * size;
 
         // Body
-        gc.fillOval(x - 4 * size, y - 9 * size, fishWidth, fishHeight);
+        gc.fillOval(position.x - 4 * size, position.y - 9 * size, fishWidth, fishHeight);
 
         // Tail
         double[] tailX = {
-            x + fishWidth - 6 * size,
-            x + fishWidth + 9 * size,
-            x + fishWidth - 6 * size
+            position.x + fishWidth - 6 * size,
+            position.x + fishWidth + 9 * size,
+            position.x + fishWidth - 6 * size
         };
         double[] tailY = {
-            y,
-            y + 10 * size,
-            y + 20 * size
+            position.y,
+            position.y + 10 * size,
+            position.y + 20 * size
         };
         gc.fillPolygon(tailX, tailY, 3);
         if (hasFishFin) {
-            drawFishFin(gc, x, y, color);
+            drawFishFin(gc, position.x, position.y, color);
         } else {
-            drawScales(gc, x, y, color);
+            drawScales(gc, position.x, position.y, color);
         }
 
-        drawEye(gc, x, y);
+        drawEye(gc, position.x, position.y);
+        BoundingBox boundingBox = getBoundingBox(position);
+        drawBoundingBox(gc, boundingBox);
+
     }
 
     protected void drawFishFin(GraphicsContext gc, double x, double y, Color color) {
@@ -126,4 +132,26 @@ public class AnimationFishIdle extends Animation {
         gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }
 
+    private void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox) {
+
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(1.0);
+
+        gc.strokeLine(
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y,
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y,
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y,
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
+        );
+    }
 }

@@ -15,15 +15,14 @@ public class Movement {
     int height = FishTank.CANVAS_HEIGH;
 
     //this method changes direction before object passes the limits
-
     public double[] rebound(BoundingBox box, double currentDx, double currentDy) {
         //array that returns two variables
         double[] newDirection = {currentDx, currentDy};
 
-        if (box.getLeft() < 0 || box.getRight() > width) {
+        if (box.getTopLeft().x < 0 || box.getBottomRight().x > width) {
             newDirection[0] *= -1;
         }
-        if (box.getTop() < 0 || box.getBottom() > height) {
+        if (box.getTopLeft().y < 0 || box.getBottomRight().y > height) {
             newDirection[1] *= -1;
         }
 
@@ -37,7 +36,7 @@ public class Movement {
             dy = height + Math.random() * 50;
             // the bubble goes to the bottom + random numbeer.
         }
-      
+
         return dy;
     }
 

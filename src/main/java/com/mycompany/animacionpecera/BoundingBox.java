@@ -5,8 +5,8 @@
 package com.mycompany.animacionpecera;
 
 /**
- * Boundinbox represents a rectangular box defined by four corner positions. Can
- * be used to check if points are contained within the box and to get the
+ * Boundingbox represents a rectangular box defined by four corner positions.
+ * Can be used to check if points are contained within the box and to get the
  * boundaries of the box.
  */
 public class BoundingBox {
@@ -42,26 +42,9 @@ public class BoundingBox {
         return bottomLeft;
     }
 
-    //Getters for boundaries and for the method isInside:
-    public double getLeft() {
-        return topLeft.x;
-    }
-
-    public double getTop() {
-        return topLeft.y;
-    }
-
-    public double getRight() {
-        return bottomRight.x;
-    }
-
-    public double getBottom() {
-        return bottomRight.y;
-    }
     // Checks if a given point is inside this bounding box.
-
     public boolean isInside(Position point) {
-        return point.x >= getLeft() && point.x <= getRight()
-                && point.y >= getTop() && point.y <= getBottom();
+        return point.x >= topLeft.x && point.x <= bottomRight.x
+                && point.y >= topLeft.y && point.y <= bottomRight.y;
     }
 }

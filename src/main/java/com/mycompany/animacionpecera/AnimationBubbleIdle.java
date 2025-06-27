@@ -47,11 +47,11 @@ public class AnimationBubbleIdle extends Animation {
     }
 
     @Override
-    public void draw(GraphicsContext gc, double x, double y) {
+    public void draw(GraphicsContext gc, Position position) {
         gc.setFill(Color.rgb(255, 255, 255, 0.3)); //white color semitransparent
-        gc.fillOval(x, y, this.size, size);//fills with color the inside of bubble
+        gc.fillOval(position.x, position.y, this.size, size);//fills with color the inside of bubble
         gc.setStroke(Color.rgb(255, 255, 255, 0.5));//white color for the bubble edge
-        gc.strokeOval(x, y, size, size);//fills with color
+        gc.strokeOval(position.x, position.y, size, size);//fills with color
     }
 
 }

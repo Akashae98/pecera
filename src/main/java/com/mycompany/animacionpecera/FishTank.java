@@ -41,12 +41,12 @@ public class FishTank {
     }
 
     // To animate fishes first we change its position and then we draw
-    public void animate(GraphicsContext gc, int width, int height) {
+    public void animate(GraphicsContext gc) {
         // we use this method in every frame of the animation timer
 
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
-            fish.move(width, height);
+            fish.move();
             fish.draw(gc);
         }
     }

@@ -11,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @author carol
  */
 public abstract class Animation {
- 
+
     protected double size;
 
     protected Animation(double size) {
@@ -19,9 +19,8 @@ public abstract class Animation {
     }
 
     // Abstract methods for each subclass
-    public abstract void draw(GraphicsContext gc, double x, double y);
-    
+    public abstract void draw(GraphicsContext gc, Position position);
+
     public abstract BoundingBox getBoundingBox(Position position);
 
-    
 }

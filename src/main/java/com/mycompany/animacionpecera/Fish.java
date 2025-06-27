@@ -32,7 +32,7 @@ public class Fish {
     }
 
     //Method of movement
-    public void move(int width, int height) {
+    public void move() {
         position.x += dx; // horizontal movement
         position.y += dy; // vertical move
         boundingBox = anim.getBoundingBox(position);
@@ -43,7 +43,8 @@ public class Fish {
 
     //Method for drawing
     public void draw(GraphicsContext gc) {
-        anim.draw(gc, position.x, position.y);
+        anim.draw(gc, position);
+
     }
 
 }
