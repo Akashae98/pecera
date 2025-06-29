@@ -28,11 +28,13 @@ public class Bubble {
 
     public void move() {
         //the position of y decreases to the top
-        position.y -= speed;
-        this.position = new Position(position.x, position.y);
-        //the position of y returns to the bottom
-        this.position.y = movement.moviAscend(position, size);
+        this.position = position.displacement(0, -speed);
 
+        //the position of y returns to the bottom
+        double newY = movement.moviAscend(position, size);
+        if (newY != position.getY()) { 
+            this.position = new Position(position.getX(), newY);
+        }
     }
 
     //Method for drawing

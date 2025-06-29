@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
  */
 public class Fish {
 
-    private double x, y, dx, dy;    //Direction for movement
+    private double dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
     private Position position;
@@ -33,12 +33,16 @@ public class Fish {
 
     //Method of movement
     public void move() {
-        position.x += dx; // horizontal movement
-        position.y += dy; // vertical move
+        position = position.displacement(dx, dy); // sum or rest into postion
+
         boundingBox = anim.getBoundingBox(position);
         double[] newDirect = movement.rebound(boundingBox, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
+        boundingBox = anim.getBoundingBox(position);
+        //teletransport relocateds a fish inside canvas
+        position = movement.teletransport(boundingBox, position);
+
     }
 
     //Method for drawing
