@@ -6,6 +6,7 @@ package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -13,20 +14,41 @@ import javafx.scene.image.Image;
  */
 public class AnimationCoralFish extends Animation {
 
-    public AnimationCoralFish(double size) {
+    private Color color;
+
+    public AnimationCoralFish(double size, Color color) {
         super(size);
+        this.color = color;
     }
 
     @Override
     public BoundingBox getBoundingBox(Position position) {
-        //pendiente
-        Position topLeft = new Position(0,0);
+        double bodyWidth = 90 * size;
+        double bodyHeight = 90 * size;
+        double tail_displacement = 33 * size;
+        double left_displacement = 4 * size;
+        double top_displacement = 4 * size; 
 
-        Position topRight = new Position(0,0);
+       
+        Position topLeft = new Position(
+                position.x + left_displacement,
+                position.y + top_displacement
+        );
 
-        Position bottomRight = new Position(0,0);
+        Position topRight = new Position(
+                position.x + bodyWidth + tail_displacement,
+                position.y + top_displacement
+        );
 
-        Position bottomLeft = new Position(0,0);
+        Position bottomRight = new Position(
+                position.x + bodyWidth + tail_displacement,
+                position.y + bodyHeight + tail_displacement
+        );
+
+        Position bottomLeft = new Position(
+                position.x + left_displacement,
+                position.y + bodyHeight + tail_displacement
+        );
 
         return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
     }
@@ -34,9 +56,37 @@ public class AnimationCoralFish extends Animation {
     @Override
     public void draw(GraphicsContext gc, Position pos) {
         Image image = chargeDraw();
-        double ancho = image.getWidth() * size;
-        double alto = image.getHeight() * size;
-        gc.drawImage(image, pos.x, pos.y, ancho, alto);
+        double width = image.getWidth() * size;
+        double height = image.getHeight() * size;
+
+        gc.drawImage(image, pos.x, pos.y, width, height);
+        BoundingBox boundingBox = getBoundingBox(pos);
+        drawBoundingBox(gc, boundingBox); 
+        gc.strokeText("o", pos.x, pos.y);
+
+    }
+
+    private void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox) {
+
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(1.0);
+
+        gc.strokeLine(
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y,
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y,
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y,
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
+        );
     }
 
     private Image chargeDraw() {

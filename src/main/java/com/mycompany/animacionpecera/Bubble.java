@@ -32,8 +32,8 @@ public class Bubble {
 
         //the position of y returns to the bottom
         double newY = movement.moviAscend(position, size);
-        if (newY != position.getY()) { 
-            this.position = new Position(position.getX(), newY);
+        if (newY != position.y) { 
+            this.position = new Position(position.x, newY);
         }
     }
 

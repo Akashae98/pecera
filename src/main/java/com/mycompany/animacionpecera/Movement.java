@@ -19,60 +19,50 @@ public class Movement {
     public double[] rebound(BoundingBox box, double currentDx, double currentDy) {
         double[] newDirection = {currentDx, currentDy};
 
-        if (box.getTopLeft().x < 0) {
-            //changes to get always a positive direction in x axys
-            newDirection[0] = (currentDy * currentDy) / (currentDy * currentDy);
+        // horizontal
+        if ((box.getTopLeft().x < 0 && currentDx < 0)
+                || (box.getBottomRight().x > width && currentDx > 0)) {
+            newDirection[0] *= -1;
         }
-        if (box.getBottomRight().x > width) {
-            //changes to negtaive direction in x axys
-            newDirection[0] = -(currentDy * currentDy) / (currentDy * currentDy);
 
-        }
-        if (box.getTopLeft().y < 0) {
-
-            newDirection[1] = (currentDy * currentDy) / (currentDy * currentDy);
-        }
-        if (box.getBottomRight().y > height) {
-
-            newDirection[1] = -(currentDy * currentDy) / (currentDy * currentDy);
+        // vertical
+        if ((box.getTopLeft().y < 0 && currentDy < 0)
+                || (box.getBottomRight().y > height && currentDy > 0)) {
+            newDirection[1] *= -1;
         }
 
         return newDirection;
     }
+
     /*an object could be created outside the canvas, this method controlls that this doesn't occurs
     teletransporting the object inside.
-    */
+     */
     public Position teletransport(BoundingBox box, Position position) {
-        double fishWidth = Math.abs(box.getTopRight().x - box.getTopLeft().x);
-        double fishHeight = Math.abs(box.getBottomLeft().y - box.getTopLeft().y);
-        
-        double x = position.getX();
-        double y = position.getY();
-        
-        if (box.getTopLeft().x < 0 || box.getBottomRight().x > width) {
-            if (box.getTopLeft().x < -1) {
-                x = fishWidth / 3;  // Teletransports
-            }
-            else if (box.getBottomRight().x > width + 1) {
-                x = width - fishWidth;
-            }
+        double fishWidth = (box.getTopRight().x - box.getTopLeft().x);
+        double fishHeight = (box.getBottomLeft().y - box.getTopLeft().y);
+
+        double x = position.x;
+        double y = position.y;
+
+        if (box.getTopLeft().x < -1) {
+            x = fishWidth / 3;  // Teletransports
+        } else if (box.getBottomRight().x > width + 1) {
+            x = width - fishWidth;
         }
-        if (box.getTopLeft().y < 0 || box.getBottomRight().y > height) {
-            if (box.getTopLeft().y < -1) {
-                y = fishHeight;
-            }
-            else if (box.getBottomRight().y > height + 1) {
-                y = height - fishHeight;
-            }
+
+        if (box.getTopLeft().y < -1) {
+            y = fishHeight;
+        } else if (box.getBottomRight().y > height + 1) {
+            y = height - fishHeight;
         }
-        
-        return new Position (x,y);
+
+        return new Position(x, y);
     }
 
     public double moviAscend(Position pos, double radio) {
-        double dy = pos.getY();
+        double dy = pos.y;
         // if position + ratio exceeds the top...
-        if (pos.getY() + radio < 0) {
+        if (pos.y + radio < 0) {
             dy = height + Math.random() * 50;
             // the bubble goes to the bottom + random numbeer.
         }

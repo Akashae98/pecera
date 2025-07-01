@@ -22,9 +22,7 @@ public class AnimationFishIdle extends Animation {
         this.color = color;
     }
 
-    /*Note: the fish's actual position (0,0) refers to the center-left point of the object.
-    * Therefore, the bounding box must account for displacement toward only the top,
-    * right, and bottom to fully cover the fish's visual area.
+    /*Note: the fish's actual position (0,0) refers to a center-left point in the object.
      */
     @Override
     public BoundingBox getBoundingBox(Position position) {

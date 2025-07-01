@@ -28,21 +28,24 @@ public class Fish {
         this.movement = new Movement();
         this.anim = new AnimationFishIdle(size, FishTank.getRandom().nextBoolean(), color);
         this.boundingBox = anim.getBoundingBox(position);
-
     }
 
     //Method of movement
     public void move() {
-        position = position.displacement(dx, dy); // sum or rest into postion
-
+        // updates postion
+        position = position.displacement(dx, dy);
+        
+        //updates boundingbox position
         boundingBox = anim.getBoundingBox(position);
+        
+        //handles rebounding and changes direction
         double[] newDirect = movement.rebound(boundingBox, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
-        boundingBox = anim.getBoundingBox(position);
-        //teletransport relocateds a fish inside canvas
-        position = movement.teletransport(boundingBox, position);
 
+        //relocates a fish inside canvas if needed
+        position = movement.teletransport(boundingBox, position);
+        boundingBox = anim.getBoundingBox(position);
     }
 
     //Method for drawing
