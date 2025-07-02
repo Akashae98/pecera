@@ -34,31 +34,6 @@ public class Movement {
         return newDirection;
     }
 
-    /*an object could be created outside the canvas, this method controlls that this doesn't occurs
-    teletransporting the object inside.
-     */
-    public Position teletransport(BoundingBox box, Position position) {
-        double fishWidth = (box.getTopRight().x - box.getTopLeft().x);
-        double fishHeight = (box.getBottomLeft().y - box.getTopLeft().y);
-
-        double x = position.x;
-        double y = position.y;
-
-        if (box.getTopLeft().x < -1) {
-            x = fishWidth / 3;  // Teletransports
-        } else if (box.getBottomRight().x > width + 1) {
-            x = width - fishWidth;
-        }
-
-        if (box.getTopLeft().y < -1) {
-            y = fishHeight;
-        } else if (box.getBottomRight().y > height + 1) {
-            y = height - fishHeight;
-        }
-
-        return new Position(x, y);
-    }
-
     public double moviAscend(Position pos, double radio) {
         double dy = pos.y;
         // if position + ratio exceeds the top...

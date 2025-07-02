@@ -34,18 +34,15 @@ public class Fish {
     public void move() {
         // updates postion
         position = position.displacement(dx, dy);
-        
+
         //updates boundingbox position
         boundingBox = anim.getBoundingBox(position);
-        
+
         //handles rebounding and changes direction
         double[] newDirect = movement.rebound(boundingBox, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
 
-        //relocates a fish inside canvas if needed
-        position = movement.teletransport(boundingBox, position);
-        boundingBox = anim.getBoundingBox(position);
     }
 
     //Method for drawing

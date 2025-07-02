@@ -22,7 +22,8 @@ public class AnimationFishIdle extends Animation {
         this.color = color;
     }
 
-    /*Note: the fish's actual position (0,0) refers to a center-left point in the object.
+    /*Note: the fish's actual position refers to a center-left point in the object.
+    We need to calculate the boundingbox starting from that position.
      */
     @Override
     public BoundingBox getBoundingBox(Position position) {

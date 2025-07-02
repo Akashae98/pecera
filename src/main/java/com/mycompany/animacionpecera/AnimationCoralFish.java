@@ -16,9 +16,9 @@ public class AnimationCoralFish extends Animation {
 
     private Color color;
 
-    public AnimationCoralFish(double size, Color color) {
+    public AnimationCoralFish(double size) {
         super(size);
-        this.color = color;
+        this.color = Color.WHITE;
     }
 
     @Override
@@ -27,9 +27,8 @@ public class AnimationCoralFish extends Animation {
         double bodyHeight = 90 * size;
         double tail_displacement = 33 * size;
         double left_displacement = 4 * size;
-        double top_displacement = 4 * size; 
+        double top_displacement = 4 * size;
 
-       
         Position topLeft = new Position(
                 position.x + left_displacement,
                 position.y + top_displacement
@@ -61,14 +60,14 @@ public class AnimationCoralFish extends Animation {
 
         gc.drawImage(image, pos.x, pos.y, width, height);
         BoundingBox boundingBox = getBoundingBox(pos);
-        drawBoundingBox(gc, boundingBox); 
+        drawBoundingBox(gc, boundingBox);
         gc.strokeText("o", pos.x, pos.y);
 
     }
 
     private void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox) {
 
-        gc.setStroke(Color.WHITE);
+        gc.setStroke(this.color);
         gc.setLineWidth(1.0);
 
         gc.strokeLine(
