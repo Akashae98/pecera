@@ -14,11 +14,10 @@ import javafx.scene.paint.Color;
  */
 public class AnimationCoralFish extends Animation {
 
-    private Color color;
+    private Color color = Color.WHITE;
 
     public AnimationCoralFish(double size) {
         super(size);
-        this.color = Color.WHITE;
     }
 
     @Override
@@ -60,32 +59,9 @@ public class AnimationCoralFish extends Animation {
 
         gc.drawImage(image, pos.x, pos.y, width, height);
         BoundingBox boundingBox = getBoundingBox(pos);
-        drawBoundingBox(gc, boundingBox);
+        drawBoundingBox(gc, boundingBox, this.color);
         gc.strokeText("o", pos.x, pos.y);
 
-    }
-
-    private void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox) {
-
-        gc.setStroke(this.color);
-        gc.setLineWidth(1.0);
-
-        gc.strokeLine(
-                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y,
-                boundingBox.getTopRight().x, boundingBox.getTopRight().y
-        );
-        gc.strokeLine(
-                boundingBox.getTopRight().x, boundingBox.getTopRight().y,
-                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y
-        );
-        gc.strokeLine(
-                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y,
-                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y
-        );
-        gc.strokeLine(
-                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
-                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
-        );
     }
 
     private Image chargeDraw() {

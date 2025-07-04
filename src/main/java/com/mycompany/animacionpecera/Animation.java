@@ -5,6 +5,7 @@
 package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -19,8 +20,31 @@ public abstract class Animation {
     }
 
     // Abstract methods for each subclass
-    public abstract void draw(GraphicsContext gc, Position position);
+    protected abstract void draw(GraphicsContext gc, Position position);
 
-    public abstract BoundingBox getBoundingBox(Position position);
+    protected abstract BoundingBox getBoundingBox(Position position);
+
+    protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color) {
+
+        gc.setStroke(color);
+        gc.setLineWidth(1.0);
+
+        gc.strokeLine(
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y,
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y,
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y,
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
+        );
+    }
 
 }
