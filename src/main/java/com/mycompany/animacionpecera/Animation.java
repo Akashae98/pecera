@@ -20,9 +20,9 @@ public abstract class Animation {
     }
 
     // Abstract methods for each subclass
-    protected abstract void draw(GraphicsContext gc, Position position);
+    public abstract void draw(GraphicsContext gc, Position position);
 
-    protected abstract BoundingBox getBoundingBox(Position position);
+    public abstract BoundingBox getBoundingBox(Position position);
 
     protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color) {
 

@@ -14,10 +14,11 @@ import javafx.scene.paint.Color;
  */
 public class AnimationCoralFish extends Animation {
 
-    private Color color = Color.WHITE;
+    private Image image;
 
     public AnimationCoralFish(double size) {
         super(size);
+        this.image = new Image(getClass().getResourceAsStream("/Images/sketchPezCoral.png"));
     }
 
     @Override
@@ -53,25 +54,15 @@ public class AnimationCoralFish extends Animation {
 
     @Override
     public void draw(GraphicsContext gc, Position pos) {
-        Image image = chargeDraw();
+
         double width = image.getWidth() * size;
         double height = image.getHeight() * size;
 
         gc.drawImage(image, pos.x, pos.y, width, height);
         BoundingBox boundingBox = getBoundingBox(pos);
-        drawBoundingBox(gc, boundingBox, this.color);
+        drawBoundingBox(gc, boundingBox, Color.WHITE);
         gc.strokeText("o", pos.x, pos.y);
 
-    }
-
-    private Image chargeDraw() {
-        try {
-            Image image = new Image(getClass().getResourceAsStream("/Images/sketchPezCoral.png"));
-            return image;
-        } catch (Exception e) {
-            System.err.println("Error al cargar imagen de pez coral: " + e.getMessage());
-        }
-        return null;
     }
 
 }
