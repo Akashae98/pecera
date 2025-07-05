@@ -55,8 +55,6 @@ public class AnimationBubbleIdle extends Animation {
         gc.strokeOval(position.x, position.y, size, size);//fills with color
         BoundingBox boundingBox = getBoundingBox(position);
         drawBoundingBox(gc, boundingBox, Color.WHITE);
-        
-        gc.strokeText("o", position.x, position.y);
     }
 
 }

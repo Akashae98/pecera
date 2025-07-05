@@ -22,9 +22,8 @@ public class AnimationFishIdle extends Animation {
         this.color = color;
     }
 
-    /*Note: the fish's actual position (0,0) refers to the center-left point of the object.
-    * Therefore, the bounding box must account for displacement toward only the top,
-    * right, and bottom to fully cover the fish's visual area.
+    /*Note: the fish's actual position refers to a center-left point in the object.
+    We need to calculate the boundingbox starting from that position.
      */
     @Override
     public BoundingBox getBoundingBox(Position position) {
@@ -93,7 +92,7 @@ public class AnimationFishIdle extends Animation {
 
         drawEye(gc, position.x, position.y);
         BoundingBox boundingBox = getBoundingBox(position);
-        drawBoundingBox(gc, boundingBox);
+        drawBoundingBox(gc, boundingBox, this.color);
 
     }
 
@@ -132,26 +131,4 @@ public class AnimationFishIdle extends Animation {
         gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }
 
-    private void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox) {
-
-        gc.setStroke(Color.WHITE);
-        gc.setLineWidth(1.0);
-
-        gc.strokeLine(
-                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y,
-                boundingBox.getTopRight().x, boundingBox.getTopRight().y
-        );
-        gc.strokeLine(
-                boundingBox.getTopRight().x, boundingBox.getTopRight().y,
-                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y
-        );
-        gc.strokeLine(
-                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y,
-                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y
-        );
-        gc.strokeLine(
-                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
-                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
-        );
-    }
 }
