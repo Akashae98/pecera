@@ -19,33 +19,38 @@ public class AnimationCoralFish extends Animation {
     public AnimationCoralFish(double size) {
         super(size);
         this.image = new Image(getClass().getResourceAsStream("/Images/sketchPezCoral.png"));
+
+    }
+
+    private double getWidth() {
+        return image.getWidth() * size;
+    }
+
+    private double getHeight() {
+        return image.getHeight() * size;
     }
 
     @Override
     public BoundingBox getBoundingBox(Position position) {
 
-        double width = image.getWidth() * size;
-        double height = image.getHeight() * size;
-        Position center = position.displacement(width / 2, height / 2);
-
         Position topLeft = new Position(
-                center.x - width / 2,
-                center.y - height / 2
+                position.x - getWidth() / 2,
+                position.y - getHeight() / 2
         );
 
         Position topRight = new Position(
-                center.x + width / 2,
-                center.y - height / 2
+                position.x + getWidth() / 2,
+                position.y - getHeight() / 2
         );
 
         Position bottomRight = new Position(
-                center.x + width / 2,
-                center.y + height / 2
+                position.x + getWidth() / 2,
+                position.y + getHeight() / 2
         );
 
         Position bottomLeft = new Position(
-                center.x - width / 2,
-                center.y + height / 2
+                position.x - getWidth() / 2,
+                position.y + getHeight() / 2
         );
 
         return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
@@ -53,15 +58,10 @@ public class AnimationCoralFish extends Animation {
 
     @Override
     public void draw(GraphicsContext gc, Position pos) {
-        double width = image.getWidth() * size;
-        double height = image.getHeight() * size;
-
-        gc.drawImage(image, pos.x, pos.y, width, height);
+        gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2, getWidth(), getHeight());
         BoundingBox boundingBox = getBoundingBox(pos);
         drawBoundingBox(gc, boundingBox, Color.MAGENTA);
-
-        Position center = pos.displacement(width / 2, height / 2);
-        gc.strokeText("o", center.x, center.y);
+        gc.strokeText("o", pos.x, pos.y);
 
     }
 
