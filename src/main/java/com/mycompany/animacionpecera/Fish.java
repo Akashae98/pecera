@@ -15,27 +15,31 @@ import javafx.scene.paint.Color;
  */
 public class Fish {
 
-    private double x, y, dx, dy;    //Direction for movement
+    private double dx, dy;    //Direction for movement
     private Movement movement;
     private final Animation anim;
     private Position position;
+    public BoundingBox boundingBox;
 
-    public Fish(Position pos, double size, Color color) {
-        this.x = pos.x;
-        this.y = pos.y;
+    public Fish(Position pos, Animation animation) {
+        this.position = pos;
         this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
         this.dy = Math.random() * 2 - 1;// Same in y-axis
         this.movement = new Movement();
-        this.anim = new AnimationFishIdle(size, FishTank.getRandom().nextBoolean(), color);
-
+        this.anim = animation;
+        this.boundingBox = anim.getBoundingBox(position);
     }
 
     //Method of movement
-    public void move(int width, int height) {
-        x += dx; // horizontal movement
-        y += dy; // vertical move
-        this.position = new Position(x, y);
-        double[] newDirect = movement.rebound(position, dx, dy);
+    public void move() {
+        // updates postion
+        position = position.displacement(dx, dy);
+
+        //updates boundingbox position
+        boundingBox = anim.getBoundingBox(position);
+
+        //handles rebounding and changes direction
+        double[] newDirect = movement.rebound(boundingBox, dx, dy);
         this.dx = newDirect[0];
         this.dy = newDirect[1];
 
@@ -43,7 +47,8 @@ public class Fish {
 
     //Method for drawing
     public void draw(GraphicsContext gc) {
-        anim.draw(gc, x, y);
+        anim.draw(gc, position);
+
     }
 
 }

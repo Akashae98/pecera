@@ -12,14 +12,13 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Bubble {
 
-    double x, y, size, speed;
+    double size, speed;
     private Movement movement;
     private Animation anim;
     private Position position;
 
     public Bubble(Position position, double size, double speed) {
-        this.x = position.x;
-        this.y = position.y;
+        this.position = position;
         this.movement = new Movement();
         this.size = size;
         this.speed = speed;
@@ -29,16 +28,18 @@ public class Bubble {
 
     public void move() {
         //the position of y decreases to the top
-        y -= speed;
-        this.position = new Position(x, y);
-        //the position of y returns to the bottom
-        this.y = movement.moviAscend(position, size);
+        this.position = position.displacement(0, -speed);
 
+        //the position of y returns to the bottom
+        double newY = movement.moviAscend(position, size);
+        if (newY != position.y) { 
+            this.position = new Position(position.x, newY);
+        }
     }
 
     //Method for drawing
     public void draw(GraphicsContext gc) {
-        anim.draw(gc, x, y);
+        anim.draw(gc, position);
     }
 
 }

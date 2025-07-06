@@ -14,16 +14,23 @@ public class Movement {
     int width = FishTank.CANVAS_WIDTH;
     int height = FishTank.CANVAS_HEIGH;
 
-    //this method changes direction before object passes the limits
-    public double[] rebound(Position pos, double currentDx, double currentDy) {
-        //array that returns two variables
+    /*this method changes direction before object passes the limits, 
+    always to the opposite direction*/
+    public double[] rebound(BoundingBox box, double currentDx, double currentDy) {
         double[] newDirection = {currentDx, currentDy};
-        if (pos.x < 0 || pos.x > width) {
+
+        // horizontal
+        if ((box.getTopLeft().x < 0 && currentDx < 0)
+                || (box.getBottomRight().x > width && currentDx > 0)) {
             newDirection[0] *= -1;
         }
-        if (pos.y < 0 || pos.y > height) {
+
+        // vertical
+        if ((box.getTopLeft().y < 0 && currentDy < 0)
+                || (box.getBottomRight().y > height && currentDy > 0)) {
             newDirection[1] *= -1;
         }
+
         return newDirection;
     }
 
@@ -35,7 +42,31 @@ public class Movement {
             // the bubble goes to the bottom + random numbeer.
         }
         return dy;
+    }
 
+    /*an object could be created outside the canvas, this method controlls that this doesn't occurs
+    teletransporting the object inside.
+     */
+    public Position teletransport(BoundingBox box, Position position) {
+        double fishWidth = (box.getTopRight().x - box.getTopLeft().x);
+        double fishHeight = (box.getBottomLeft().y - box.getTopLeft().y);
+
+        double x = position.x;
+        double y = position.y;
+
+        if (box.getTopLeft().x < -1) {
+            x = fishWidth / 3;  // Teletransports
+        } else if (box.getBottomRight().x > width + 1) {
+            x = width - fishWidth;
+        }
+
+        if (box.getTopLeft().y < -1) {
+            y = fishHeight;
+        } else if (box.getBottomRight().y > height + 1) {
+            y = height - fishHeight;
+        }
+
+        return new Position(x, y);
     }
 
 }

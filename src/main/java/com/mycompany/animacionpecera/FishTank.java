@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -24,8 +25,8 @@ public class FishTank {
     }
 
     public static Position getRandomPoint() { //to obtain a position inside canvas
-        double x = random.nextDouble() * CANVAS_WIDTH;
-        double y = random.nextDouble() * CANVAS_HEIGH;
+        double x = random.nextDouble() * (CANVAS_WIDTH - 40);
+        double y = random.nextDouble() * (CANVAS_HEIGH - 40);
         return new Position(x, y);
     }
 
@@ -36,16 +37,19 @@ public class FishTank {
     // Adds a fish in the array and creates a fish in a position
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
-        fishesList.add(new Fish(position, 0.5 + random.nextDouble(), randomColor.getColor()));
+        Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1), FishTank.getRandom().nextBoolean(), randomColor.getColor());
+        Animation anim_coral = new AnimationCoralFish(0.5 + random.nextDouble(0.5));
+        fishesList.add(new Fish(position, anim));
+        fishesList.add(new Fish(position, anim_coral));
     }
 
     // To animate fishes first we change its position and then we draw
-    public void animate(GraphicsContext gc, int width, int height) {
+    public void animate(GraphicsContext gc) {
         // we use this method in every frame of the animation timer
 
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
-            fish.move(width, height);
+            fish.move();
             fish.draw(gc);
         }
     }
