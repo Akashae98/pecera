@@ -40,13 +40,19 @@ public class MainScene extends Application {
             Position position = FishTank.getRandomPoint();
             fishTank.addFish(position);
         }
-        /* The loops create random bubbles at the canvas */
+        //bubbles
         for (int i = 0; i < 25; i++) {
+            double size = 3 + Math.random() * 3;
+            double speed = 0.6 + Math.random();
             Position pos = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(pos, 3 + Math.random() * 3,
-                    0.6 + Math.random()));
+            Direction direction = new Direction(0, -speed); // the y decreases to the top
+            Animation animation = new AnimationBubbleIdle(size);
+            Movement movement = new LinearMovement(direction, size);
+
+            bubbleList.add(new Bubble(pos, size, speed, animation, movement));
         }
-        for (int i = 0; i < 10; i++) {
+
+        /*for (int i = 0; i < 10; i++) {
             Position pos = FishTank.getRandomPoint();
             bubbleList.add(new Bubble(pos, 6 + Math.random() * 3,
                     0.4 + Math.random()));
@@ -55,8 +61,7 @@ public class MainScene extends Application {
             Position pos = FishTank.getRandomPoint();
             bubbleList.add(new Bubble(pos, 10 + Math.random() * 3,
                     0.2 + Math.random()));
-        }
-
+        }*/
         // Creates MainScene
         new AnimationTimer() {
             @Override

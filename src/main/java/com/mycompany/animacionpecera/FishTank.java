@@ -37,10 +37,12 @@ public class FishTank {
     // Adds a fish in the array and creates a fish in a position
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
-        Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1), FishTank.getRandom().nextBoolean(), randomColor.getColor());
+        Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
+        FishTank.getRandom().nextBoolean(), randomColor.getColor());
         Animation anim_coral = new AnimationCoralFish(0.5 + random.nextDouble(0.5));
-        fishesList.add(new Fish(position, anim));
-        fishesList.add(new Fish(position, anim_coral));
+        
+        fishesList.add(new Fish(position, anim, new MovementRebound()));
+        fishesList.add(new Fish(position, anim_coral, new MovementRebound()));
     }
 
     // To animate fishes first we change its position and then we draw
