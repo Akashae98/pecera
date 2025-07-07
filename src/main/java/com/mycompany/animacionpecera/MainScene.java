@@ -41,27 +41,38 @@ public class MainScene extends Application {
             fishTank.addFish(position);
         }
         //bubbles
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 40; i++) {
             double size = 3 + Math.random() * 3;
             double speed = 0.6 + Math.random();
             Position pos = FishTank.getRandomPoint();
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
-            Movement movement = new LinearMovement(direction, size);
+            Movement movement = new LinearMovement(direction);
 
             bubbleList.add(new Bubble(pos, size, speed, animation, movement));
         }
 
-        /*for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 35; i++) {
+            double size = 8 + Math.random() * 3;
+            double speed = 0.4 + Math.random();
             Position pos = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(pos, 6 + Math.random() * 3,
-                    0.4 + Math.random()));
+            Direction direction = new Direction(0, -speed); // the y decreases to the top
+            Animation animation = new AnimationBubbleIdle(size);
+            Movement movement = new LinearMovement(direction);
+
+            bubbleList.add(new Bubble(pos, size, speed, animation, movement));
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 20; i++) {
+            double size = 13 + Math.random() * 3;
+            double speed = 0.2 + Math.random();
             Position pos = FishTank.getRandomPoint();
-            bubbleList.add(new Bubble(pos, 10 + Math.random() * 3,
-                    0.2 + Math.random()));
-        }*/
+            Direction direction = new Direction(0, -speed); // the y decreases to the top
+            Animation animation = new AnimationBubbleIdle(size);
+            Movement movement = new LinearMovement(direction);
+
+            bubbleList.add(new Bubble(pos, size, speed, animation, movement));
+        }
+
         // Creates MainScene
         new AnimationTimer() {
             @Override

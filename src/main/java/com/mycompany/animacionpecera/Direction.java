@@ -17,4 +17,5 @@ public record Direction(double dx, double dy) {
     public Direction invertY() {
         return new Direction(dx, -dy);
     }
+
 }

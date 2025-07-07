@@ -6,11 +6,9 @@ package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
 
-
 /**
- * This class let us create fishes with position, velocity and random colors,
- * etc. Fishes can be created with a fishfin or with scales depending on whether
- * the boolean hasFishFin its true or false.
+ * This class manages the position, movement and animation of different
+ * fishes...
  *
  */
 public class Fish {
@@ -20,11 +18,11 @@ public class Fish {
     private final Animation anim;
     public BoundingBox boundingBox;
 
-    public Fish(Position pos, Animation animationType, Movement movementType) {
-        this.position = pos;
-        this.movement = movementType;
+    public Fish(Position position, Animation animationType, Movement movementType) {
+        this.position = position;
         this.anim = animationType;
-        this.boundingBox = anim.getBoundingBox(position);
+        this.movement = movementType;
+        this.boundingBox = anim.getBoundingBox(this.position);
     }
 
     //Method of movement

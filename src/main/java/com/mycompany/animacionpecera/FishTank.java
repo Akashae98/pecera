@@ -14,8 +14,8 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class FishTank {
 
-    public static final int CANVAS_WIDTH = 600;
-    public static final int CANVAS_HEIGH = 400;
+    public static final int CANVAS_WIDTH = 900;
+    public static final int CANVAS_HEIGH = 700;
     private final ArrayList<Fish> fishesList;
     private static final Random random = new Random();
 
@@ -34,14 +34,18 @@ public class FishTank {
         return random;
     }
 
-    // Adds a fish in the array and creates a fish in a position
+    // Adds a fish in the array and creates a type of fish 
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
         FishTank.getRandom().nextBoolean(), randomColor.getColor());
         Animation anim_coral = new AnimationCoralFish(0.5 + random.nextDouble(0.5));
         
+        Direction direction = new Direction(0, -0.5 * Math.random()); 
+        
         fishesList.add(new Fish(position, anim, new MovementRebound()));
+        //pez burbuja
+        fishesList.add(new Fish(position, anim, new LinearMovement(direction)));
         fishesList.add(new Fish(position, anim_coral, new MovementRebound()));
     }
 

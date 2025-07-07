@@ -12,35 +12,33 @@ public class MovementRebound extends Movement {
 
     public MovementRebound() {
         super(new Direction(Math.random() * 2 - 1, Math.random() * 2 - 1));
-
     }
 
     /*this method changes direction before object passes the limits, 
     always to the opposite direction*/
     @Override
-    public Position nextPosition(Position current, BoundingBox bounding) {
+    public Position nextPosition(Position current, BoundingBox boundingbox) {
 
-        double[] newDir = rebound(bounding, direction.dx(), direction.dy());
-
-        direction = new Direction(newDir[0], newDir[1]);
-
-        return current.displacement(direction.dx(), direction.dy());
+        Direction newDirection = rebound(boundingbox, direction);
+        direction = newDirection;
+        return current.displacement(newDirection.dx(), newDirection.dy());
     }
 
-    public double[] rebound(BoundingBox box, double currentDx, double currentDy) {
-        double[] newDirection = {currentDx, currentDy};
+    public Direction rebound(BoundingBox box, Direction currentDir) {
+        double newDx = currentDir.dx();
+        double newDy = currentDir.dy();
 
-        if ((box.getTopLeft().x < 0 && currentDx < 0)
-                || (box.getBottomRight().x > width && currentDx > 0)) {
-            newDirection[0] *= -1;
+        if ((box.getTopLeft().x < 0 && currentDir.dx() < 0)
+                || (box.getBottomRight().x > width && currentDir.dx() > 0)) {
+            newDx *= -1;
         }
 
-        if ((box.getTopLeft().y < 0 && currentDy < 0)
-                || (box.getBottomRight().y > height && currentDy > 0)) {
-            newDirection[1] *= -1;
+        if ((box.getTopLeft().y < 0 && currentDir.dy() < 0)
+                || (box.getBottomRight().y > height && currentDir.dy() > 0)) {
+            newDy *= -1;
         }
 
-        return newDirection;
+        return new Direction(newDx, newDy);
     }
 
 }
