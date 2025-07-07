@@ -8,45 +8,20 @@ package com.mycompany.animacionpecera;
  *
  * @author carol
  */
-public class Movement {
+public abstract class Movement {
 
     //limits of the aquarium
-    int width = FishTank.CANVAS_WIDTH;
-    int height = FishTank.CANVAS_HEIGH;
+    protected int width = FishTank.CANVAS_WIDTH;
+    protected int height = FishTank.CANVAS_HEIGH;
+    protected Direction direction;
 
-    /*this method changes direction before object passes the limits, 
-    always to the opposite direction*/
-    public double[] rebound(BoundingBox box, double currentDx, double currentDy) {
-        double[] newDirection = {currentDx, currentDy};
-
-        // horizontal
-        if ((box.getTopLeft().x < 0 && currentDx < 0)
-                || (box.getBottomRight().x > width && currentDx > 0)) {
-            newDirection[0] *= -1;
-        }
-
-        // vertical
-        if ((box.getTopLeft().y < 0 && currentDy < 0)
-                || (box.getBottomRight().y > height && currentDy > 0)) {
-            newDirection[1] *= -1;
-        }
-
-        return newDirection;
+    public Movement(Direction direction) {
+        this.direction = direction;
     }
 
-    public double moviAscend(Position pos, double radio) {
-        double dy = pos.y;
-        // if position + ratio exceeds the top...
-        if (pos.y + radio < 0) {
-            dy = height + Math.random() * 50;
-            // the bubble goes to the bottom + random numbeer.
-        }
-        return dy;
-    }
-
-    /*an object could be created outside the canvas, this method controlls that this doesn't occurs
-    teletransporting the object inside.
-     */
+    public abstract Position nextPosition(Position current, BoundingBox bounding);
+    
+    //esto está de momento aquí:
     public Position teletransport(BoundingBox box, Position position) {
         double fishWidth = (box.getTopRight().x - box.getTopLeft().x);
         double fishHeight = (box.getBottomLeft().y - box.getTopLeft().y);

@@ -12,29 +12,21 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class Bubble {
 
-    double size, speed;
+    private Position position;
     private Movement movement;
     private Animation anim;
-    private Position position;
+    public BoundingBox boundingBox;
 
-    public Bubble(Position position, double size, double speed) {
+    public Bubble(Position position, double size, double speed, Animation animationType, Movement movementType) {
         this.position = position;
-        this.movement = new Movement();
-        this.size = size;
-        this.speed = speed;
-        this.anim = new AnimationBubbleIdle(size);
-
+        this.movement = movementType;
+        this.anim = animationType;
+        this.boundingBox = anim.getBoundingBox(position);
     }
 
     public void move() {
-        //the position of y decreases to the top
-        this.position = position.displacement(0, -speed);
-
-        //the position of y returns to the bottom
-        double newY = movement.moviAscend(position, size);
-        if (newY != position.y) { 
-            this.position = new Position(position.x, newY);
-        }
+        //in case bubble surprass the top
+        position = this.movement.nextPosition(position, this.boundingBox);
     }
 
     //Method for drawing
