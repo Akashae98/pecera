@@ -38,11 +38,11 @@ public class FishTank {
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
-        FishTank.getRandom().nextBoolean(), randomColor.getColor());
+                FishTank.getRandom().nextBoolean(), randomColor.getColor());
         Animation anim_coral = new AnimationCoralFish(0.5 + random.nextDouble(0.5));
-        
-        Direction direction = new Direction(0, -0.5 * Math.random()); 
-        
+
+        Direction direction = new Direction(0, -0.5 * Math.random());
+
         fishesList.add(new Fish(position, anim, new MovementRebound()));
         //pez burbuja
         fishesList.add(new Fish(position, anim, new LinearMovement(direction)));
