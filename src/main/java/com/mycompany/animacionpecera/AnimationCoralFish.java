@@ -61,7 +61,6 @@ public class AnimationCoralFish extends Animation {
         gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2, getWidth(), getHeight());
         BoundingBox boundingBox = getBoundingBox(pos);
         drawBoundingBox(gc, boundingBox, Color.MAGENTA);
-        gc.strokeText("o", pos.x, pos.y);
 
     }
 

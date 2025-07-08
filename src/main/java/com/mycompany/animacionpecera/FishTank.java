@@ -14,8 +14,8 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class FishTank {
 
-    public static final int CANVAS_WIDTH = 600;
-    public static final int CANVAS_HEIGH = 400;
+    public static final int CANVAS_WIDTH = 1000;
+    public static final int CANVAS_HEIGH = 700;
     private final ArrayList<Fish> fishesList;
     private static final Random random = new Random();
 

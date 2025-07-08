@@ -23,8 +23,14 @@ public abstract class Animation {
     public abstract void draw(GraphicsContext gc, Position position);
 
     public abstract BoundingBox getBoundingBox(Position position);
+    
+    private boolean showBoundingBoxes = true;           
 
     protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color) {
+        
+        if(showBoundingBoxes!= false){
+            return;
+        }
 
         gc.setStroke(color);
         gc.setLineWidth(1.0);
@@ -45,6 +51,7 @@ public abstract class Animation {
                 boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
                 boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
         );
+      
     }
 
 }
