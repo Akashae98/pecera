@@ -60,7 +60,7 @@ public class AnimationCoralFish extends Animation {
     public void draw(GraphicsContext gc, Position pos) {
         gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2, getWidth(), getHeight());
         BoundingBox boundingBox = getBoundingBox(pos);
-        drawBoundingBox(gc, boundingBox, Color.MAGENTA);
+        drawBoundingBox(gc, boundingBox, Color.MAGENTA, pos);
 
     }
 

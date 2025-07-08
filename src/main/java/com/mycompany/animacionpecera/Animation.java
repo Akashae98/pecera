@@ -24,9 +24,9 @@ public abstract class Animation {
 
     public abstract BoundingBox getBoundingBox(Position position);
     
-    private boolean showBoundingBoxes = true;           
+    private boolean showBoundingBoxes = false;           
 
-    protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color) {
+    protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color, Position position) {
         
         if(showBoundingBoxes!= false){
             return;
@@ -51,7 +51,7 @@ public abstract class Animation {
                 boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
                 boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
         );
-      
+        gc.strokeText(".", position.x, position.y);
     }
 
 }
