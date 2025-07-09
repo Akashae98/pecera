@@ -13,13 +13,8 @@ public abstract class Movement {
     //limits of the aquarium
     protected int width = FishTank.CANVAS_WIDTH;
     protected int height = FishTank.CANVAS_HEIGH;
-    protected Direction direction;
 
-    public Movement(Direction direction) {
-        this.direction = direction;
-    }
-
-    public abstract Position nextPosition(Position current, BoundingBox bounding);
+    public abstract Position nextPosition(SceneObject current);
     
     //esto está de momento aquí:
     public Position teletransport(BoundingBox box, Position position) {
