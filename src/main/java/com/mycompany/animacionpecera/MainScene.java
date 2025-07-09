@@ -48,8 +48,9 @@ public class MainScene extends Application {
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
+            Movement loop = new LoopOutOfBoundsMovement(movement, animation.getBoundingBox(pos));
 
-            bubbleList.add(new Bubble(pos, size, speed, animation, movement));
+            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
         }
 
         for (int i = 0; i < 35; i++) {
@@ -59,8 +60,8 @@ public class MainScene extends Application {
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
-
-            bubbleList.add(new Bubble(pos, size, speed, animation, movement));
+            Movement loop = new LoopOutOfBoundsMovement(movement, animation.getBoundingBox(pos));
+            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
         }
         for (int i = 0; i < 20; i++) {
             double size = 13 + Math.random() * 3;
@@ -69,8 +70,9 @@ public class MainScene extends Application {
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
+            Movement loop = new LoopOutOfBoundsMovement(movement, animation.getBoundingBox(pos));
 
-            bubbleList.add(new Bubble(pos, size, speed, animation, movement));
+            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
         }
 
         // Creates MainScene

@@ -10,18 +10,29 @@ package com.mycompany.animacionpecera;
  */
 public class MovementRebound extends Movement {
 
-    public MovementRebound() {
-        super(new Direction(Math.random() * 2 - 1, Math.random() * 2 - 1));
+    private LinearMovement linealMove;
+    private BoundingBox bounding;
+
+    public MovementRebound(LinearMovement linealMove, BoundingBox bounding) {
+        this.linealMove = linealMove;
+        this.bounding = bounding;
     }
 
-    /*this method changes direction before object passes the limits, 
+    /*this method changes linear movement before object passes the limits, 
     always to the opposite direction*/
     @Override
-    public Position nextPosition(Position current, BoundingBox boundingbox) {
+    public Position nextPosition(SceneObject current) {
+        
+        Direction direction = linealMove.getDirection();
+        Position currentPos = current.getPosition();
+        Position nextPos = currentPos.displacement(direction.dx(), direction.dy());
 
-        Direction newDirection = rebound(boundingbox, direction);
-        direction = newDirection;
-        return current.displacement(newDirection.dx(), newDirection.dy());
+        BoundingBox nextBox = current.getBoundingBoxAt(nextPos);
+
+        Direction directionRebound = rebound(nextBox, direction);
+        linealMove.setDirection(directionRebound);
+
+        return currentPos.displacement(directionRebound.dx(), directionRebound.dy());
     }
 
     public Direction rebound(BoundingBox box, Direction currentDir) {

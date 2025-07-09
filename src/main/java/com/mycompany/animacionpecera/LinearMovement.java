@@ -10,19 +10,24 @@ package com.mycompany.animacionpecera;
  */
 public class LinearMovement extends Movement {
 
-    public LinearMovement(Direction direction) {
-        super(direction);
+    private Direction direction;
 
+    public LinearMovement(Direction direction) {
+        this.direction = direction;
     }
+
 
     @Override
-    public Position nextPosition(Position current, BoundingBox box) {
-        double newY = current.y + direction.dy();
-        // if bubble exceeds the top, then goes to the bottom + random numbeer.
-        if (newY + box.getTopLeft().x < 0) {
-            newY = height + Math.random() * 50;
-        }
-        return new Position(current.x, newY);
+    public Position nextPosition(SceneObject current) {
+        Position currentPos = current.getPosition();
+        return currentPos.displacement(direction.dx(), direction.dy());
+    }
+     public Direction getDirection() {
+        return direction;
     }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+    
 }

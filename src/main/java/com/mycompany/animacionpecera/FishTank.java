@@ -39,20 +39,28 @@ public class FishTank {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
                 FishTank.getRandom().nextBoolean(), randomColor.getColor());
-        Animation anim_coral = new AnimationCoralFish(0.5 + random.nextDouble(0.5));
+        Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
 
-        Direction direction = new Direction(0, -0.5 * Math.random());
+        double dx = Math.random() * 2 - 1;
+        double dy = dx;
+        Direction direction = new Direction(dx, dy);
 
-        fishesList.add(new Fish(position, anim, new MovementRebound()));
+        LinearMovement lineal = new LinearMovement(direction);
+        Movement loop = new LoopOutOfBoundsMovement(lineal, anim.getBoundingBox(position));
         //pez burbuja
-        fishesList.add(new Fish(position, anim, new LinearMovement(direction)));
-        fishesList.add(new Fish(position, anim_coral, new MovementRebound()));
+        fishesList.add(new Fish(position, loop, anim));
+        Direction direction2 = new Direction(dx - 0.5, dy - 0.5);
+        LinearMovement lineal2 = new LinearMovement(direction2);
+        MovementRebound rebound = new MovementRebound(lineal, anim.getBoundingBox(position));
+        MovementRebound rebound2 = new MovementRebound(lineal2, anim.getBoundingBox(position));
+
+        fishesList.add(new Fish(position, rebound, anim));
+        fishesList.add(new Fish(position, rebound2, anim_coral));
     }
 
     // To animate fishes first we change its position and then we draw
     public void animate(GraphicsContext gc) {
         // we use this method in every frame of the animation timer
-
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
             fish.move();
