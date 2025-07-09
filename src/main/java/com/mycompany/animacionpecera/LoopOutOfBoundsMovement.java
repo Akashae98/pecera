@@ -22,7 +22,7 @@ public class LoopOutOfBoundsMovement extends Movement {
     public Position nextPosition(SceneObject current) {
         //movement
         Position next = linearMove.nextPosition(current);
-        BoundingBox box = current.getBoundingBox();
+        BoundingBox box = current.getBoundingBox(current.position);
 
         // if bubble exceeds the top, then goes to the bottom + random numbeer.
         if (box.getBottomRight().y < 0) {

@@ -40,18 +40,19 @@ public class FishTank {
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
                 FishTank.getRandom().nextBoolean(), randomColor.getColor());
         Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
-
-        double dx = Math.random() * 2 - 1;
-        double dy = dx;
-        Direction direction = new Direction(dx, dy);
-
-        LinearMovement lineal = new LinearMovement(direction);
+        
+         //pez burbuja
+        LinearMovement lineal = new LinearMovement(new Direction(0, -0.6 + Math.random()));
         Movement loop = new LoopOutOfBoundsMovement(lineal, anim.getBoundingBox(position));
-        //pez burbuja
         fishesList.add(new Fish(position, loop, anim));
-        Direction direction2 = new Direction(dx - 0.5, dy - 0.5);
+        
+        double dx = Math.random() * 2 - 1;
+        double dy = Math.random() * 2 - 1;
+        Direction direction = new Direction(dx, dy);
+        Direction direction2 = new Direction(dx * Math.random(), dy * Math.random());
+        LinearMovement lineal1 = new LinearMovement(direction);
         LinearMovement lineal2 = new LinearMovement(direction2);
-        MovementRebound rebound = new MovementRebound(lineal, anim.getBoundingBox(position));
+        MovementRebound rebound = new MovementRebound(lineal1, anim.getBoundingBox(position));
         MovementRebound rebound2 = new MovementRebound(lineal2, anim.getBoundingBox(position));
 
         fishesList.add(new Fish(position, rebound, anim));

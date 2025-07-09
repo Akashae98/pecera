@@ -3,13 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.animacionpecera;
+
 import javafx.scene.canvas.GraphicsContext;
+
 /**
  *
  * @author carol
- */ 
+ */
 
 public abstract class SceneObject {
+
     protected Position position;
     protected Movement movement;
     protected Animation anim;
@@ -36,12 +39,8 @@ public abstract class SceneObject {
         return position;
     }
 
-    public BoundingBox getBoundingBox() {
-        return boundingBox;
-    }
-
-   //if changes position, return the hitbox in the new position
-    public BoundingBox getBoundingBoxAt(Position pos) {
+    //if changes position, return the hitbox in the new position
+    public BoundingBox getBoundingBox(Position pos) {
         return anim.getBoundingBox(pos);
     }
 
@@ -54,5 +53,3 @@ public abstract class SceneObject {
     }
 
 }
-
-

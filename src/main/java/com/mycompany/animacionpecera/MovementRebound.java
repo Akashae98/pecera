@@ -24,15 +24,15 @@ public class MovementRebound extends Movement {
     public Position nextPosition(SceneObject current) {
         
         Direction direction = linealMove.getDirection();
-        Position currentPos = current.getPosition();
-        Position nextPos = currentPos.displacement(direction.dx(), direction.dy());
+        Position actualPos = current.getPosition();
+        Position nextPos = actualPos.displacement(direction.dx(), direction.dy());
 
-        BoundingBox nextBox = current.getBoundingBoxAt(nextPos);
+        BoundingBox nextBox = current.getBoundingBox(nextPos);
 
         Direction directionRebound = rebound(nextBox, direction);
         linealMove.setDirection(directionRebound);
 
-        return currentPos.displacement(directionRebound.dx(), directionRebound.dy());
+        return actualPos.displacement(directionRebound.dx(), directionRebound.dy());
     }
 
     public Direction rebound(BoundingBox box, Direction currentDir) {
