@@ -30,8 +30,12 @@ public class MainScene extends Application {
 
     @Override
     public void start(Stage stage) {
+        int CANVAS_WIDTH = FishTank.CANVAS_WIDTH;
+        int CANVAS_HEIGH = FishTank.CANVAS_HEIGH;
         // Canvas of 600x400 pixels habilitates to draw
-        Canvas canvas = new Canvas(FishTank.CANVAS_WIDTH, FishTank.CANVAS_HEIGH);
+        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
+        BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(0, CANVAS_WIDTH),
+                new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
         fishTank = new FishTank();
 
@@ -48,7 +52,7 @@ public class MainScene extends Application {
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
-            Movement loop = new LoopOutOfBoundsMovement(movement, animation.getBoundingBox(pos));
+            Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
 
             bubbleList.add(new Bubble(size, speed, pos, animation, loop));
         }
@@ -60,7 +64,7 @@ public class MainScene extends Application {
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
-            Movement loop = new LoopOutOfBoundsMovement(movement, animation.getBoundingBox(pos));
+            Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
             bubbleList.add(new Bubble(size, speed, pos, animation, loop));
         }
         for (int i = 0; i < 20; i++) {
@@ -70,7 +74,7 @@ public class MainScene extends Application {
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
-            Movement loop = new LoopOutOfBoundsMovement(movement, animation.getBoundingBox(pos));
+            Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
 
             bubbleList.add(new Bubble(size, speed, pos, animation, loop));
         }
