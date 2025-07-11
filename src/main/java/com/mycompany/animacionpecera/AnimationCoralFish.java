@@ -6,7 +6,6 @@ package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 /**
  *
@@ -58,7 +57,8 @@ public class AnimationCoralFish extends Animation {
 
     @Override
     public void draw(GraphicsContext gc, Position pos) {
-        gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2, getWidth(), getHeight());
+        gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2,
+                getWidth(), getHeight());
 
     }
 

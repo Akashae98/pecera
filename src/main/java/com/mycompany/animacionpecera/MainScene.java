@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -37,7 +36,7 @@ public class MainScene extends Application {
         int CANVAS_HEIGH = FishTank.CANVAS_HEIGH;
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
-        BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(0, CANVAS_WIDTH),
+        BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
                 new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
         fishTank = new FishTank();
