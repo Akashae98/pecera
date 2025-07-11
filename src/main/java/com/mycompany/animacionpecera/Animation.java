@@ -4,7 +4,6 @@
  */
 package com.mycompany.animacionpecera;
 
-import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -14,56 +13,38 @@ import javafx.scene.paint.Color;
  */
 public abstract class Animation {
 
-    protected double x;
-    protected double y;
     protected double size;
-    protected Color color;
-    private static final Random random = new Random(); //Instance of random    
 
-    public Animation(double x, double y) {
-        this.x = x;
-        this.y = y;
-        this.size = 0.5 + random.nextDouble();
-        this.color = colorGenerator();
+    protected Animation(double size) {
+        this.size = size;
     }
 
-    // Abstract method for each subclass
-    public abstract void draw(GraphicsContext gc);
+    // Abstract methods for each subclass
+    public abstract void draw(GraphicsContext gc, Position position);
 
+    public abstract BoundingBox getBoundingBox(Position position);
 
-    public void setPosition(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-    
-    public Color getColor() {
-        return color;
-    }
-    
-    private Color colorGenerator() {
-        int selector = random.nextInt(4);//selects between 0, 1 o 2
+    protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color) {
 
-        switch (selector) {
-            case 0: //Blue colors
-                return Color.rgb( //portions of the colors:
-                        50 + random.nextInt(100), // red: 50–149
-                        150 + random.nextInt(70), // green: 150–219
-                        180 + random.nextInt(75) // blue: 180–254
-                );
-            case 1: //Pink colors
-                return Color.rgb(
-                        200 + random.nextInt(55), // red: 200–254
-                        100 + random.nextInt(80), // green: 100–179
-                        140 + random.nextInt(60) // blue: 140–199
-                );
-            case 2: //Purple colors
-                return Color.rgb(
-                        150 + random.nextInt(50), // red: 150–199
-                        120 + random.nextInt(60), // green: 120–179
-                        180 + random.nextInt(40) // blue: 180–219
-                );
-            default:
-                return Color.CORAL;
-        }
+        gc.setStroke(color);
+        gc.setLineWidth(1.0);
+
+        gc.strokeLine(
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y,
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getTopRight().x, boundingBox.getTopRight().y,
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y,
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y
+        );
+        gc.strokeLine(
+                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
+                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
+        );
     }
+
 }

@@ -8,8 +8,14 @@ package com.mycompany.animacionpecera;
  *
  * @author carol
  */
-public abstract class Movement {
+public record Direction(double dx, double dy) {
 
-    public abstract Position nextPosition(SceneObject current);
+    public Direction invertX() {
+        return new Direction(-dx, dy);
+    }
+
+    public Direction invertY() {
+        return new Direction(dx, -dy);
+    }
 
 }

@@ -4,57 +4,16 @@
  */
 package com.mycompany.animacionpecera;
 
-
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-
 /**
- * This class let us create fishes with position, velocity and random colors,
- * etc. Fishes can be created with a fishfin or with scales depending on whether
- * the boolean hasFishFin its true or false.
+ * This class manages the position, movement and animation of different
+ * fishes...
  *
  */
-public class Fish {
-    private double x, y;
-    private double dx, dy;    //Direction for movement
-    private final Movement movement;
-    private final Animation animation;
-    private Color color;
+public class Fish extends SceneObject {
 
-    public Fish(double x, double y, Animation animation) {
-        this.x= x;
-        this.y= y;
-        this.dx = Math.random() * 2 - 1; //Aleatory movement between -1 and 1 in x-axis
-        this.dy = Math.random() * 2 - 1;// Same in y-axis
-        this.movement = new Movement();
-        this.animation = animation;
-        this.animation.setPosition(x, y);
-         /**
-        Color color = animation.getColor();
-        boolean isCoral = color.equals(Color.CORAL); 
-        if (isCoral) {
-        this.animation = new AnimationCoralFish(x, y);
-        } else {
-        this.animation = new AnimationFishIdle(x, y);
-        }
-        */  
-    }
-    
+    public Fish(Position position, Movement movementType, Animation animationType) {
+        super(position, animationType, movementType);
 
-    //Method of movement
-    public void move(int width, int height) {
-        x += dx; // horizontal movement
-        y += dy; // vertical move
-        double[] newDirect = movement.rebound(x, y, dx, dy);
-        this.dx = newDirect[0];
-        this.dy = newDirect[1];
-        
-        animation.setPosition(x, y);
     }
 
-    //Method for drawing
-    public void draw(GraphicsContext gc) {
-        animation.draw(gc);
-    }
-    
 }

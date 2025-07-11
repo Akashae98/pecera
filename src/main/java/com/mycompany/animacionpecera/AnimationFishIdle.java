@@ -4,7 +4,6 @@
  */
 package com.mycompany.animacionpecera;
 
-import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -13,18 +12,57 @@ import javafx.scene.paint.Color;
  * @author carol
  */
 public class AnimationFishIdle extends Animation {
-    
+
     private final boolean hasFishFin;
-    private static final Random random = new Random(); //Instance of random
-    
-   public AnimationFishIdle(double x, double y) {
-        super(x, y);
-        this.hasFishFin = random.nextBoolean();
+    private Color color;
+
+    public AnimationFishIdle(double size, boolean hasFishFin, Color color) {
+        super(size);
+        this.hasFishFin = hasFishFin;
+        this.color = color;
     }
- 
+
+    /*Note: the fish's actual position refers to a center-left point in the object.
+    We need to calculate the boundingbox starting from that position.
+     */
+    @Override
+    public BoundingBox getBoundingBox(Position position) {
+        //the base of the bodyfish 
+        double bodyWidth = 36 * size;
+        //the height of the bodyfish
+        double bodyHeight = 20 * size;
+        //the height of the fishtail
+        double tail_displacement = 10 * size;
+        //displacement to left
+        double left_displacement = 5 * size;
+
+        Position topLeft = new Position(
+                position.x - (left_displacement),
+                position.y - (bodyHeight / 2)
+        );
+
+        Position topRight = new Position(
+                position.x + bodyWidth + tail_displacement,
+                position.y - (bodyHeight / 2)
+        );
+
+        Position bottomRight = new Position(
+                position.x + bodyWidth + tail_displacement,
+                position.y + (bodyHeight / 2) + tail_displacement
+        );
+
+        Position bottomLeft = new Position(
+                position.x - (left_displacement),
+                position.y + (bodyHeight / 2) + tail_displacement
+        );
+
+        return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
+
+    }
+
     //Method for drawing
     @Override
-    public void draw(GraphicsContext gc) {
+    public void draw(GraphicsContext gc, Position position) {
         gc.setFill(color);
         int baseFishWidth = 36;
         int baseFishHeight = 22;
@@ -32,36 +70,39 @@ public class AnimationFishIdle extends Animation {
         double fishHeight = baseFishHeight * size;
 
         // Body
-        gc.fillOval(x - 4 * size, y - 9 * size, fishWidth, fishHeight);
+        gc.fillOval(position.x - 4 * size, position.y - 9 * size, fishWidth, fishHeight);
 
         // Tail
         double[] tailX = {
-            x + fishWidth - 6 * size,
-            x + fishWidth + 9 * size,
-            x + fishWidth - 6 * size
+            position.x + fishWidth - 6 * size,
+            position.x + fishWidth + 9 * size,
+            position.x + fishWidth - 6 * size
         };
         double[] tailY = {
-            y,
-            y + 10 * size,
-            y + 20 * size
+            position.y,
+            position.y + 10 * size,
+            position.y + 20 * size
         };
         gc.fillPolygon(tailX, tailY, 3);
-         if (hasFishFin) {
-            drawFishFin(gc, color);
+        if (hasFishFin) {
+            drawFishFin(gc, position.x, position.y, color);
         } else {
-            drawScales(gc, color);
+            drawScales(gc, position.x, position.y, color);
         }
 
-        drawEye(gc);
+        drawEye(gc, position.x, position.y);
+        BoundingBox boundingBox = getBoundingBox(position);
+        drawBoundingBox(gc, boundingBox, Color.MAGENTA);
+
     }
-        
-    protected void drawFishFin(GraphicsContext gc, Color color) {
+
+    protected void drawFishFin(GraphicsContext gc, double x, double y, Color color) {
         gc.setStroke(color.darker());
         gc.setLineWidth(2 * size);
         gc.strokeLine(x + 10 * size, y - 8 * size, x + 20 * size, y - 17 * size);
     }
 
-    protected void drawScales(GraphicsContext gc, Color color) {
+    protected void drawScales(GraphicsContext gc, double x, double y, Color color) {
         Color bright = color.brighter();
         Color brighterTransparent = new Color(bright.getRed(), bright.getGreen(), bright.getBlue(), 0.8);
         gc.setFill(brighterTransparent);
@@ -85,9 +126,9 @@ public class AnimationFishIdle extends Animation {
         }
     }
 
-    protected void drawEye(GraphicsContext gc) {
+    protected void drawEye(GraphicsContext gc, double x, double y) {
         gc.setFill(Color.WHITE);
         gc.fillOval(x + 4 * size, y - 2 * size, 5 * size, 5 * size);
     }
-    
+
 }
