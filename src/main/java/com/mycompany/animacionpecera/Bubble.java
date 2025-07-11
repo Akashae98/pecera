@@ -4,42 +4,15 @@
  */
 package com.mycompany.animacionpecera;
 
-import javafx.scene.canvas.GraphicsContext;
-
 /**
  *
  * @author ivani
  */
-public class Bubble {
+public class Bubble extends SceneObject {
 
-    double size, speed;
-    private Movement movement;
-    private Animation anim;
-    private Position position;
-
-    public Bubble(Position position, double size, double speed) {
-        this.position = position;
-        this.movement = new Movement();
-        this.size = size;
-        this.speed = speed;
-        this.anim = new AnimationBubbleIdle(size);
-
-    }
-
-    public void move() {
-        //the position of y decreases to the top
-        this.position = position.displacement(0, -speed);
-
-        //the position of y returns to the bottom
-        double newY = movement.moviAscend(position, size);
-        if (newY != position.y) { 
-            this.position = new Position(position.x, newY);
-        }
-    }
-
-    //Method for drawing
-    public void draw(GraphicsContext gc, boolean showBox) {
-        anim.draw(gc, position, showBox);
+    public Bubble(double size, double speed, Position position,
+            Animation animationType, Movement movementType) {
+        super(position, animationType, movementType);
     }
 
 }
