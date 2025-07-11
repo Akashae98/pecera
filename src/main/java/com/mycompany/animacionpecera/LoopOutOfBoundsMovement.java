@@ -34,7 +34,7 @@ public class LoopOutOfBoundsMovement extends Movement {
             newX = canvasBox.getTopLeft().x;
         }
         //vertical teleport to the other side
-        if (box.getTopLeft().y < canvasBox.getTopLeft().y) {
+        if (box.getBottomRight().y < canvasBox.getTopLeft().y) {
             newY = canvasBox.getBottomRight().y;
 
         } else if (box.getTopLeft().y > canvasBox.getBottomRight().y) {

@@ -42,23 +42,23 @@ public class FishTank {
         Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
         BoundingBox canvas = new BoundingBox(new Position(0, 0), new Position(0, CANVAS_WIDTH),
                 new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
-
-        //pez burbuja
-        LinearMovement lineal = new LinearMovement(new Direction(0, -(0.6 + Math.random())));
-        Movement rebound = new MovementRebound(lineal, canvas);
-        fishesList.add(new Fish(position, rebound, anim));
-
         double dx = Math.random() * 2 - 1;
         double dy = Math.random() * 2 - 1;
         Direction direction = new Direction(dx, dy);
+        //pez burbuja
+        LinearMovement lineal = new LinearMovement(direction);
+        Movement rebound = new LoopOutOfBoundsMovement(lineal, canvas);
+        fishesList.add(new Fish(position, rebound, anim));
+
+       
         Direction direction2 = new Direction(dx * Math.random(), dy * Math.random());
         LinearMovement lineal1 = new LinearMovement(direction);
         LinearMovement lineal2 = new LinearMovement(direction2);
         MovementRebound rebound1 = new MovementRebound(lineal1, canvas);
         MovementRebound rebound2 = new MovementRebound(lineal2, canvas);
 
-        fishesList.add(new Fish(position, rebound1, anim));
-        fishesList.add(new Fish(position, rebound2, anim_coral));
+       // fishesList.add(new Fish(position, rebound1, anim));
+        fishesList.add(new Fish(position, rebound, anim_coral));
     }
 
     // To animate fishes first we change its position and then we draw
