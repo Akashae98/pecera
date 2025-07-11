@@ -10,7 +10,9 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -27,6 +29,7 @@ public class MainScene extends Application {
     private FishTank fishTank;// Object controlling fishes
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
+    private boolean showBox = true;
 
     @Override
     public void start(Stage stage) {
@@ -57,6 +60,20 @@ public class MainScene extends Application {
                     0.2 + Math.random()));
         }
 
+        Button toggleBoxButton = new Button("Show Boxes");
+        toggleBoxButton.setStyle(
+                "-fx-background-color: #e0aee0; "
+                + "-fx-text-fill: white; "
+                + "-fx-font-weight: bold; "
+                + "-fx-background-radius: 10; "
+                + "-fx-margin-left: 5; "
+                + "-fx-padding: 10 10;"
+        );
+        toggleBoxButton.setOnAction(e -> {
+            showBox = !showBox;
+            toggleBoxButton.setText(showBox ? "Show Boxes" : "Hide Boxes");
+        });
+
         // Creates MainScene
         new AnimationTimer() {
             @Override
@@ -71,10 +88,10 @@ public class MainScene extends Application {
                 //draws/animates bubbles
                 for (Bubble b : bubbleList) {
                     b.move();
-                    b.draw(gc);
+                    b.draw(gc, showBox);
                 }
                 //draws/animates fishes
-                fishTank.animate(gc);
+                fishTank.animate(gc, showBox);
             }
         }.start();
 
@@ -83,8 +100,10 @@ public class MainScene extends Application {
             Position position = new Position(e.getX(), e.getY());
             fishTank.addFish(position);
         });
+        VBox layout = new VBox();
+        layout.getChildren().addAll(toggleBoxButton, canvas);
         // Shows the canvas in a window
-        stage.setScene(new Scene(new StackPane(canvas)));
+        stage.setScene(new Scene(layout));
         stage.setTitle("Acuario JavaFX");
         stage.show();
     }

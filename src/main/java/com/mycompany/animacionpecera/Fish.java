@@ -5,7 +5,7 @@
 package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+
 
 /**
  * This class let us create fishes with position, velocity and random colors,
@@ -46,8 +46,8 @@ public class Fish {
     }
 
     //Method for drawing
-    public void draw(GraphicsContext gc) {
-        anim.draw(gc, position);
+    public void draw(GraphicsContext gc, boolean showBox) {
+        anim.draw(gc, position, showBox);
 
     }
 

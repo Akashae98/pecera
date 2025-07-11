@@ -62,7 +62,7 @@ public class AnimationFishIdle extends Animation {
 
     //Method for drawing
     @Override
-    public void draw(GraphicsContext gc, Position position) {
+    public void draw(GraphicsContext gc, Position position, boolean showBox) {
         gc.setFill(color);
         int baseFishWidth = 36;
         int baseFishHeight = 22;
@@ -91,8 +91,7 @@ public class AnimationFishIdle extends Animation {
         }
 
         drawEye(gc, position.x, position.y);
-        BoundingBox boundingBox = getBoundingBox(position);
-        drawBoundingBox(gc, boundingBox, Color.MAGENTA, position);
+        drawBoundingBox(gc, position, showBox);
 
     }
 

@@ -38,8 +38,8 @@ public class Bubble {
     }
 
     //Method for drawing
-    public void draw(GraphicsContext gc) {
-        anim.draw(gc, position);
+    public void draw(GraphicsContext gc, boolean showBox) {
+        anim.draw(gc, position, showBox);
     }
 
 }
