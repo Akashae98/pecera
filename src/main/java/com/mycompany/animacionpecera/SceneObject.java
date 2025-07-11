@@ -10,7 +10,6 @@ import javafx.scene.canvas.GraphicsContext;
  *
  * @author carol
  */
-
 public abstract class SceneObject {
 
     protected Position position;
@@ -31,8 +30,8 @@ public abstract class SceneObject {
         position = movement.nextPosition(this);
     }
 
-    public void draw(GraphicsContext gc) {
-        anim.draw(gc, position);
+    public void draw(GraphicsContext gc, boolean showBox) {
+        anim.update(gc, position, showBox);
     }
 
     public Position getPosition() {

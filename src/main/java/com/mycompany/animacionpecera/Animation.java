@@ -24,9 +24,17 @@ public abstract class Animation {
 
     public abstract BoundingBox getBoundingBox(Position position);
 
-    protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color) {
+    public void update(GraphicsContext gc, Position position, boolean showBox) {
+        draw(gc, position);
+        if (showBox) {// if true draws boundingbox
+            drawBoundingBox(gc, position);
+        }
+    }
 
-        gc.setStroke(color);
+    protected void drawBoundingBox(GraphicsContext gc, Position position) {
+
+        BoundingBox boundingBox = getBoundingBox(position);
+        gc.setStroke(Color.MAGENTA);
         gc.setLineWidth(1.0);
 
         gc.strokeLine(
@@ -45,6 +53,7 @@ public abstract class Animation {
                 boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
                 boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
         );
+        gc.strokeText(".", position.x, position.y);
     }
 
 }

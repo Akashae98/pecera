@@ -91,8 +91,6 @@ public class AnimationFishIdle extends Animation {
         }
 
         drawEye(gc, position.x, position.y);
-        BoundingBox boundingBox = getBoundingBox(position);
-        drawBoundingBox(gc, boundingBox, Color.MAGENTA);
 
     }
 

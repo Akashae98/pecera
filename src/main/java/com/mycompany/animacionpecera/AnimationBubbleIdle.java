@@ -52,9 +52,6 @@ public class AnimationBubbleIdle extends Animation {
         gc.fillOval(position.x - size / 2, position.y - size / 2, size, size);//fills with color the inside of bubble
         gc.setStroke(Color.rgb(255, 255, 255, 0.5));//white color for the bubble edge
         gc.strokeOval(position.x - size / 2, position.y - size / 2, size, size);//fills with color
-        BoundingBox boundingBox = getBoundingBox(position);
-        drawBoundingBox(gc, boundingBox, Color.MAGENTA);
-        gc.strokeText(".", position.x, position.y);
     }
 
 }
