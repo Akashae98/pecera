@@ -57,9 +57,8 @@ public class AnimationCoralFish extends Animation {
     }
 
     @Override
-    public void draw(GraphicsContext gc, Position pos, boolean showBox) {
+    public void draw(GraphicsContext gc, Position pos) {
         gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2, getWidth(), getHeight());
-        drawBoundingBox(gc, pos, showBox);
 
     }
 

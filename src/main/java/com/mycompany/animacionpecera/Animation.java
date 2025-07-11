@@ -20,17 +20,19 @@ public abstract class Animation {
     }
 
     // Abstract methods for each subclass
-    public abstract void draw(GraphicsContext gc, Position position, boolean showBox);
+    public abstract void draw(GraphicsContext gc, Position position);
 
     public abstract BoundingBox getBoundingBox(Position position);
-    
-              
 
-    protected void drawBoundingBox(GraphicsContext gc, Position position, boolean showBox) {
-        
-        if(showBox!= false){
-            return;
+    public void update(GraphicsContext gc, Position position, boolean showBox) {
+        draw(gc, position);
+        if (showBox) {// if true draws boundingbox
+            drawBoundingBox(gc, position);
         }
+    }
+
+    protected void drawBoundingBox(GraphicsContext gc, Position position) {
+
         BoundingBox boundingBox = getBoundingBox(position);
         gc.setStroke(Color.MAGENTA);
         gc.setLineWidth(1.0);

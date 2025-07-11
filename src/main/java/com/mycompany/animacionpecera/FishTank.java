@@ -57,7 +57,7 @@ public class FishTank {
         MovementRebound rebound2 = new MovementRebound(lineal2, canvas);
 
        // fishesList.add(new Fish(position, rebound1, anim));
-        fishesList.add(new Fish(position, rebound, anim_coral));
+        fishesList.add(new Fish(position, rebound2, anim_coral));
     }
 
     // To animate fishes first we change its position and then we draw

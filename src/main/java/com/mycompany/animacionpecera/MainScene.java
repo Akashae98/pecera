@@ -29,7 +29,7 @@ public class MainScene extends Application {
     private FishTank fishTank;// Object controlling fishes
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
-    private boolean showBox = true;
+    private boolean showBox;
 
     @Override
     public void start(Stage stage) {
@@ -93,7 +93,7 @@ public class MainScene extends Application {
         );
         toggleBoxButton.setOnAction(e -> {
             showBox = !showBox;
-            toggleBoxButton.setText(showBox ? "Show Boxes" : "Hide Boxes");
+            toggleBoxButton.setText(showBox ? "Hide Boxes" : "Show Boxes");
         });
 
         // Creates MainScene
@@ -102,8 +102,8 @@ public class MainScene extends Application {
             public void handle(long now) {
                 // Gradient background simulates water 
                 LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                        new Stop(0, Color.rgb(70, 130, 180)), //Darkerblue
-                        new Stop(1, Color.rgb(127, 240, 220))); //Lighter blue
+                        new Stop(0, Color.rgb(127, 240, 220)),
+                        new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
                 gc.setFill(fondo);
                 gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
