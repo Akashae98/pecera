@@ -73,7 +73,7 @@ public class MainScene extends Application {
             double size = 15 + Math.random() * 2;
             double speed = 100 + Math.random();
             Position pos = FishTank.getRandomPoint();
-            Direction direction = new Direction(0, -speed); 
+            Direction direction = new Direction(0, -speed);
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
             Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
@@ -98,6 +98,7 @@ public class MainScene extends Application {
         // Creates MainScene
         new AnimationTimer() {
             private long lastUpdate = 0;
+            private final long frameInterval = 16_666_667;//60 fps
 
             @Override
             public void handle(long now) {
@@ -105,8 +106,14 @@ public class MainScene extends Application {
                     lastUpdate = now;
                     return;
                 }
+                
+                if (now - lastUpdate < frameInterval) {
+                    return;
+                }
+                //deltatime its seconds between current frame and the last
                 double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
+                
                 // Gradient background simulates water 
                 LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(127, 240, 220)),
@@ -131,7 +138,7 @@ public class MainScene extends Application {
         });
         VBox layout = new VBox();
         layout.getChildren().addAll(toggleBoxButton, canvas);
-        
+
         // Shows the canvas in a window
         stage.setScene(new Scene(layout));
         stage.setTitle("Acuario JavaFX");
