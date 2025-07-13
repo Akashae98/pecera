@@ -49,36 +49,36 @@ public class MainScene extends Application {
         //bubbles
         for (int i = 0; i < 40; i++) {
             double size = 3 + Math.random() * 3;
-            double speed = 0.6 + Math.random();
+            double speed = 150 + Math.random();
             Position pos = FishTank.getRandomPoint();
             Direction direction = new Direction(0, -speed); // the y decreases to the top
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
             Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
 
-            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
+            bubbleList.add(new Bubble(size, pos, animation, loop));
         }
 
         for (int i = 0; i < 35; i++) {
             double size = 8 + Math.random() * 3;
-            double speed = 0.4 + Math.random();
+            double speed = 140 + Math.random();
             Position pos = FishTank.getRandomPoint();
-            Direction direction = new Direction(0, -speed); // the y decreases to the top
+            Direction direction = new Direction(0, -speed); // the y decreases more slowly
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
             Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
-            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
+            bubbleList.add(new Bubble(size, pos, animation, loop));
         }
-        for (int i = 0; i < 20; i++) {
-            double size = 13 + Math.random() * 3;
-            double speed = 0.2 + Math.random();
+        for (int i = 0; i < 10; i++) {
+            double size = 15 + Math.random() * 2;
+            double speed = 100 + Math.random();
             Position pos = FishTank.getRandomPoint();
-            Direction direction = new Direction(0, -speed); // the y decreases to the top
+            Direction direction = new Direction(0, -speed); 
             Animation animation = new AnimationBubbleIdle(size);
             Movement movement = new LinearMovement(direction);
             Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
 
-            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
+            bubbleList.add(new Bubble(size, pos, animation, loop));
         }
 
         Button toggleBoxButton = new Button("Show Boxes");
@@ -97,8 +97,16 @@ public class MainScene extends Application {
 
         // Creates MainScene
         new AnimationTimer() {
+            private long lastUpdate = 0;
+
             @Override
             public void handle(long now) {
+                if (lastUpdate == 0) {
+                    lastUpdate = now;
+                    return;
+                }
+                double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
+                lastUpdate = now;
                 // Gradient background simulates water 
                 LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(127, 240, 220)),
@@ -108,11 +116,11 @@ public class MainScene extends Application {
 
                 //draws/animates bubbles
                 for (Bubble b : bubbleList) {
-                    b.move();
+                    b.move(deltaTime);
                     b.draw(gc, showBox);
                 }
                 //draws/animates fishes
-                fishTank.animate(gc, showBox);
+                fishTank.animate(gc, showBox, deltaTime);
             }
         }.start();
 
@@ -123,6 +131,7 @@ public class MainScene extends Application {
         });
         VBox layout = new VBox();
         layout.getChildren().addAll(toggleBoxButton, canvas);
+        
         // Shows the canvas in a window
         stage.setScene(new Scene(layout));
         stage.setTitle("Acuario JavaFX");

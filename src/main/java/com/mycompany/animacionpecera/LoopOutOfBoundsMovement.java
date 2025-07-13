@@ -20,14 +20,14 @@ public class LoopOutOfBoundsMovement extends Movement {
 
     @Override
     public Position nextPosition(SceneObject current) {
-        //movement
+        //get the next position using the current linear movement
         Position next = linearMove.nextPosition(current);
         BoundingBox box = current.getBoundingBox(current.position);
 
         double newX = next.x;
         double newY = next.y;
 
-        //horizontal teleport to the other side if exceedes the canvas
+        //horizontal teleport to the other side if exceeds the canvas
         if (box.getBottomRight().x < canvasBox.getTopLeft().x) {
             newX = canvasBox.getBottomRight().x;
         } else if (box.getTopLeft().x > canvasBox.getBottomRight().x) {
