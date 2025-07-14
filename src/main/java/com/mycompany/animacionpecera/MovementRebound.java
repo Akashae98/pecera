@@ -38,12 +38,12 @@ public class MovementRebound extends Movement {
     private Direction rebound(BoundingBox box, Direction currentDir) {
         if ((box.topLeft().x() < canvasBox.topLeft().x() && currentDir.dx() < 0)
                 || (box.bottomRight().x() > canvasBox.bottomRight().x() && currentDir.dx() > 0)) {
-            return currentDir.invertX();
+            currentDir = currentDir.invertX();
         }
 
         if ((box.topLeft().y() < canvasBox.topLeft().y() && currentDir.dy() < 0)
                 || (box.bottomRight().y() > canvasBox.bottomRight().y() && currentDir.dy() > 0)) {
-            return currentDir.invertY();
+            currentDir = currentDir.invertY();
         }
 
         return currentDir;
