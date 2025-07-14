@@ -39,13 +39,13 @@ public class MovementRebound extends Movement {
         double newDx = currentDir.dx();
         double newDy = currentDir.dy();
 
-        if ((box.getTopLeft().x < canvasBox.getTopLeft().x && currentDir.dx() < 0)
-                || (box.getBottomRight().x > canvasBox.getBottomRight().x && currentDir.dx() > 0)) {
+        if ((box.getTopLeft().x() < canvasBox.getTopLeft().x() && currentDir.dx() < 0)
+                || (box.getBottomRight().x() > canvasBox.getBottomRight().x() && currentDir.dx() > 0)) {
             newDx *= -1;
         }
 
-        if ((box.getTopLeft().y < canvasBox.getTopLeft().y && currentDir.dy() < 0)
-                || (box.getBottomRight().y > canvasBox.getBottomRight().y && currentDir.dy() > 0)) {
+        if ((box.getTopLeft().y() < canvasBox.getTopLeft().y() && currentDir.dy() < 0)
+                || (box.getBottomRight().y() > canvasBox.getBottomRight().y() && currentDir.dy() > 0)) {
             newDy *= -1;
         }
 

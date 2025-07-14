@@ -44,7 +44,7 @@ public class BoundingBox {
 
     // Checks if a given point is inside this bounding box.
     public boolean isInside(Position point) {
-        return point.x >= topLeft.x && point.x <= bottomRight.x
-                && point.y >= topLeft.y && point.y <= bottomRight.y;
+        return point.x() >= topLeft.x() && point.x() <= bottomRight.x()
+                && point.y() >= topLeft.y() && point.y() <= bottomRight.y();
     }
 }
