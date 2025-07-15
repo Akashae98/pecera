@@ -37,23 +37,23 @@ public class AnimationFishIdle extends Animation {
         double left_displacement = 5 * size;
 
         Position topLeft = new Position(
-                position.x - (left_displacement),
-                position.y - (bodyHeight / 2)
+                position.x() - (left_displacement),
+                position.y() - (bodyHeight / 2)
         );
 
         Position topRight = new Position(
-                position.x + bodyWidth + tail_displacement,
-                position.y - (bodyHeight / 2)
+                position.x() + bodyWidth + tail_displacement,
+                position.y() - (bodyHeight / 2)
         );
 
         Position bottomRight = new Position(
-                position.x + bodyWidth + tail_displacement,
-                position.y + (bodyHeight / 2) + tail_displacement
+                position.x() + bodyWidth + tail_displacement,
+                position.y() + (bodyHeight / 2) + tail_displacement
         );
 
         Position bottomLeft = new Position(
-                position.x - (left_displacement),
-                position.y + (bodyHeight / 2) + tail_displacement
+                position.x() - (left_displacement),
+                position.y() + (bodyHeight / 2) + tail_displacement
         );
 
         return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
@@ -70,27 +70,27 @@ public class AnimationFishIdle extends Animation {
         double fishHeight = baseFishHeight * size;
 
         // Body
-        gc.fillOval(position.x - 4 * size, position.y - 9 * size, fishWidth, fishHeight);
+        gc.fillOval(position.x() - 4 * size, position.y() - 9 * size, fishWidth, fishHeight);
 
         // Tail
         double[] tailX = {
-            position.x + fishWidth - 6 * size,
-            position.x + fishWidth + 9 * size,
-            position.x + fishWidth - 6 * size
+            position.x() + fishWidth - 6 * size,
+            position.x() + fishWidth + 9 * size,
+            position.x() + fishWidth - 6 * size
         };
         double[] tailY = {
-            position.y,
-            position.y + 10 * size,
-            position.y + 20 * size
+            position.y(),
+            position.y() + 10 * size,
+            position.y() + 20 * size
         };
         gc.fillPolygon(tailX, tailY, 3);
         if (hasFishFin) {
-            drawFishFin(gc, position.x, position.y, color);
+            drawFishFin(gc, position.x(), position.y(), color);
         } else {
-            drawScales(gc, position.x, position.y, color);
+            drawScales(gc, position.x(), position.y(), color);
         }
 
-        drawEye(gc, position.x, position.y);
+        drawEye(gc, position.x(), position.y());
 
     }
 

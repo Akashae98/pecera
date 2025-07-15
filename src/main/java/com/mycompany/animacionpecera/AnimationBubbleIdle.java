@@ -24,23 +24,23 @@ public class AnimationBubbleIdle extends Animation {
         double height = size;
 
         Position topLeft = new Position(
-                position.x - width / 2,
-                position.y - height / 2
+                position.x() - width / 2,
+                position.y() - height / 2
         );
 
         Position topRight = new Position(
-                position.x + width / 2,
-                position.y - height / 2
+                position.x() + width / 2,
+                position.y() - height / 2
         );
 
         Position bottomRight = new Position(
-                position.x + width / 2,
-                position.y + height / 2
+                position.x() + width / 2,
+                position.y() + height / 2
         );
 
         Position bottomLeft = new Position(
-                position.x - width / 2,
-                position.y + height / 2
+                position.x() - width / 2,
+                position.y() + height / 2
         );
 
         return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
@@ -49,9 +49,9 @@ public class AnimationBubbleIdle extends Animation {
     @Override
     public void draw(GraphicsContext gc, Position position) {
         gc.setFill(Color.rgb(255, 255, 255, 0.3)); //white color semitransparent
-        gc.fillOval(position.x - size / 2, position.y - size / 2, size, size);//fills with color the inside of bubble
+        gc.fillOval(position.x() - size / 2, position.y() - size / 2, size, size);//fills with color the inside of bubble
         gc.setStroke(Color.rgb(255, 255, 255, 0.5));//white color for the bubble edge
-        gc.strokeOval(position.x - size / 2, position.y - size / 2, size, size);//fills with color
+        gc.strokeOval(position.x() - size / 2, position.y() - size / 2, size, size);//fills with color
     }
 
 }

@@ -21,7 +21,8 @@ public class LinearMovement extends Movement {
     public Position nextPosition(SceneObject current) {
         Position currentPos = current.getPosition();
         double deltaTime = current.deltaTime;
-        return currentPos.displacement(direction.dx() * deltaTime, direction.dy() * deltaTime);
+        direction.multiply(deltaTime);
+        return currentPos.displacement(direction);
     }
 
     public Direction getDirection() {
