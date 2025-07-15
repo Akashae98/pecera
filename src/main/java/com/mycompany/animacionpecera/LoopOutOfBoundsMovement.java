@@ -10,18 +10,24 @@ package com.mycompany.animacionpecera;
  */
 public class LoopOutOfBoundsMovement extends Movement {
 
-    private Movement linearMove;
+    private Movement linealMove;
     private BoundingBox canvasBox;
 
     public LoopOutOfBoundsMovement(Movement Movement, BoundingBox bounds) {
-        this.linearMove = Movement;
+        this.linealMove = Movement;
         this.canvasBox = bounds;
+    }
+
+    @Override
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+        linealMove.update(deltaTime);
     }
 
     @Override
     public Position nextPosition(SceneObject current) {
         //get the next position using the current linear movement
-        Position next = linearMove.nextPosition(current);
+        Position next = linealMove.nextPosition(current);
         BoundingBox box = current.getBoundingBox(current.position);
 
         double newX = next.x();

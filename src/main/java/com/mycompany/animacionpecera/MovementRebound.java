@@ -18,6 +18,12 @@ public class MovementRebound extends Movement {
         this.canvasBox = bounding;
     }
 
+    @Override
+    public void update(double deltaTime) {
+        super.update(deltaTime);
+        linealMove.update(deltaTime);
+    }
+
     /*this method manages linear movement, before the object passes the limits 
     changes direction to the opposite side*/
     @Override

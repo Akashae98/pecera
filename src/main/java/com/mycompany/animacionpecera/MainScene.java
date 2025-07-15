@@ -113,7 +113,7 @@ public class MainScene extends Application {
 
                 // Rendering
                 for (SceneObject object : sceneList) {
-                    object.draw(gc, showBox);
+                    object.draw(gc, showBox, deltaTime);
                 }
             }
         }.start();

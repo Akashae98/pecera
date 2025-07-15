@@ -9,13 +9,17 @@ package com.mycompany.animacionpecera;
  * @author carol
  */
 public abstract class Movement {
-
-    protected double deltaTime;
-
-    public abstract Position nextPosition(SceneObject current);
+    
+    protected double deltaTime; 
 
     public void update(double deltaTime) {
-        this.deltaTime = deltaTime;
+        this.deltaTime = deltaTime;  
     }
+
+    public double getDeltaTime() {
+        return deltaTime;
+    }
+
+    public abstract Position nextPosition(SceneObject current);
 
 }
