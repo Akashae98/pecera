@@ -25,31 +25,28 @@ public class MovementRebound extends Movement {
 
         Direction direction = linealMove.getDirection();
         Position currentPos = current.getPosition();
-        Position nextPos = currentPos.displacement(direction.dx(), direction.dy());
+        Position nextPos = currentPos.displacement(direction);
 
         BoundingBox nextBox = current.getBoundingBox(nextPos);
 
         Direction directionRebound = rebound(nextBox, direction);
         linealMove.setDirection(directionRebound);
 
-        return currentPos.displacement(directionRebound.dx(), directionRebound.dy());
+        return currentPos.displacement(directionRebound);
     }
 
     private Direction rebound(BoundingBox box, Direction currentDir) {
-        double newDx = currentDir.dx();
-        double newDy = currentDir.dy();
-
-        if ((box.getTopLeft().x < canvasBox.getTopLeft().x && currentDir.dx() < 0)
-                || (box.getBottomRight().x > canvasBox.getBottomRight().x && currentDir.dx() > 0)) {
-            newDx *= -1;
+        if ((box.topLeft().x() < canvasBox.topLeft().x() && currentDir.dx() < 0)
+                || (box.bottomRight().x() > canvasBox.bottomRight().x() && currentDir.dx() > 0)) {
+            currentDir = currentDir.invertX();
         }
 
-        if ((box.getTopLeft().y < canvasBox.getTopLeft().y && currentDir.dy() < 0)
-                || (box.getBottomRight().y > canvasBox.getBottomRight().y && currentDir.dy() > 0)) {
-            newDy *= -1;
+        if ((box.topLeft().y() < canvasBox.topLeft().y() && currentDir.dy() < 0)
+                || (box.bottomRight().y() > canvasBox.bottomRight().y() && currentDir.dy() > 0)) {
+            currentDir = currentDir.invertY();
         }
 
-        return new Direction(newDx, newDy);
+        return currentDir;
     }
 
 }

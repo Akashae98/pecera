@@ -20,7 +20,7 @@ public class LinearMovement extends Movement {
     @Override
     public Position nextPosition(SceneObject current) {
         Position currentPos = current.getPosition();
-        return currentPos.displacement(direction.dx(), direction.dy());
+        return currentPos.displacement(direction);
     }
      public Direction getDirection() {
         return direction;
