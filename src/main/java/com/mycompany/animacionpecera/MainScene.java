@@ -24,15 +24,6 @@ import javafx.stage.Stage;
  * Controls the animation of fishes and bubbles. You can add fishes with a click
  * on the mousse.
  *
- * Borra Fishtank y mueve todo el codigo relevante que contiene a MainScene.
- * Todas las entidades tienen que estar juntas. Ademas, haz que MainScene tenga
- * una lista de SceneObject, no de de burbujas o peces. Haz dos bucles, uno que
- * actualize todas las posiciones de todos los objectos y luego otr bucle que
- * actualize todas las imagenes. La parte logica y la parte de renderizado
- * estara separada.
- *
- * loop { for object in objects{ updatePosition() } for object in objects{
- * draw() } }
  */
 public class MainScene extends Application {
 
@@ -41,22 +32,23 @@ public class MainScene extends Application {
     public static final Random random = new Random();
 
     private GraphicsContext gc; //Graphic context to draw in the canvas
-    private final List<SceneObject> sceneList = new ArrayList<>(); // List of bubbles
+    private final List<SceneObject> sceneList = new ArrayList<>();
     private boolean showBox;
+    BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
+            new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
 
     @Override
     public void start(Stage stage) {
-
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
-        BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
-                new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
-        // At initiate adds 5 fishes in random places 
+        // At initiate adds 10 fishes in random places 
         for (int i = 0; i < 5; i++) {
             Position position = getRandomPoint();
             addFish(position);
+            Position position2 = getRandomPoint();
+            addCoralFish(position2);
         }
 
         // little bubbles
@@ -99,12 +91,12 @@ public class MainScene extends Application {
                 gc.setFill(fondo);
                 gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-                 // Lógica
+                // Logic
                 for (SceneObject object : sceneList) {
                     object.move();
                 }
 
-                // Renderizado
+                // Rendering
                 for (SceneObject object : sceneList) {
                     object.draw(gc, showBox);
                 }
@@ -115,6 +107,7 @@ public class MainScene extends Application {
         canvas.setOnMouseClicked(e -> {
             Position position = new Position(e.getX(), e.getY());
             addFish(position);
+            addCoralFish(position);
         });
         VBox layout = new VBox();
         layout.getChildren().addAll(toggleBoxButton, canvas);
@@ -124,38 +117,45 @@ public class MainScene extends Application {
         stage.show();
     }
 
+    //to create bubbles
     private void addBubble(double size, double speed, BoundingBox canvasBox) {
         Position pos = getRandomPoint();
-        Direction direction = new Direction(0, -speed); 
+        Direction direction = new Direction(0, -speed);
         Animation animation = new AnimationBubbleIdle(size);
         Movement movement = new LinearMovement(direction);
         Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
         sceneList.add(new Bubble(size, pos, animation, loop));
     }
 
-    // Adds a fish in the array and creates a type of fish 
+    // Creates normal fishes 
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
                 random.nextBoolean(), randomColor.getColor());
-        Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
-
-        BoundingBox canvas = new BoundingBox(new Position(0, 0), new Position(0, CANVAS_WIDTH),
-                new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
 
         double dx = Math.random() * 2 - 1;
         double dy = Math.random() * 2 - 1;
 
-        Direction direction1 = new Direction(dx, dy);
-        Movement movement1 = new LoopOutOfBoundsMovement(new LinearMovement(direction1), canvas);
-        sceneList.add(new Fish(position, movement1, anim));
+        Direction direction = new Direction(dx, dy);
+        Movement movement = new LoopOutOfBoundsMovement(new LinearMovement(direction), canvasBox);
+        sceneList.add(new Fish(position, movement, anim));
 
-        Direction direction2 = new Direction(dx + 0.44, dy + 0.44);
-        Movement movement2 = new MovementRebound(new LinearMovement(direction2), canvas);
-        sceneList.add(new Fish(position, movement2, anim_coral));
     }
 
-    public static Position getRandomPoint() { //to obtain a position inside canvas
+    //Creates coralfish
+    public void addCoralFish(Position position) {
+        Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
+
+        double dx = Math.random() * 2 - 1;
+        double dy = Math.random() * 2 - 1;
+
+        Direction direction = new Direction(dx, dy);
+        Movement movement = new MovementRebound(new LinearMovement(direction), canvasBox);
+        sceneList.add(new Fish(position, movement, anim_coral));
+    }
+    
+    //to obtain a position inside canvas
+    public static Position getRandomPoint() { 
         double x = random.nextDouble() * (CANVAS_WIDTH - 40);
         double y = random.nextDouble() * (CANVAS_HEIGH - 40);
         return new Position(x, y);
