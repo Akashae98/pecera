@@ -53,17 +53,17 @@ public class MainScene extends Application {
 
         // little bubbles
         for (int i = 0; i < 40; i++) {
-            addBubble(3 + Math.random() * 3, 0.6 + Math.random(), canvasBox);
+            addBubble(3 + Math.random() * 3, 140 + Math.random(), canvasBox);
         }
 
         // medium
         for (int i = 0; i < 35; i++) {
-            addBubble(8 + Math.random() * 3, 0.4 + Math.random(), canvasBox);
+            addBubble(8 + Math.random() * 3, 100 + Math.random(), canvasBox);
         }
 
         //big
         for (int i = 0; i < 20; i++) {
-            addBubble(13 + Math.random() * 3, 0.2 + Math.random(), canvasBox);
+            addBubble(13 + Math.random() * 3, 80 + Math.random(), canvasBox);
         }
 
         Button toggleBoxButton = new Button("Show Boxes");
@@ -91,14 +91,14 @@ public class MainScene extends Application {
                     lastUpdate = now;
                     return;
                 }
-                
+
                 if (now - lastUpdate < frameInterval) {
                     return;
                 }
                 //deltatime its seconds between current frame and the last
                 double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
-                
+
                 // Gradient background simulates water 
                 LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(127, 240, 220)),
@@ -143,35 +143,34 @@ public class MainScene extends Application {
         sceneList.add(new Bubble(size, pos, animation, loop));
     }
 
-    // Creates normal fishes 
+    //creates normal fishes 
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
                 random.nextBoolean(), randomColor.getColor());
 
-        double dx = Math.random() * 2 - 1;
-        double dy = Math.random() * 2 - 1;
+        double dx = Math.random() * 80 - 1;
+        double dy = Math.random() * 80 - 1;
 
         Direction direction = new Direction(dx, dy);
         Movement movement = new LoopOutOfBoundsMovement(new LinearMovement(direction), canvasBox);
         sceneList.add(new Fish(position, movement, anim));
-
     }
 
     //Creates coralfish
     public void addCoralFish(Position position) {
         Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
 
-        double dx = Math.random() * 2 - 1;
-        double dy = Math.random() * 2 - 1;
+        double dx = Math.random() * 80 - 1;
+        double dy = Math.random() * 80 - 1;
 
         Direction direction = new Direction(dx, dy);
         Movement movement = new MovementRebound(new LinearMovement(direction), canvasBox);
         sceneList.add(new Fish(position, movement, anim_coral));
     }
-    
+
     //to obtain a position inside canvas
-    public static Position getRandomPoint() { 
+    public static Position getRandomPoint() {
         double x = random.nextDouble() * (CANVAS_WIDTH - 40);
         double y = random.nextDouble() * (CANVAS_HEIGH - 40);
         return new Position(x, y);
