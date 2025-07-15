@@ -26,7 +26,8 @@ public abstract class SceneObject {
 
     public void move(double deltaTime) {
         boundingBox = anim.getBoundingBox(position);
-        position = movement.nextPosition(this, deltaTime);
+        movement.update(deltaTime);
+        position = movement.nextPosition(this);
     }
 
     public void draw(GraphicsContext gc, boolean showBox) {

@@ -19,9 +19,9 @@ public class LoopOutOfBoundsMovement extends Movement {
     }
 
     @Override
-    public Position nextPosition(SceneObject current, double deltaTime) {
+    public Position nextPosition(SceneObject current) {
         //get the next position using the current linear movement
-        Position next = linearMove.nextPosition(current, deltaTime);
+        Position next = linearMove.nextPosition(current);
         BoundingBox box = current.getBoundingBox(current.position);
 
         double newX = next.x();
