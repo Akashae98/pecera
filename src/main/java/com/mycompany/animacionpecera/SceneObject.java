@@ -16,6 +16,7 @@ public abstract class SceneObject {
     protected Movement movement;
     protected Animation anim;
     protected BoundingBox boundingBox;
+    protected double deltaTime;
 
     public SceneObject(Position position, Animation animationType, Movement movementType) {
         this.position = position;
@@ -24,8 +25,9 @@ public abstract class SceneObject {
         this.boundingBox = anim.getBoundingBox(position);
     }
 
-    // Mueve el objeto y actualiza su posición y boundingBox
-    public void move() {
+    
+    public void move(double deltaTime) {
+        deltaTime = deltaTime;
         boundingBox = anim.getBoundingBox(position);
         position = movement.nextPosition(this);
     }

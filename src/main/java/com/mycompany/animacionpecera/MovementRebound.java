@@ -18,21 +18,22 @@ public class MovementRebound extends Movement {
         this.canvasBox = bounding;
     }
 
-    /*this method changes linear movement before object passes the limits, 
-    always to the opposite direction*/
+    /*this method manages linear movement, before the object passes the limits 
+    changes direction to the opposite side*/
     @Override
     public Position nextPosition(SceneObject current) {
-
-        Direction direction = linealMove.getDirection();
-        Position currentPos = current.getPosition();
-        Position nextPos = currentPos.displacement(direction);
-
+        //get the next position using the current linear movement
+        Position nextPos = linealMove.nextPosition(current);
         BoundingBox nextBox = current.getBoundingBox(nextPos);
+        //get current direction and its changed if happens collision
+        Direction currentDir = linealMove.getDirection();
+        Direction directionRebound = rebound(nextBox, currentDir);
+        //updates direction if has collide
+        if (!directionRebound.equals(currentDir)) {
+            linealMove.setDirection(directionRebound);
 
-        Direction directionRebound = rebound(nextBox, direction);
-        linealMove.setDirection(directionRebound);
-
-        return currentPos.displacement(directionRebound);
+        }
+        return nextPos;
     }
 
     private Direction rebound(BoundingBox box, Direction currentDir) {
