@@ -6,7 +6,6 @@ package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 /**
  *
@@ -34,23 +33,23 @@ public class AnimationCoralFish extends Animation {
     public BoundingBox getBoundingBox(Position position) {
 
         Position topLeft = new Position(
-                position.x - getWidth() / 2,
-                position.y - getHeight() / 2
+                position.x() - getWidth() / 2,
+                position.y() - getHeight() / 2
         );
 
         Position topRight = new Position(
-                position.x + getWidth() / 2,
-                position.y - getHeight() / 2
+                position.x() + getWidth() / 2,
+                position.y() - getHeight() / 2
         );
 
         Position bottomRight = new Position(
-                position.x + getWidth() / 2,
-                position.y + getHeight() / 2
+                position.x() + getWidth() / 2,
+                position.y() + getHeight() / 2
         );
 
         Position bottomLeft = new Position(
-                position.x - getWidth() / 2,
-                position.y + getHeight() / 2
+                position.x() - getWidth() / 2,
+                position.y() + getHeight() / 2
         );
 
         return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
@@ -58,10 +57,8 @@ public class AnimationCoralFish extends Animation {
 
     @Override
     public void draw(GraphicsContext gc, Position pos) {
-        gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2, getWidth(), getHeight());
-        BoundingBox boundingBox = getBoundingBox(pos);
-        drawBoundingBox(gc, boundingBox, Color.MAGENTA);
-        gc.strokeText("o", pos.x, pos.y);
+        gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
+                getWidth(), getHeight());
 
     }
 

@@ -24,27 +24,36 @@ public abstract class Animation {
 
     public abstract BoundingBox getBoundingBox(Position position);
 
-    protected void drawBoundingBox(GraphicsContext gc, BoundingBox boundingBox, Color color) {
+    public void update(GraphicsContext gc, Position position, boolean showBox) {
+        draw(gc, position);
+        if (showBox) {// if true draws boundingbox
+            drawBoundingBox(gc, position);
+        }
+    }
 
-        gc.setStroke(color);
+    protected void drawBoundingBox(GraphicsContext gc, Position position) {
+
+        BoundingBox boundingBox = getBoundingBox(position);
+        gc.setStroke(Color.MAGENTA);
         gc.setLineWidth(1.0);
 
         gc.strokeLine(
-                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y,
-                boundingBox.getTopRight().x, boundingBox.getTopRight().y
+                boundingBox.topLeft().x(), boundingBox.topLeft().y(),
+                boundingBox.topRight().x(), boundingBox.topRight().y()
         );
         gc.strokeLine(
-                boundingBox.getTopRight().x, boundingBox.getTopRight().y,
-                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y
+                boundingBox.topRight().x(), boundingBox.topRight().y(),
+                boundingBox.bottomRight().x(), boundingBox.bottomRight().y()
         );
         gc.strokeLine(
-                boundingBox.getBottomRight().x, boundingBox.getBottomRight().y,
-                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y
+                boundingBox.bottomRight().x(), boundingBox.bottomRight().y(),
+                boundingBox.bottomLeft().x(), boundingBox.bottomLeft().y()
         );
         gc.strokeLine(
-                boundingBox.getBottomLeft().x, boundingBox.getBottomLeft().y,
-                boundingBox.getTopLeft().x, boundingBox.getTopLeft().y
+                boundingBox.bottomLeft().x(), boundingBox.bottomLeft().y(),
+                boundingBox.topLeft().x(), boundingBox.topLeft().y()
         );
+        gc.strokeText(".", position.x(), position.y());
     }
 
 }

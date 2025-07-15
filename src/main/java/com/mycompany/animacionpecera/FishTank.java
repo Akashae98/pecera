@@ -1,4 +1,3 @@
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -14,8 +13,8 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class FishTank {
 
-    public static final int CANVAS_WIDTH = 900;
-    public static final int CANVAS_HEIGH = 700;
+    public static final int CANVAS_WIDTH = 1520;
+    public static final int CANVAS_HEIGH = 880;
     private final ArrayList<Fish> fishesList;
     private static final Random random = new Random();
 
@@ -58,17 +57,18 @@ public class FishTank {
         MovementRebound rebound2 = new MovementRebound(lineal2, canvas);
 
        // fishesList.add(new Fish(position, rebound1, anim));
-        fishesList.add(new Fish(position, rebound, anim_coral));
+        fishesList.add(new Fish(position, rebound2, anim_coral));
     }
 
     // To animate fishes first we change its position and then we draw
-    public void animate(GraphicsContext gc) {
+    public void animate(GraphicsContext gc, boolean showBox) {
         // we use this method in every frame of the animation timer
         //for each fish in the list we may change the position and draw
         for (Fish fish : fishesList) {
             fish.move();
-            fish.draw(gc);
+            fish.draw(gc, showBox);
         }
     }
 
 }
+

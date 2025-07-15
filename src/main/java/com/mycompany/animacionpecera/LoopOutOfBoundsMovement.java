@@ -24,21 +24,21 @@ public class LoopOutOfBoundsMovement extends Movement {
         Position next = linearMove.nextPosition(current);
         BoundingBox box = current.getBoundingBox(current.position);
 
-        double newX = next.x;
-        double newY = next.y;
+        double newX = next.x();
+        double newY = next.y();
 
         //horizontal teleport to the other side if exceedes the canvas
-        if (box.getBottomRight().x < canvasBox.getTopLeft().x) {
-            newX = canvasBox.getBottomRight().x;
-        } else if (box.getTopLeft().x > canvasBox.getBottomRight().x) {
-            newX = canvasBox.getTopLeft().x;
+        if (box.bottomRight().x() < canvasBox.topLeft().x()) {
+            newX = canvasBox.bottomRight().x();
+        } else if (box.topLeft().x() > canvasBox.bottomRight().x()) {
+            newX = canvasBox.topLeft().x();
         }
         //vertical teleport to the other side
-        if (box.getBottomRight().y < canvasBox.getTopLeft().y) {
-            newY = canvasBox.getBottomRight().y;
+        if (box.bottomRight().y() < canvasBox.topLeft().y()) {
+            newY = canvasBox.bottomRight().y();
 
-        } else if (box.getTopLeft().y > canvasBox.getBottomRight().y) {
-            newY = canvasBox.getTopLeft().y;
+        } else if (box.topLeft().y() > canvasBox.bottomRight().y()) {
+            newY = canvasBox.topLeft().y();
         }
 
         return new Position(newX, newY);
