@@ -33,23 +33,23 @@ public class AnimationCoralFish extends Animation {
     public BoundingBox getBoundingBox(Position position) {
 
         Position topLeft = new Position(
-                position.x - getWidth() / 2,
-                position.y - getHeight() / 2
+                position.x() - getWidth() / 2,
+                position.y() - getHeight() / 2
         );
 
         Position topRight = new Position(
-                position.x + getWidth() / 2,
-                position.y - getHeight() / 2
+                position.x() + getWidth() / 2,
+                position.y() - getHeight() / 2
         );
 
         Position bottomRight = new Position(
-                position.x + getWidth() / 2,
-                position.y + getHeight() / 2
+                position.x() + getWidth() / 2,
+                position.y() + getHeight() / 2
         );
 
         Position bottomLeft = new Position(
-                position.x - getWidth() / 2,
-                position.y + getHeight() / 2
+                position.x() - getWidth() / 2,
+                position.y() + getHeight() / 2
         );
 
         return new BoundingBox(topLeft, topRight, bottomRight, bottomLeft);
@@ -57,7 +57,7 @@ public class AnimationCoralFish extends Animation {
 
     @Override
     public void draw(GraphicsContext gc, Position pos) {
-        gc.drawImage(image, pos.x - getWidth() / 2, pos.y - getHeight() / 2,
+        gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());
 
     }
