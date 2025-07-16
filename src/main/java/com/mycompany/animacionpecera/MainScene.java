@@ -3,6 +3,7 @@
  */
 package com.mycompany.animacionpecera;
 
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.AnimationTimer;
@@ -11,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -29,6 +31,7 @@ public class MainScene extends Application {
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
     private boolean showBox;
+    private boolean Running = true;
 
     @Override
     public void start(Stage stage) {
@@ -95,39 +98,61 @@ public class MainScene extends Application {
             toggleBoxButton.setText(showBox ? "Hide Boxes" : "Show Boxes");
         });
 
+        Button playPauseButton = new Button("Pause");
+        playPauseButton.setStyle(
+                "-fx-background-color: #aee0ae; "
+                + "-fx-text-fill: white; "
+                + "-fx-font-weight: bold; "
+                + "-fx-background-radius: 10; "
+                + "-fx-margin: 5; "
+                + "-fx-padding: 10 10;"
+        );
+
+        playPauseButton.setOnAction(e -> {
+            Running = !Running;
+            playPauseButton.setText(Running ? "Pause" : "Play");
+        });
+
         // Creates MainScene
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // Gradient background simulates water 
-                LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                        new Stop(0, Color.rgb(127, 240, 220)),
-                        new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
-                gc.setFill(fondo);
-                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                if (Running) {
+                    // Gradient background simulates water 
+                    LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                            new Stop(0, Color.rgb(127, 240, 220)),
+                            new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
+                    gc.setFill(fondo);
+                    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-                //draws/animates bubbles
-                for (Bubble b : bubbleList) {
-                    b.move();
-                    b.draw(gc, showBox);
+                    //draws/animates bubbles
+                    for (Bubble b : bubbleList) {
+                        b.move();
+                        b.draw(gc, showBox);
+                    }
+                    //draws/animates fishes
+                    fishTank.animate(gc, showBox);
                 }
-                //draws/animates fishes
-                fishTank.animate(gc, showBox);
             }
         }.start();
 
         // User interaction: adds fishes with a click
+        // User interaction: adds fishes with a click
+        canvas.setOnMouseClicked(e -> {
+            Position position = new Position(e.getX(), e.getY());
+            fishTank.addFish(position);
+        });
+         // Horizontal layout contains the buttons
         HBox buttonLayout = new HBox();
         buttonLayout.getChildren().addAll(toggleBoxButton, playPauseButton);
         buttonLayout.setSpacing(10);
-        buttonLayout.setPadding(new Insets(10));
-
-// Principal layout contans
-        VBox mainLayout = new VBox();
-        mainLayout.getChildren().addAll(buttonLayout, canvas);
+        
+        //vertical layout adds the buttons and then the canvas or vice versa
+        VBox Layout = new VBox();
+        Layout.getChildren().addAll(canvas, buttonLayout);
 
         // Shows the canvas in a window
-        stage.setScene(new Scene(layout));
+        stage.setScene(new Scene(Layout));
         stage.setTitle("Acuario JavaFX");
         stage.show();
     }
