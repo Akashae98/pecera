@@ -29,20 +29,20 @@ import javafx.stage.Stage;
 public class MainScene extends Application {
 
     public static final int CANVAS_WIDTH = 1520;
-    public static final int CANVAS_HEIGH = 780;
+    public static final int CANVAS_HEIGHT = 780;
     public static final Random random = new Random();
 
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<SceneObject> sceneObjectList = new ArrayList<>();
     BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
-            new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
+            new Position(CANVAS_WIDTH, CANVAS_HEIGHT), new Position(0, CANVAS_HEIGHT));
     private boolean showBox;
     private boolean Running = true;
 
     @Override
     public void start(Stage stage) {
         // Canvas habilitates to draw
-        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
+        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
         // At initiate adds 10 fishes in random places 
@@ -105,12 +105,6 @@ public class MainScene extends Application {
             @Override
             public void handle(long now) {
                 if (Running) {
-                    // Gradient background simulates water 
-                    LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                            new Stop(0, Color.rgb(127, 240, 220)),
-                            new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
-                    gc.setFill(fondo);
-                    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                     if (lastUpdate == 0) {
                         lastUpdate = now;
                         return;
@@ -119,9 +113,16 @@ public class MainScene extends Application {
                     if (now - lastUpdate < frameInterval) {
                         return;
                     }
+                    
                     //deltatime its seconds between current frame and the last
                     double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                     lastUpdate = now;
+                    // Gradient background simulates water 
+                    LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                            new Stop(0, Color.rgb(127, 240, 220)),
+                            new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
+                    gc.setFill(fondo);
+                    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
                     // Logic
                     for (SceneObject object : sceneObjectList) {
@@ -139,10 +140,10 @@ public class MainScene extends Application {
         // User interaction: adds fishes with a click
         canvas.setOnMouseClicked(e
                 -> {
-                    Position position = new Position(e.getX(), e.getY());
-                    addFish(position);
-                    addCoralFish(position);
-                }
+            Position position = new Position(e.getX(), e.getY());
+            addFish(position);
+            addCoralFish(position);
+        }
         );
         // Horizontal layout contains the buttons
         HBox buttonLayout = new HBox();
@@ -198,7 +199,7 @@ public class MainScene extends Application {
     //to obtain a position inside canvas
     public static Position getRandomPoint() {
         double x = random.nextDouble() * (CANVAS_WIDTH - 40);
-        double y = random.nextDouble() * (CANVAS_HEIGH - 40);
+        double y = random.nextDouble() * (CANVAS_HEIGHT - 40);
         return new Position(x, y);
     }
 
