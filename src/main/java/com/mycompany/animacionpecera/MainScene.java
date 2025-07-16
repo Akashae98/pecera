@@ -32,7 +32,7 @@ public class MainScene extends Application {
     public static final Random random = new Random();
 
     private GraphicsContext gc; //Graphic context to draw in the canvas
-    private final List<SceneObject> sceneList = new ArrayList<>();
+    private final List<SceneObject> sceneObjectList = new ArrayList<>();
     private boolean showBox;
     BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
             new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
@@ -107,12 +107,12 @@ public class MainScene extends Application {
                 gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
                 // Logic
-                for (SceneObject object : sceneList) {
+                for (SceneObject object : sceneObjectList) {
                     object.move(deltaTime);
                 }
 
                 // Rendering
-                for (SceneObject object : sceneList) {
+                for (SceneObject object : sceneObjectList) {
                     object.draw(gc, showBox, deltaTime);
                 }
             }
@@ -140,7 +140,7 @@ public class MainScene extends Application {
         Animation animation = new AnimationBubbleIdle(size);
         Movement movement = new LinearMovement(direction);
         Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
-        sceneList.add(new Bubble(size, pos, animation, loop));
+        sceneObjectList.add(new Bubble(size, pos, animation, loop));
     }
 
     //creates normal fishes 
@@ -154,7 +154,7 @@ public class MainScene extends Application {
 
         Direction direction = new Direction(dx, dy);
         Movement movement = new LoopOutOfBoundsMovement(new LinearMovement(direction), canvasBox);
-        sceneList.add(new Fish(position, movement, anim));
+        sceneObjectList.add(new Fish(position, movement, anim));
     }
 
     //Creates coralfish
@@ -166,7 +166,7 @@ public class MainScene extends Application {
 
         Direction direction = new Direction(dx, dy);
         Movement movement = new MovementRebound(new LinearMovement(direction), canvasBox);
-        sceneList.add(new Fish(position, movement, anim_coral));
+        sceneObjectList.add(new Fish(position, movement, anim_coral));
     }
 
     //to obtain a position inside canvas
