@@ -9,11 +9,6 @@ package com.mycompany.animacionpecera;
  * fishes...
  *
  */
-public class Fish extends SceneObject {
-
-    public Fish(Position position, Movement movementType, Animation animationType) {
-        super(position, animationType, movementType);
-
-    }
+public class Fish  extends Component{
 
 }

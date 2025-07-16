@@ -25,6 +25,13 @@ public class BoundingBox {
         this.bottomLeft = bottomLeft;
     }
 
+    public BoundingBox(Position origin, double width, double height) {
+        this.topLeft = origin;
+        this.topRight = origin.displacement(width, 0);
+        this.bottomLeft = origin.displacement(0, height);
+        this.bottomRight = origin.displacement(width, height);
+    }
+
     // Getters for the corners:
     public Position getTopLeft() {
         return topLeft;
@@ -46,5 +53,9 @@ public class BoundingBox {
     public boolean isInside(Position point) {
         return point.x() >= topLeft.x() && point.x() <= bottomRight.x()
                 && point.y() >= topLeft.y() && point.y() <= bottomRight.y();
+    }
+
+    public Position[] getPoints() {
+        return new Position[]{topLeft, topRight, bottomLeft, bottomRight};
     }
 }

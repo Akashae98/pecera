@@ -5,6 +5,8 @@ package com.mycompany.animacionpecera;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mycompany.animacionpecera.colliders.BoxCollider;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,7 +25,6 @@ import javafx.stage.Stage;
  */
 public class MainScene extends Application {
 
-    private FishTank fishTank;// Object controlling fishes
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<Bubble> bubbleList = new ArrayList<>(); // List of bubbles
     private final Text textField = new Text();
@@ -34,23 +35,26 @@ public class MainScene extends Application {
 
     @Override
     public void start(Stage stage) {
-        int CANVAS_WIDTH = FishTank.CANVAS_WIDTH;
-        int CANVAS_HEIGH = FishTank.CANVAS_HEIGH;
+        int CANVAS_WIDTH = 1520;
+        int CANVAS_HEIGH = 880;
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
         BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
                 new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
-        fishTank = new FishTank();
 
         GameEntity gameEntity = new GameEntity();
         gameEntity.addComponent(new PositionComponent(new Position(50, 50)));
-        gameEntity.addComponent(new VelocityComponent(new Direction(1, 1)));
+        gameEntity.addComponent(new VelocityComponent(new Direction(10, 10)));
+        gameEntity.addComponent(new BoxCollider(100,100));
         gameEntity.addComponent(new SpriteComponent("/Images/sketchPezCoral.png"));
+        gameEntity.addComponent(new Fish());
         gameEntities.add(gameEntity);
 
         gameSystems.add(new MovementSystem());
+        gameSystems.add(new BorderCollisionSystem(CANVAS_WIDTH, CANVAS_HEIGH));
         gameSystems.add(new RenderSystem(canvas));
+        gameSystems.add(new DebugRenderSystem(canvas));
 
 
         // At initiate Adds 5 fishes in random places
@@ -150,7 +154,6 @@ public class MainScene extends Application {
 //                    textField.setText(String.valueOf(b.position.y()));
 //                }
 //                //draws/animates fishes
-//                fishTank.animate(gc, showBox);
                 for (GameSystem system : gameSystems) {
                     system.update(gameEntities, deltaTime);
                 }
@@ -161,12 +164,12 @@ public class MainScene extends Application {
                 // 6. Control de FPS (antes de terminar el frame)
                 long remainingTime = NANOS_PER_FRAME - frameDuration;
 
-//                if (remainingTime > 100_000) { // Solo si queda más de 0.1ms
-//                    try {
-//                        Thread.sleep(remainingTime / 1_000_000,
-//                                (int)(remainingTime % 1_000_000));
-//                    } catch (InterruptedException e) {}
-//                }
+                if (remainingTime > 100_000) { // Solo si queda más de 0.1ms
+                    try {
+                        Thread.sleep(remainingTime / 1_000_000,
+                                (int)(remainingTime % 1_000_000));
+                    } catch (InterruptedException e) {}
+                }
 
                 // 7. Actualizar lastFrameTime al FINAL del proceso
                 fps = 1000.0/ deltaTime; // FPS = 1 / tiempo entre frames
@@ -193,7 +196,6 @@ public class MainScene extends Application {
         // User interaction: adds fishes with a click
 //        canvas.setOnMouseClicked(e -> {
 //            Position position = new Position(e.getX(), e.getY());
-//            fishTank.addFish(position);
 //        });
         VBox layout = new VBox();
         HBox buttonLayout = new HBox();
