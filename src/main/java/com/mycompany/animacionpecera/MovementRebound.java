@@ -18,18 +18,12 @@ public class MovementRebound extends Movement {
         this.canvasBox = bounding;
     }
 
-    @Override
-    public void update(double deltaTime) {
-        super.update(deltaTime);
-        linealMove.update(deltaTime);
-    }
-
     /*this method manages linear movement, before the object passes the limits 
     changes direction to the opposite side*/
     @Override
-    public Position nextPosition(SceneObject current) {
+    public Position nextPosition(SceneObject current, double deltaTime) {
         //get the next position using the current linear movement
-        Position nextPos = linealMove.nextPosition(current);
+        Position nextPos = linealMove.nextPosition(current, deltaTime);
         BoundingBox nextBox = current.getBoundingBox(nextPos);
         //get current direction and its changed if happens collision
         Direction currentDir = linealMove.getDirection();

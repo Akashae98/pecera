@@ -18,7 +18,7 @@ public class LinearMovement extends Movement {
     }
 
     @Override
-    public Position nextPosition(SceneObject current) {
+    public Position nextPosition(SceneObject current, double deltaTime) {
         Position currentPos = current.getPosition();
         Direction scaledDirection = new Direction(direction.dx() * deltaTime,
                 direction.dy() * deltaTime);
