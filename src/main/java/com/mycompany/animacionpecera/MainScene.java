@@ -117,12 +117,15 @@ public class MainScene extends Application {
         }.start();
 
         // User interaction: adds fishes with a click
-        canvas.setOnMouseClicked(e -> {
-            Position position = new Position(e.getX(), e.getY());
-            fishTank.addFish(position);
-        });
-        VBox layout = new VBox();
-        layout.getChildren().addAll(toggleBoxButton, canvas);
+        HBox buttonLayout = new HBox();
+        buttonLayout.getChildren().addAll(toggleBoxButton, playPauseButton);
+        buttonLayout.setSpacing(10);
+        buttonLayout.setPadding(new Insets(10));
+
+// Principal layout contans
+        VBox mainLayout = new VBox();
+        mainLayout.getChildren().addAll(buttonLayout, canvas);
+
         // Shows the canvas in a window
         stage.setScene(new Scene(layout));
         stage.setTitle("Acuario JavaFX");
