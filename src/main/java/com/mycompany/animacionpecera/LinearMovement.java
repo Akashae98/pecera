@@ -14,20 +14,23 @@ public class LinearMovement extends Movement {
 
     public LinearMovement(Direction direction) {
         this.direction = direction;
-    }
 
+    }
 
     @Override
-    public Position nextPosition(SceneObject current) {
+    public Position nextPosition(SceneObject current, double deltaTime) {
         Position currentPos = current.getPosition();
-        return currentPos.displacement(direction);
+        Direction scaledDirection = new Direction(direction.dx() * deltaTime,
+                direction.dy() * deltaTime);
+        return currentPos.displacement(scaledDirection);
     }
-     public Direction getDirection() {
+
+    public Direction getDirection() {
         return direction;
     }
 
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
-    
+
 }

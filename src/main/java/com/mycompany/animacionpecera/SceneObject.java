@@ -24,13 +24,12 @@ public abstract class SceneObject {
         this.boundingBox = anim.getBoundingBox(position);
     }
 
-    // Mueve el objeto y actualiza su posición y boundingBox
-    public void move() {
+    public void move(double deltaTime) {
         boundingBox = anim.getBoundingBox(position);
-        position = movement.nextPosition(this);
+        position = movement.nextPosition(this, deltaTime);
     }
 
-    public void draw(GraphicsContext gc, boolean showBox) {
+    public void draw(GraphicsContext gc, boolean showBox, double deltaTime) {
         anim.update(gc, position, showBox);
     }
 
