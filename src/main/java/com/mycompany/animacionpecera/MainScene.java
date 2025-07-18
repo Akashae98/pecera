@@ -113,7 +113,7 @@ public class MainScene extends Application {
                     if (now - lastUpdate < frameInterval) {
                         return;
                     }
-                    
+
                     //deltatime its seconds between current frame and the last
                     double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                     lastUpdate = now;
@@ -133,6 +133,9 @@ public class MainScene extends Application {
                     for (SceneObject object : sceneObjectList) {
                         object.draw(gc, showBox, deltaTime);
                     }
+                }
+                if (!Running) {
+                    lastUpdate = 0; 
                 }
             }
         }.start();
