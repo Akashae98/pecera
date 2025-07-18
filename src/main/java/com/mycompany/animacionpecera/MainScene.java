@@ -3,9 +3,6 @@
  */
 package com.mycompany.animacionpecera;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -19,11 +16,14 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Principal Class wich creates the window and the canvas to draw the animation.
  * Controls the animation of fishes and bubbles. You can add fishes with a click
  * on the mousse.
- *
  */
 public class MainScene extends Application {
 
@@ -37,13 +37,18 @@ public class MainScene extends Application {
     BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
             new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
 
+    // Principal method to throw the application
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
-        // At initiate adds 10 fishes in random places 
+        // At initiate adds 10 fishes in random places
         for (int i = 0; i < 5; i++) {
             Position position = getRandomPoint();
             addFish(position);
@@ -84,6 +89,7 @@ public class MainScene extends Application {
         new AnimationTimer() {
             private long lastUpdate = 0;
             private final long frameInterval = 16_666_667;//60 fps
+            public static final double FRAME_SKIP_THRESHOLD = 0.5;
 
             @Override
             public void handle(long now) {
@@ -95,11 +101,18 @@ public class MainScene extends Application {
                 if (now - lastUpdate < frameInterval) {
                     return;
                 }
-                //deltatime its seconds between current frame and the last
+                // deltaTime its seconds between current frame and the last
                 double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
 
-                // Gradient background simulates water 
+                // clamping delta
+                if (deltaTime > FRAME_SKIP_THRESHOLD && DebugUtil.isDebugging()) {
+                    System.out.println("Skipping frame: " + deltaTime);
+                    lastUpdate = now;
+                    return;
+                }
+
+                // Gradient background simulates water
                 LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(127, 240, 220)),
                         new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
@@ -143,7 +156,7 @@ public class MainScene extends Application {
         sceneObjectList.add(new Bubble(size, pos, animation, loop));
     }
 
-    //creates normal fishes 
+    //creates normal fishes
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
@@ -174,10 +187,5 @@ public class MainScene extends Application {
         double x = random.nextDouble() * (CANVAS_WIDTH - 40);
         double y = random.nextDouble() * (CANVAS_HEIGH - 40);
         return new Position(x, y);
-    }
-
-    // Principal method to throw the application
-    public static void main(String[] args) {
-        launch(args);
     }
 }
