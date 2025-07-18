@@ -10,9 +10,11 @@ We also need the nbaction.xml that triggers the plugin when running the applicat
 #### For IntelJ
 Dont execute project from Run. Execute javafx:run from maven.
 ###### Alternative to maven. 
-Create a Run Configuration of type Application.
-Add to "Vm options" the following line:
+Execute "scripts/javafx_vm_opts". 
 
---module-path "$(find ~/.m2/repository/org/openjfx/ -name '*-linux.jar' | paste -sd: -)" --add-modules ALL-MODULE-PATH
+Use the correct script depending on your operating system. Copy the result.
 
-With this configuration, modules are imported automatically, ignoring Maven altogether.
+Create a Run Configuration of type Application. Paste to "Vm options" the previous line.
+
+With this configuration, JARs are imported automatically, ignoring Maven altogether.
+If more modules are used, you have to add them manually.
