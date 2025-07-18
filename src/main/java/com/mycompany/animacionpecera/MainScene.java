@@ -37,13 +37,18 @@ public class MainScene extends Application {
     BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
             new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
 
+    // Principal method to throw the application
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
-        // At initiate adds 10 fishes in random places 
+        // At initiate adds 10 fishes in random places
         for (int i = 0; i < 5; i++) {
             Position position = getRandomPoint();
             addFish(position);
@@ -99,7 +104,7 @@ public class MainScene extends Application {
                 double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
 
-                // Gradient background simulates water 
+                // Gradient background simulates water
                 LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(127, 240, 220)),
                         new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
@@ -143,7 +148,7 @@ public class MainScene extends Application {
         sceneObjectList.add(new Bubble(size, pos, animation, loop));
     }
 
-    //creates normal fishes 
+    //creates normal fishes
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
@@ -174,10 +179,5 @@ public class MainScene extends Application {
         double x = random.nextDouble() * (CANVAS_WIDTH - 40);
         double y = random.nextDouble() * (CANVAS_HEIGH - 40);
         return new Position(x, y);
-    }
-
-    // Principal method to throw the application
-    public static void main(String[] args) {
-        launch(args);
     }
 }
