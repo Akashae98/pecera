@@ -3,6 +3,7 @@
  */
 package com.mycompany.animacionpecera;
 
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -19,6 +20,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Principal Class wich creates the window and the canvas to draw the animation.
@@ -43,16 +46,16 @@ public class MainScene extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
         // At initiate adds 10 fishes in random places
         for (int i = 0; i < 5; i++) {
-            Position position = getRandomPoint();
+            Position position = QuantumRandom.getQuantumRandomPoint(CANVAS_WIDTH, CANVAS_HEIGH);
             addFish(position);
-            Position position2 = getRandomPoint();
+            Position position2 = QuantumRandom.getQuantumRandomPoint(CANVAS_WIDTH, CANVAS_HEIGH);
             addCoralFish(position2);
         }
 
@@ -148,12 +151,16 @@ public class MainScene extends Application {
 
     //to create bubbles
     private void addBubble(double size, double speed, BoundingBox canvasBox) {
-        Position pos = getRandomPoint();
-        Direction direction = new Direction(0, -speed);
-        Animation animation = new AnimationBubbleIdle(size);
-        Movement movement = new LinearMovement(direction);
-        Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
-        sceneObjectList.add(new Bubble(size, pos, animation, loop));
+        try {
+            Position pos = QuantumRandom.getQuantumRandomPoint(CANVAS_WIDTH, CANVAS_HEIGH);
+            Direction direction = new Direction(0, -speed);
+            Animation animation = new AnimationBubbleIdle(size);
+            Movement movement = new LinearMovement(direction);
+            Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
+            sceneObjectList.add(new Bubble(size, pos, animation, loop));
+        } catch (Exception ex) {
+            Logger.getLogger(MainScene.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //creates normal fishes
