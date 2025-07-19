@@ -5,7 +5,10 @@
 package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -15,24 +18,43 @@ import javafx.scene.paint.Color;
  */
 public class AnimationFishIdle extends Animation {
 
-    private Color color;
-    private Image image;
-    private ColorAdjust colorAdjust; // Efecto para cambiar el color
+    private final Color color;
+    private final Image image;
+    private String imageName;
 
     public AnimationFishIdle(double size, Color color) {
         super(size);
         this.color = color;
-        this.image = new Image(getClass().getResourceAsStream("/images/gray_fish.png"));
-        
-        this.colorAdjust = new ColorAdjust();
-        updateColorEffect(); // Aplicar el color inicial
+        this.image = loadFishImageByColor(color);
     }
 
-    private void updateColorEffect() {
-        // Convertir el Color a valores HSV para el tono (hue)
-        double hue = calculateHueFromColor(this.color);
-        colorAdjust.setHue(hue);
-        colorAdjust.setSaturation(0.9); 
+    private Image loadFishImageByColor(Color color) {
+        String imagePath = "/Images/";
+
+        // Determina el nombre de la imagen basado en el color
+        if (isInRange(color, 50, 149, 150, 219, 180, 254)) { // Azules
+            this.imageName = "blue_fish.png";
+        } else if (isInRange(color, 200, 254, 100, 179, 140, 199)) { // Rosados
+            this.imageName = "red_fish.png";
+        } else if (isInRange(color, 150, 199, 120, 179, 180, 219)) { // Morados
+            this.imageName = "golden_fish.png";
+        } else {
+            this.imageName = "gray_fish.png"; // Imagen genérica para otros colores
+        }
+
+        try {
+            return new Image(getClass().getResourceAsStream(imagePath + imageName));
+        } catch (Exception e) {
+            System.err.println("No se encontró " + imageName + ", usando imagen gris.");
+            return new Image(getClass().getResourceAsStream(imagePath + "gray_fish.png"));
+        }
+    }
+
+    private boolean isInRange(Color color, int rMin, int rMax, int gMin, int gMax, int bMin, int bMax) {
+        int r = (int) (color.getRed() * 255);
+        int g = (int) (color.getGreen() * 255);
+        int b = (int) (color.getBlue() * 255);
+        return (r >= rMin && r <= rMax) && (g >= gMin && g <= gMax) && (b >= bMin && b <= bMax);
     }
 
     private double calculateHueFromColor(Color color) {
@@ -40,47 +62,71 @@ public class AnimationFishIdle extends Animation {
         double r = color.getRed();
         double g = color.getGreen();
         double b = color.getBlue();
-        
+
         double max = Math.max(r, Math.max(g, b));
         double min = Math.min(r, Math.min(g, b));
         double delta = max - min;
-        
+
         double hue = 0;
         if (delta != 0) {
-            if (max == r) hue = (g - b) / delta + (g < b ? 6 : 0);
-            else if (max == g) hue = (b - r) / delta + 2;
-            else hue = (r - g) / delta + 4;
+            if (max == r) {
+                hue = (g - b) / delta + (g < b ? 6 : 0);
+            } else if (max == g) {
+                hue = (b - r) / delta + 2;
+            } else {
+                hue = (r - g) / delta + 4;
+            }
             hue /= 6;
         }
-        return hue - 0.5; 
+        return hue - 0.5;
     }
-     private double getWidth() {
+
+    private double getWidth() {
         return image.getWidth() * size;
     }
 
     private double getHeight() {
         return image.getHeight() * size;
     }
+
     @Override
     public void draw(GraphicsContext gc, Position pos) {
-        // Guardar el estado actual del GraphicsContext
         gc.save();
-        gc.scale(size, size);
-        gc.setEffect(colorAdjust);
+        gc.setEffect(null);
+
+        Bloom bloom = new Bloom();
+        bloom.setThreshold(0.9);
+        gc.setEffect(bloom);
+
+        if ("gray_fish.png".equals(this.imageName)) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setHue(calculateHueFromColor(color));
+            colorAdjust.setSaturation(0.3);  //low
+
+            Glow glow = new Glow();
+            glow.setLevel(0.2);
+
+            //To combine effects
+            Blend blend = new Blend();
+            blend.setTopInput(colorAdjust);
+            blend.setBottomInput(glow);
+            bloom.setThreshold(0.9);
+            gc.setEffect(bloom);
+            gc.setEffect(blend);
+        }
 
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());
-        
-        // Restaurar el estado del GraphicsContext (para no afectar otros dibujos)
+
         gc.restore();
     }
-    
+
     /*Note: the fish's actual position refers to a center-left point in the object.
     We need to calculate the boundingbox starting from that position.
      */
     @Override
     public BoundingBox getBoundingBox(Position position) {
-       
+
         Position topLeft = new Position(
                 position.x() - getWidth() / 2,
                 position.y() - getHeight() / 2

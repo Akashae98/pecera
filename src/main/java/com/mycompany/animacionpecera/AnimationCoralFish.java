@@ -5,7 +5,9 @@
 package com.mycompany.animacionpecera;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -57,8 +59,15 @@ public class AnimationCoralFish extends Animation {
 
     @Override
     public void draw(GraphicsContext gc, Position pos) {
+        gc.save();
+        DropShadow glowEffect = new DropShadow();
+        glowEffect.setColor(Color.WHITE.deriveColor(0, 1, 1, 0.3));  // Color del brillo
+        glowEffect.setRadius(10);  // Tamaño del resplandor
+        glowEffect.setSpread(0.2);  // Intensidad
+        gc.setEffect(glowEffect);
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());
+        gc.restore();
 
     }
 

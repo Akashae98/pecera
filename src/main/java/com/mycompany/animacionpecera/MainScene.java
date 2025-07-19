@@ -159,7 +159,7 @@ public class MainScene extends Application {
     //creates normal fishes
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
-        Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
+        Animation anim = new AnimationFishIdle(0.2 +random.nextDouble(0.6),
                 randomColor.getColor());
 
         double dx = Math.random() * 80 - 1;
@@ -172,7 +172,7 @@ public class MainScene extends Application {
 
     //Creates coralfish
     public void addCoralFish(Position position) {
-        Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
+        Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.6));
 
         double dx = Math.random() * 80 - 1;
         double dy = Math.random() * 80 - 1;
