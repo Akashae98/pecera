@@ -33,13 +33,13 @@ public class AnimationFishIdle extends Animation {
 
         // Determina el nombre de la imagen basado en el color
         if (isInRange(color, 50, 149, 150, 219, 180, 254)) { // Azules
-            this.imageName = "blue_fish.png";
-        } else if (isInRange(color, 200, 254, 100, 179, 140, 199)) { // Rosados
             this.imageName = "red_fish.png";
+        } else if (isInRange(color, 200, 254, 100, 179, 140, 199)) { // Rosados
+            this.imageName = "pink_fish.png";
         } else if (isInRange(color, 150, 199, 120, 179, 180, 219)) { // Morados
-            this.imageName = "golden_fish.png";
+            this.imageName = "purple_fish.png";
         } else {
-            this.imageName = "gray_fish.png"; // Imagen genérica para otros colores
+            this.imageName = "red_fish.png"; // Imagen genérica para otros colores
         }
 
         try {
@@ -94,26 +94,7 @@ public class AnimationFishIdle extends Animation {
         gc.save();
         gc.setEffect(null);
 
-        Bloom bloom = new Bloom();
-        bloom.setThreshold(0.9);
-        gc.setEffect(bloom);
-
-        if ("gray_fish.png".equals(this.imageName)) {
-            ColorAdjust colorAdjust = new ColorAdjust();
-            colorAdjust.setHue(calculateHueFromColor(color));
-            colorAdjust.setSaturation(0.3);  //low
-
-            Glow glow = new Glow();
-            glow.setLevel(0.2);
-
-            //To combine effects
-            Blend blend = new Blend();
-            blend.setTopInput(colorAdjust);
-            blend.setBottomInput(glow);
-            bloom.setThreshold(0.9);
-            gc.setEffect(bloom);
-            gc.setEffect(blend);
-        }
+       
 
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());
