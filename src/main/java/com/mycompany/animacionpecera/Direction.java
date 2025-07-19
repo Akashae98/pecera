@@ -24,4 +24,8 @@ public record Direction(double dx, double dy) {
         return new Direction(dx, -dy);
     }
 
+    public Direction multiply(double multiplier) {
+        return new Direction(dx * multiplier, dy * multiplier);
+    }
+
 }

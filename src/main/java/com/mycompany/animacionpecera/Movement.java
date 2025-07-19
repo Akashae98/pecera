@@ -10,6 +10,6 @@ package com.mycompany.animacionpecera;
  */
 public abstract class Movement {
 
-    public abstract Position nextPosition(SceneObject current);
+    public abstract Position nextPosition(SceneObject current, double deltaTime);
 
 }
