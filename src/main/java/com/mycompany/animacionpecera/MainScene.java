@@ -160,7 +160,7 @@ public class MainScene extends Application {
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
         Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
-                random.nextBoolean(), randomColor.getColor());
+                randomColor.getColor());
 
         double dx = Math.random() * 80 - 1;
         double dy = Math.random() * 80 - 1;
