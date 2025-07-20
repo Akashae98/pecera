@@ -55,6 +55,14 @@ public class BoundingBox {
                 && point.y() >= topLeft.y() && point.y() <= bottomRight.y();
     }
 
+    public double getWidth() {
+        return topRight.x() - topLeft.x();
+    }
+
+    public double getHeight() {
+        return bottomLeft.y() - topLeft.y();
+    }
+
     public Position[] getPoints() {
         return new Position[]{topLeft, topRight, bottomLeft, bottomRight};
     }

@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.transform.Affine;
 
 import java.util.List;
 
@@ -43,7 +44,12 @@ public class RenderSystem extends GameSystem {
                 SpriteComponent sprite = e.getComponent(SpriteComponent.class);
                 //Load from cache
                 Image image = AssetManager.loadImage(sprite.getPath(), false);
-                gc.drawImage(image, pos.position.x(), pos.position.y());
+                Affine affine = new Affine();
+                affine.appendTranslation(pos.position.x(), pos.position.y());
+                gc.save();
+                gc.setTransform(affine);
+                gc.drawImage(image, 0,0);
+                gc.restore();
             }
         }
     }

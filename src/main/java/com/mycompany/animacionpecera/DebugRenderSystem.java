@@ -3,11 +3,7 @@ package com.mycompany.animacionpecera;
 import com.mycompany.animacionpecera.colliders.BoxCollider;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 
 import java.util.List;
 
@@ -27,6 +23,9 @@ public class DebugRenderSystem extends GameSystem {
 
     @Override
     public void update(List<GameEntity> entities, double deltaTime) {
+        if (!GameState.getInstance().isDebugEnabled()) {
+            return;
+        }
         for (GameEntity e : entities) {
             if (e.hasComponent(PositionComponent.class)) {
                 PositionComponent pos = e.getComponent(PositionComponent.class);
@@ -34,26 +33,13 @@ public class DebugRenderSystem extends GameSystem {
 
                 if (e.hasComponent(BoxCollider.class)) {
                     BoxCollider collider = e.getComponent(BoxCollider.class);
-                    BoundingBox boundingBox = new BoundingBox(pos.position, collider.getWidth(), collider.getHeight());
+                    gc.save();
                     gc.setStroke(Color.MAGENTA);
                     gc.setLineWidth(1.0);
+                    gc.strokeRect(pos.position.x(), pos.position.y(), collider.getWidth(),  collider.getHeight());
+                    gc.restore();
 
-                    gc.strokeLine(
-                            boundingBox.getTopLeft().x(), boundingBox.getTopLeft().y(),
-                            boundingBox.getTopRight().x(), boundingBox.getTopRight().y()
-                    );
-                    gc.strokeLine(
-                            boundingBox.getTopRight().x(), boundingBox.getTopRight().y(),
-                            boundingBox.getBottomRight().x(), boundingBox.getBottomRight().y()
-                    );
-                    gc.strokeLine(
-                            boundingBox.getBottomRight().x(), boundingBox.getBottomRight().y(),
-                            boundingBox.getBottomLeft().x(), boundingBox.getBottomLeft().y()
-                    );
-                    gc.strokeLine(
-                            boundingBox.getBottomLeft().x(), boundingBox.getBottomLeft().y(),
-                            boundingBox.getTopLeft().x(), boundingBox.getTopLeft().y()
-                    );
+
                 }
             }
         }

@@ -5,9 +5,9 @@ package com.mycompany.animacionpecera;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.mycompany.animacionpecera.colliders.BoxCollider;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -32,70 +32,31 @@ public class MainScene extends Application {
     private boolean runSimulation;
     private final List<GameEntity> gameEntities = new ArrayList<>(); // List of bubbles
     private final List<GameSystem> gameSystems = new ArrayList<>();
-
+    final int CANVAS_WIDTH = 1520;
+    final int CANVAS_HEIGH = 880;
     @Override
     public void start(Stage stage) {
-        int CANVAS_WIDTH = 1520;
-        int CANVAS_HEIGH = 880;
+
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
         BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
                 new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
-        GameEntity gameEntity = new GameEntity();
-        gameEntity.addComponent(new PositionComponent(new Position(50, 50)));
-        gameEntity.addComponent(new VelocityComponent(new Direction(10, 10)));
-        gameEntity.addComponent(new BoxCollider(100,100));
-        gameEntity.addComponent(new SpriteComponent("/Images/sketchPezCoral.png"));
-        gameEntity.addComponent(new Fish());
-        gameEntities.add(gameEntity);
+        World world = new World();
 
-        gameSystems.add(new MovementSystem());
-        gameSystems.add(new BorderCollisionSystem(CANVAS_WIDTH, CANVAS_HEIGH));
-        gameSystems.add(new RenderSystem(canvas));
-        gameSystems.add(new DebugRenderSystem(canvas));
+        for (int i = 0; i <= 1000; i += 1) {
+            world.addEntity(createFish());
+        }
+        world.addSystem(new MovementSystem());
+        world.addSystem(new BorderCollisionSystem(CANVAS_WIDTH, CANVAS_HEIGH));
+        world.addSystem(new RenderSystem(canvas));
+        world.addSystem(new DebugRenderSystem(canvas));
 
 
-        // At initiate Adds 5 fishes in random places
-//        for (int i = 0; i < 5; i++) {
-//            Position position = FishTank.getRandomPoint();
-//            fishTank.addFish(position);
-//        }
-//        //bubbles
-//        for (int i = 0; i < 40; i++) {
-//            double size = 3 + Math.random() * 3;
-//            double speed = 0.6 + Math.random();
-//            Position pos = FishTank.getRandomPoint();
-//            Direction direction = new Direction(0, -speed); // the y decreases to the top
-//            Animation animation = new AnimationBubbleIdle(size);
-//            Movement movement = new LinearMovement(direction);
-//            Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
-//
-//            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
-//        }
-//
-//        for (int i = 0; i < 35; i++) {
-//            double size = 8 + Math.random() * 3;
-//            double speed = 0.4 + Math.random();
-//            Position pos = FishTank.getRandomPoint();
-//            Direction direction = new Direction(0, -speed); // the y decreases to the top
-//            Animation animation = new AnimationBubbleIdle(size);
-//            Movement movement = new LinearMovement(direction);
-//            Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
-//            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
-//        }
-//        for (int i = 0; i < 20; i++) {
-//            double size = 13 + Math.random() * 3;
-//            double speed = 0.2 + Math.random();
-//            Position pos = FishTank.getRandomPoint();
-//            Direction direction = new Direction(0, -speed); // the y decreases to the top
-//            Animation animation = new AnimationBubbleIdle(size);
-//            Movement movement = new LinearMovement(direction);
-//            Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
-//
-//            bubbleList.add(new Bubble(size, speed, pos, animation, loop));
-//        }
+        GameLoop gameLoop = new GameLoop(world);
+        gameLoop.start();
+
 
         Button toggleBoxButton = new Button("Show Boxes");
         String buttonStyle = "-fx-background-color: #e0aee0; "
@@ -111,92 +72,26 @@ public class MainScene extends Application {
 
         toggleBoxButton.setStyle(buttonStyle);
         toggleBoxButton.setOnAction(e -> {
-            showBox = !showBox;
+            GameState.getInstance().setDebug(!GameState.getInstance().isDebugEnabled());
             toggleBoxButton.setText(showBox ? "Hide Boxes" : "Show Boxes");
         });
 
-        Text fpsLabel = new Text();
-        fpsLabel.setText("0 FPS");
-
-        // Creates MainScene
-         AnimationTimer mainLoop = new AnimationTimer() {
-             public double getFps() {
-                 return fps;
-             }
-
-             long lastFrameTime = 0;
-             private double deltaTime = 0;
-             private double fps = 0;
-             private final long objectiveDeltaTime = 16_666_666;
-
-             private static final double TARGET_FRAME_TIME = 1.0 / 60.0; // 60 FPS en segundos
-             private static final long NANOS_PER_FRAME = (long)(TARGET_FRAME_TIME * 1_000_000_000);
-            @Override
-            public void handle(long now) {
-                // 1. Calcular deltaTime
-                if (lastFrameTime == 0) {
-                    lastFrameTime = now;
-                    return;
-                }
-                double deltaTime = (now - lastFrameTime) / 1_000_000.0;
-
-                // Gradient background simulates water
-//                LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-//                        new Stop(0, Color.rgb(127, 240, 220)),
-//                        new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
-//                gc.setFill(fondo);
-//                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//
-//                //draws/animates bubbles
-//                for (Bubble b : bubbleList) {
-//                    b.move();
-//                    b.draw(gc, showBox);
-//                    textField.setText(String.valueOf(b.position.y()));
-//                }
-//                //draws/animates fishes
-                for (GameSystem system : gameSystems) {
-                    system.update(gameEntities, deltaTime);
-                }
-                    // 5. Calcular tiempo de frame completo
-                long currentFrameEnd = System.nanoTime();
-                long frameDuration = currentFrameEnd - now;
-
-                // 6. Control de FPS (antes de terminar el frame)
-                long remainingTime = NANOS_PER_FRAME - frameDuration;
-
-                if (remainingTime > 100_000) { // Solo si queda más de 0.1ms
-                    try {
-                        Thread.sleep(remainingTime / 1_000_000,
-                                (int)(remainingTime % 1_000_000));
-                    } catch (InterruptedException e) {}
-                }
-
-                // 7. Actualizar lastFrameTime al FINAL del proceso
-                fps = 1000.0/ deltaTime; // FPS = 1 / tiempo entre frames
-                fpsLabel.setText("FPS: " + fps);
-                lastFrameTime = now;
-
-
-            }
-        };
-        mainLoop.start();
 
         Button toggleRunButton = new Button("Stop simulation");
         toggleRunButton.setStyle(buttonStyle);
         toggleRunButton.setOnAction(e -> {
             if (runSimulation){
-                mainLoop.start();
+                gameLoop.start();
             }else{
-                mainLoop.stop();
+                gameLoop.stop();
             }
             runSimulation = !runSimulation;
             toggleRunButton.setText(runSimulation ? "Start simulation" : "Stop simulation");
         });
 
-        // User interaction: adds fishes with a click
-//        canvas.setOnMouseClicked(e -> {
-//            Position position = new Position(e.getX(), e.getY());
-//        });
+        Text fpsLabel = new Text();
+        fpsLabel.textProperty().bind(GameState.getInstance().getFps().asString("FPS: %d")); // Binding automático
+
         VBox layout = new VBox();
         HBox buttonLayout = new HBox();
         HBox dataLayout = new HBox();
@@ -214,5 +109,16 @@ public class MainScene extends Application {
     // Principal method to throw the application
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public GameEntity createFish(){
+        GameEntity gameEntity = new GameEntity();
+        Random random = new Random();
+        gameEntity.addComponent(new PositionComponent(new Position(random.nextDouble(CANVAS_WIDTH), random.nextDouble(CANVAS_HEIGH))));
+        gameEntity.addComponent(new VelocityComponent(new Direction(random.nextDouble(-1, 1), random.nextDouble(-1, 1))));
+        gameEntity.addComponent(new BoxCollider(120,127));
+        gameEntity.addComponent(new SpriteComponent("/Images/sketchPezCoral.png"));
+        gameEntity.addComponent(new Fish());
+        return gameEntity;
     }
 }
