@@ -27,14 +27,14 @@ import java.util.Random;
  */
 public class MainScene extends Application {
 
-    public static final int CANVAS_WIDTH = 1520;
-    public static final int CANVAS_HEIGHT = 780;
+    public static final int canvasWidth = 1520;
+    public static final int canvasHeight = 780;
     public static final Random random = new Random();
 
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<SceneObject> sceneObjectList = new ArrayList<>();
-    BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
-            new Position(CANVAS_WIDTH, CANVAS_HEIGHT), new Position(0, CANVAS_HEIGHT));
+    BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(canvasWidth, 0),
+    new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
     private boolean showBox;
     private boolean Running = true;
 
@@ -46,7 +46,7 @@ public class MainScene extends Application {
     @Override
     public void start(Stage stage) {
         // Canvas habilitates to draw
-        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        Canvas canvas = new Canvas(canvasWidth, canvasHeight);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
         // At initiate adds 10 fishes in random places
@@ -109,45 +109,46 @@ public class MainScene extends Application {
 
             @Override
             public void handle(long now) {
-                if (Running) {
-                    if (lastUpdate == 0) {
-                        lastUpdate = now;
-                        return;
-                    }
 
-                    if (now - lastUpdate < frameInterval) {
-                        return;
-                    }
-
-                    //deltatime its seconds between current frame and the last
-                    double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
-                    lastUpdate = now;
-
-                    // clamping delta
-                    if (deltaTime > FRAME_SKIP_THRESHOLD && DebugUtil.isDebugging()) {
-                        System.out.println("Skipping frame: " + deltaTime);
-                        lastUpdate = now;
-                        return;
-                    }
-                    // Gradient background simulates water 
-                    LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                            new Stop(0, Color.rgb(127, 240, 220)),
-                            new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
-                    gc.setFill(fondo);
-                    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-                    // Logic
-                    for (SceneObject object : sceneObjectList) {
-                        object.move(deltaTime);
-                    }
-
-                    // Rendering
-                    for (SceneObject object : sceneObjectList) {
-                        object.draw(gc, showBox, deltaTime);
-                    }
-                }
                 if (!Running) {
-                    lastUpdate = 0;
+                    lastUpdate = now;
+                    return;
+                }
+
+                if (lastUpdate == 0) {
+                    lastUpdate = now;
+                    return;
+                }
+
+                if (now - lastUpdate < frameInterval) {
+                    return;
+                }
+
+                //deltatime its seconds between current frame and the last
+                double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
+                lastUpdate = now;
+
+                // clamping delta
+                if (deltaTime > FRAME_SKIP_THRESHOLD && DebugUtil.isDebugging()) {
+                    System.out.println("Skipping frame: " + deltaTime);
+                    lastUpdate = now;
+                    return;
+                }
+                // Gradient background simulates water 
+                LinearGradient backgroundColor = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.rgb(127, 240, 220)),
+                        new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
+                gc.setFill(backgroundColor);
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+                // Logic
+                for (SceneObject object : sceneObjectList) {
+                    object.move(deltaTime);
+                }
+
+                // Rendering
+                for (SceneObject object : sceneObjectList) {
+                    object.draw(gc, showBox, deltaTime);
                 }
 
             }
@@ -172,10 +173,8 @@ public class MainScene extends Application {
         Layout.getChildren().addAll(buttonLayout, canvas);
 
         // Shows the canvas in a window
-        stage.setScene(
-                new Scene(Layout));
-        stage.setTitle(
-                "Acuario JavaFX");
+        stage.setScene(new Scene(Layout));
+        stage.setTitle("Acuario JavaFX");
         stage.show();
     }
 
@@ -217,8 +216,8 @@ public class MainScene extends Application {
 
     //to obtain a position inside canvas
     public static Position getRandomPoint() {
-        double x = random.nextDouble() * (CANVAS_WIDTH - 40);
-        double y = random.nextDouble() * (CANVAS_HEIGHT - 40);
+        double x = random.nextDouble() * (canvasWidth - 40);
+        double y = random.nextDouble() * (canvasHeight - 40);
         return new Position(x, y);
     }
 }
