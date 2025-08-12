@@ -9,13 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,15 +27,16 @@ import java.util.Random;
  */
 public class MainScene extends Application {
 
-    public static final int CANVAS_WIDTH = 1520;
-    public static final int CANVAS_HEIGH = 780;
+    public static final int canvasWidth = 1520;
+    public static final int canvasHeight = 780;
     public static final Random random = new Random();
 
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<SceneObject> sceneObjectList = new ArrayList<>();
+    BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(canvasWidth, 0),
+    new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
     private boolean showBox;
-    BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(CANVAS_WIDTH, 0),
-            new Position(CANVAS_WIDTH, CANVAS_HEIGH), new Position(0, CANVAS_HEIGH));
+    private boolean Running = true;
 
     // Principal method to throw the application
     public static void main(String[] args) {
@@ -45,7 +46,7 @@ public class MainScene extends Application {
     @Override
     public void start(Stage stage) {
         // Canvas habilitates to draw
-        Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
+        Canvas canvas = new Canvas(canvasWidth, canvasHeight);
         gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
 
         // At initiate adds 10 fishes in random places
@@ -85,6 +86,21 @@ public class MainScene extends Application {
             toggleBoxButton.setText(showBox ? "Hide Boxes" : "Show Boxes");
         });
 
+        Button playPauseButton = new Button("Pause");
+        playPauseButton.setStyle(
+                "-fx-background-color: #aee0ae; "
+                + "-fx-text-fill: white; "
+                + "-fx-font-weight: bold; "
+                + "-fx-background-radius: 10; "
+                + "-fx-margin: 5; "
+                + "-fx-padding: 10 10;"
+        );
+
+        playPauseButton.setOnAction(e -> {
+            Running = !Running;
+            playPauseButton.setText(Running ? "Pause" : "Play");
+        });
+
         // Creates MainScene
         new AnimationTimer() {
             private long lastUpdate = 0;
@@ -93,6 +109,12 @@ public class MainScene extends Application {
 
             @Override
             public void handle(long now) {
+
+                if (!Running) {
+                    lastUpdate = now;
+                    return;
+                }
+
                 if (lastUpdate == 0) {
                     lastUpdate = now;
                     return;
@@ -101,7 +123,8 @@ public class MainScene extends Application {
                 if (now - lastUpdate < frameInterval) {
                     return;
                 }
-                // deltaTime its seconds between current frame and the last
+
+                //deltatime its seconds between current frame and the last
                 double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
 
@@ -111,12 +134,11 @@ public class MainScene extends Application {
                     lastUpdate = now;
                     return;
                 }
-
-                // Gradient background simulates water
-                LinearGradient fondo = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                // Gradient background simulates water 
+                LinearGradient backgroundColor = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
                         new Stop(0, Color.rgb(127, 240, 220)),
                         new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
-                gc.setFill(fondo);
+                gc.setFill(backgroundColor);
                 gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
                 // Logic
@@ -128,20 +150,30 @@ public class MainScene extends Application {
                 for (SceneObject object : sceneObjectList) {
                     object.draw(gc, showBox, deltaTime);
                 }
+
             }
         }.start();
 
         // User interaction: adds fishes with a click
-        canvas.setOnMouseClicked(e -> {
+        canvas.setOnMouseClicked(e
+                -> {
             Position position = new Position(e.getX(), e.getY());
             addFish(position);
             addCoralFish(position);
-        });
-        VBox layout = new VBox();
-        layout.getChildren().addAll(toggleBoxButton, canvas);
+        }
+        );
+        // Horizontal layout contains the buttons
+        HBox buttonLayout = new HBox();
+        buttonLayout.getChildren().addAll(toggleBoxButton, playPauseButton);
+        buttonLayout.setSpacing(
+                10);
+
+        //vertical layout adds the buttons and then the canvas or viceversa
+        VBox Layout = new VBox();
+        Layout.getChildren().addAll(buttonLayout, canvas);
 
         // Shows the canvas in a window
-        stage.setScene(new Scene(layout));
+        stage.setScene(new Scene(Layout));
         stage.setTitle("Acuario JavaFX");
         stage.show();
     }
@@ -184,8 +216,8 @@ public class MainScene extends Application {
 
     //to obtain a position inside canvas
     public static Position getRandomPoint() {
-        double x = random.nextDouble() * (CANVAS_WIDTH - 40);
-        double y = random.nextDouble() * (CANVAS_HEIGH - 40);
+        double x = random.nextDouble() * (canvasWidth - 40);
+        double y = random.nextDouble() * (canvasHeight - 40);
         return new Position(x, y);
     }
 }
