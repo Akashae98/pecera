@@ -62,8 +62,8 @@ public class AnimationCoralFish extends Animation {
         gc.save();
         DropShadow glowEffect = new DropShadow();
         glowEffect.setColor(Color.WHITE.deriveColor(0, 1, 1, 0.3));  // Color del brillo
-        glowEffect.setRadius(5);  // Tamaño del resplandor
-        glowEffect.setSpread(0.2);  // Intensidad
+        glowEffect.setRadius(3);  // Tamaño del resplandor
+        glowEffect.setSpread(0.1);  // Intensidad
         gc.setEffect(glowEffect);
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());

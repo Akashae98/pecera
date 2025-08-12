@@ -31,21 +31,21 @@ public class AnimationFishIdle extends Animation {
     private Image loadFishImageByColor(Color color) {
         String imagePath = "/Images/";
 
-        // Determina el nombre de la imagen basado en el color
-        if (isInRange(color, 50, 149, 150, 219, 180, 254)) { // Azules
-            this.imageName = "red_fish.png";
-        } else if (isInRange(color, 200, 254, 100, 179, 140, 199)) { // Rosados
+        // Determines the name of the image based int he color
+        if (isInRange(color, 50, 149, 150, 219, 180, 254)) { // blues
             this.imageName = "pink_fish.png";
-        } else if (isInRange(color, 150, 199, 120, 179, 180, 219)) { // Morados
-            this.imageName = "purple_fish.png";
+        } else if (isInRange(color, 200, 254, 100, 179, 140, 199)) { // pinks
+            this.imageName = "pink_fish.png";
+        } else if (isInRange(color, 150, 199, 120, 179, 180, 219)) { // purples
+            this.imageName = "pink_fish.png";
         } else {
-            this.imageName = "red_fish.png"; // Imagen genérica para otros colores
+            this.imageName = "red_fish.png"; // coral 
         }
 
         try {
             return new Image(getClass().getResourceAsStream(imagePath + imageName));
         } catch (Exception e) {
-            System.err.println("No se encontró " + imageName + ", usando imagen gris.");
+            System.err.println("We didn`t find " + imageName + ", using grey image...");
             return new Image(getClass().getResourceAsStream(imagePath + "gray_fish.png"));
         }
     }
@@ -93,9 +93,26 @@ public class AnimationFishIdle extends Animation {
     public void draw(GraphicsContext gc, Position pos) {
         gc.save();
         gc.setEffect(null);
+        Bloom bloom = new Bloom();
+       // bloom.setThreshold(0.9);
+        //gc.setEffect(bloom);
 
-       
+        if ("pink_fish.png".equals(this.imageName)) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setHue(calculateHueFromColor(color));
+            colorAdjust.setSaturation(0.3);  //low
 
+            Glow glow = new Glow();
+            glow.setLevel(0.2);
+
+            //To combine effects
+            Blend blend = new Blend();
+            blend.setTopInput(colorAdjust);
+            blend.setBottomInput(glow);
+            bloom.setThreshold(0.9);
+            gc.setEffect(bloom);
+            gc.setEffect(blend);
+        }
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());
 
