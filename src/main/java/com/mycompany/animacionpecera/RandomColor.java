@@ -6,48 +6,90 @@ package com.mycompany.animacionpecera;
 
 import java.util.Random;
 import javafx.scene.paint.Color;
+
 /**
  *
  * @author User
  */
 public class RandomColor {
-    
+
     public Color color;
     private static final Random random = MainScene.random;
 
     public RandomColor() {
         this.color = colorGenerator();
     }
-    
+
     public Color getColor() {
         return color;
     }
-    
-    private Color colorGenerator() {
-        int selector = random.nextInt(4);//selects between 0, 1 o 2
 
+   private Color colorGenerator() {
+    int selector = random.nextInt(5);
+        
         switch (selector) {
-            case 0: //Blue colors
-                return Color.rgb( //portions of the colors:
-                        50 + random.nextInt(100), // red: 50–149
-                        150 + random.nextInt(70), // green: 150–219
-                        180 + random.nextInt(75) // blue: 180–254
-                );
-            case 1: //Pink colors
-                return Color.rgb(
-                        200 + random.nextInt(55), // red: 200–254
-                        100 + random.nextInt(80), // green: 100–179
-                        140 + random.nextInt(60) // blue: 140–199
-                );
-            case 2: //Purple colors
-                return Color.rgb(
-                        150 + random.nextInt(50), // red: 150–199
-                        120 + random.nextInt(60), // green: 120–179
-                        180 + random.nextInt(40) // blue: 180–219
-                );
+            case 0: // Azul turquesa brillante
+                return generateTurquoise();
+                
+            case 1: // Rosa intenso
+                return generateHotPink();
+                
+            case 2: // Lila/púrpura
+                return generateLavender();
+                
+            case 3: // Rosa pastel
+                return generatePastelPink();
+                
+            case 4: // Coral/anaranjado
+                return generateCoral();
+                
             default:
-                return Color.CORAL;
+                return generateCoral(); // Por seguridad
         }
-    } 
-   
+    }
+    // Caso 1: Azules turquesas (hue 170-200°)
+    private Color generateTurquoise() {
+        return Color.hsb(
+            170 + random.nextInt(30),   // Hue: 170-200°
+            0.7 + random.nextDouble() * 0.2, // Saturación: 0.7-0.9
+            0.8 + random.nextDouble() * 0.15 // Brillo: 0.8-0.95
+        );
+    }
+
+    // Caso 2: Rosas intensos (hue 330-360°)
+    private Color generateHotPink() {
+        return Color.hsb(
+            330 + random.nextInt(30),   // Hue: 330-360°
+            0.8 + random.nextDouble() * 0.15, // Saturación: 0.8-0.95
+            0.9 + random.nextDouble() * 0.1  // Brillo: 0.9-1.0
+        );
+    }
+
+    // Caso 3: Lilas/púrpuras (hue 270-310°)
+    private Color generateLavender() {
+        return Color.hsb(
+            270 + random.nextInt(40),   // Hue: 270-310°
+            0.6 + random.nextDouble() * 0.25, // Saturación: 0.6-0.85
+            0.85 + random.nextDouble() * 0.1 // Brillo: 0.85-0.95
+        );
+    }
+
+    // Caso 4: Rosas pastel (hue 340-20°)
+    private Color generatePastelPink() {
+        return Color.hsb(
+            340 + random.nextInt(40),   // Hue: 340-20° (se envuelve)
+            0.5 + random.nextDouble() * 0.2, // Saturación: 0.5-0.7
+            0.95 + random.nextDouble() * 0.05 // Brillo: 0.95-1.0
+        );
+    }
+
+    // Caso 5: Coral/anaranjado (hue 10-25°)
+    private Color generateCoral() {
+        return Color.hsb(
+            10 + random.nextInt(15),    // Hue: 10-25°
+            0.8 + random.nextDouble() * 0.15, // Saturación: 0.8-0.95
+            0.9 + random.nextDouble() * 0.08 // Brillo: 0.9-0.98
+        );
+    }
+
 }
