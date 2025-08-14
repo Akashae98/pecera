@@ -34,7 +34,7 @@ public class MainScene extends Application {
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<SceneObject> sceneObjectList = new ArrayList<>();
     BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(canvasWidth, 0),
-    new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
+            new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
     private boolean showBox;
     private boolean Running = true;
 
@@ -104,8 +104,12 @@ public class MainScene extends Application {
         // Creates MainScene
         new AnimationTimer() {
             private long lastUpdate = 0;
-            private final long frameInterval = 16_666_667;//60 fps
+            private final long frameInterval = 16_666_667; //60 fps
             public static final double FRAME_SKIP_THRESHOLD = 0.5;
+            private double elapsedTime = 0;
+            private int frames = 0;
+            private double fps;
+            private double msPerFrame;
 
             @Override
             public void handle(long now) {
@@ -120,11 +124,12 @@ public class MainScene extends Application {
                     return;
                 }
 
+              // Early return if frame rate exceeds 60 FPS target (<16.67)
                 if (now - lastUpdate < frameInterval) {
                     return;
                 }
 
-                //deltatime its seconds between current frame and the last
+                //Deltatime its seconds between current frame and the last
                 double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
 
@@ -151,6 +156,23 @@ public class MainScene extends Application {
                     object.draw(gc, showBox, deltaTime);
                 }
 
+                //System.out.println("deltaTime: " + deltaTime);
+
+                // Accumulated time and frames
+                elapsedTime += deltaTime;
+                frames++;
+
+                if (elapsedTime >= 1.0) { //when delta arrives at each second
+                    fps = frames / elapsedTime;
+                    msPerFrame = (elapsedTime / frames) * 1000;
+                    elapsedTime = 0;
+                    // frame = frames;
+                    frames = 0;
+                }
+                //then we update the values in text
+                gc.setFill(Color.MAGENTA);
+                gc.fillText(String.format("%.2f FPS", fps), 10, 20);
+                gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
             }
         }.start();
 
