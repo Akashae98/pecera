@@ -110,11 +110,44 @@ public class MainScene extends Application {
             private int frames = 0;
             private double fps;
             private double msPerFrame;
+            public double deltaTime;
+            
+            private void renderScene(double deltaTime) {
+                // Gradient background simulates water 
+                LinearGradient background = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.rgb(127, 240, 220)),
+                        new Stop(1, Color.rgb(70, 130, 180)));
+                gc.setFill(background);
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+                // Rendering
+                for (SceneObject object : sceneObjectList) {
+                    object.draw(gc, showBox, deltaTime);
+                }
+
+                // UI (FPS)
+                gc.setFill(Color.MAGENTA);
+                gc.fillText(String.format("%.2f FPS", fps), 10, 20);
+                gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
+            }
+
+            private void updateFpsStats() {
+                elapsedTime += deltaTime;
+                frames++;
+
+                if (elapsedTime >= 0.5) {
+                    fps = frames / elapsedTime;
+                    msPerFrame = (elapsedTime / frames) * 1000;
+                    elapsedTime = 0;
+                    frames = 0;
+                }
+            }
+            
             @Override
             public void handle(long now) {
 
                 if (!Running) {
+                    renderScene(0);
                     lastUpdate = now;
                     return;
                 }
@@ -124,13 +157,13 @@ public class MainScene extends Application {
                     return;
                 }
 
-              // Early return if frame rate exceeds 60 FPS target (<16.67)
+                // Early return if frame rate exceeds 60 FPS target (<16.67)
                 if (now - lastUpdate < frameInterval) {
                     return;
                 }
 
                 //Deltatime its seconds between current frame and the last
-                double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
+                deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
 
                 // clamping delta
@@ -139,41 +172,19 @@ public class MainScene extends Application {
                     lastUpdate = now;
                     return;
                 }
-                // Gradient background simulates water 
-                LinearGradient backgroundColor = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                        new Stop(0, Color.rgb(127, 240, 220)),
-                        new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
-                gc.setFill(backgroundColor);
-                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
                 // Logic
                 for (SceneObject object : sceneObjectList) {
                     object.move(deltaTime);
                 }
-
                 // Rendering
-                for (SceneObject object : sceneObjectList) {
-                    object.draw(gc, showBox, deltaTime);
-                }
+                renderScene(deltaTime);
 
-                //System.out.println("deltaTime: " + deltaTime);
-
-                // Accumulated time and frames
-                elapsedTime += deltaTime;
-                frames++;
-
-                if (elapsedTime >= 1.0) { //when delta arrives at each second
-                    fps = frames / elapsedTime;
-                    msPerFrame = (elapsedTime / frames) * 1000;
-                    elapsedTime = 0;
-                    // frame = frames;
-                    frames = 0;
-                }
-                //then we update the values in text
-                gc.setFill(Color.MAGENTA);
-                gc.fillText(String.format("%.2f FPS", fps), 10, 20);
-                gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
+                // Updates fps stats
+                updateFpsStats();
+               //System.out.println("deltaTime: " + deltaTime);
             }
+
         }.start();
 
         // User interaction: adds fishes with a click
