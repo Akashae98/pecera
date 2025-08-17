@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Principal Class wich creates the window and the canvas to draw the animation.
@@ -104,14 +106,14 @@ public class MainScene extends Application {
         // Creates MainScene
         new AnimationTimer() {
             private long lastUpdate = 0;
-            private final long frameInterval = 16_666_667; //60 fps
+            private final long FRAME_INTERVAL = 16_666_667; //60 fps
             public static final double FRAME_SKIP_THRESHOLD = 0.5;
             private double elapsedTime = 0;
             private int frames = 0;
             private double fps;
             private double msPerFrame;
             public double deltaTime;
-            
+
             private void renderScene(double deltaTime) {
                 // Gradient background simulates water 
                 LinearGradient background = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
@@ -125,10 +127,6 @@ public class MainScene extends Application {
                     object.draw(gc, showBox, deltaTime);
                 }
 
-                // UI (FPS)
-                gc.setFill(Color.MAGENTA);
-                gc.fillText(String.format("%.2f FPS", fps), 10, 20);
-                gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
             }
 
             private void updateFpsStats() {
@@ -142,7 +140,7 @@ public class MainScene extends Application {
                     frames = 0;
                 }
             }
-            
+
             @Override
             public void handle(long now) {
 
@@ -156,10 +154,15 @@ public class MainScene extends Application {
                     lastUpdate = now;
                     return;
                 }
-
-                // Early return if frame rate exceeds 60 FPS target (<16.67)
-                if (now - lastUpdate < frameInterval) {
-                    return;
+                
+               // Cap FPS to 60 (max 16.67 ms/frame)
+                long elapsed = now - lastUpdate;
+                if (elapsed < FRAME_INTERVAL) {
+                    try {
+                        Thread.sleep((FRAME_INTERVAL - elapsed) / 1_000_000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MainScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
                 //Deltatime its seconds between current frame and the last
@@ -182,7 +185,12 @@ public class MainScene extends Application {
 
                 // Updates fps stats
                 updateFpsStats();
-               //System.out.println("deltaTime: " + deltaTime);
+
+                // UI (FPS)
+                gc.setFill(Color.MAGENTA);
+                gc.fillText(String.format("%.2f FPS", fps), 10, 20);
+                gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
+
             }
 
         }.start();
