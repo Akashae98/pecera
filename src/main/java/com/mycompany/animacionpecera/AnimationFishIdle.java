@@ -4,11 +4,11 @@
  */
 package com.mycompany.animacionpecera;
 
+import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -22,31 +22,29 @@ public class AnimationFishIdle extends Animation {
     private final Color color;
     private final Image image;
     private String imageName;
+    Random random = new Random();
+    double hueRandom;
 
     public AnimationFishIdle(double size, Color color) {
         super(size);
         this.color = color;
         this.image = loadFishImageByColor(color);
+        this.hueRandom = random.nextDouble();
     }
 
     private Image loadFishImageByColor(Color color) {
         String imagePath = "/Images/";
 
         double hue = color.getHue(); // de 0 a 360
-        // Primero detectamos por RGB para máxima precisión
-        if (isTurquoiseByRGB(color)) {
+
+        if (isPinkHue(hue)) {
             imageName = "pink_fish.png";
-        } else if (isPinkByRGB(color)) {
+        } else if (isTurquoiseHue(hue)) {
             imageName = "pink_fish.png";
-        } // Luego por HSB para clasificación general
-        else {
-            if (isPinkHue(hue)) {
-                imageName = "pink_fish.png";
-            } else if (isPurpleHue(hue)) {
-                imageName = "purple_fish.png";
-            } else {
-                imageName = "red_fish.png";
-            }
+        } else if (isPurpleHue(hue)) {
+            imageName = "purple_fish.png";
+        } else {
+            imageName = "red_fish.png";
         }
 
         try {
@@ -57,29 +55,16 @@ public class AnimationFishIdle extends Animation {
         }
     }
 
-    private boolean isTurquoiseByRGB(Color color) {
-        return (color.getRed() * 255 < 150)
-                && // poco rojo
-                (color.getGreen() * 255 > 140)
-                && // mucho verde
-                (color.getBlue() * 255 > 170);    // mucho azul
-    }
-
-    private boolean isPinkByRGB(Color color) {
-        return (color.getRed() * 255 > 200)
-                && // mucho rojo
-                (color.getGreen() * 255 < 120)
-                && // poco verde
-                (color.getBlue() * 255 > 140)
-                && (color.getRed() > color.getBlue());    // bastante azul
-    }
-
     private boolean isPinkHue(double hue) {
-        return hue >= 330 || hue <= 20; // Rango correcto para rosas
+        return hue >= 170 && hue <= 200;
+    }
+
+    private boolean isTurquoiseHue(double hue) {
+        return hue >= 330 || hue <= 20; 
     }
 
     private boolean isPurpleHue(double hue) {
-        return hue >= 260 && hue < 330; // Rango para púrpuras/lilas
+        return hue >= 260 && hue < 330; 
     }
 
     private double getWidth() {
@@ -96,20 +81,19 @@ public class AnimationFishIdle extends Animation {
         gc.setEffect(null);
 
         double hue = color.getHue();
+        double normalizedHue = (hue - 180) / 180.0; // 0–360 → -1 a 1
+
         ColorAdjust colorAdjust = new ColorAdjust();
-        Effect finalEffect = colorAdjust; // Empezamos con el ajuste básico
 
-        if (isPinkByRGB(color)) {
-            colorAdjust.setHue(3);
-            colorAdjust.setSaturation(0.3);
+        if (isTurquoiseHue(hue)) {
+            // turns the pink image to blue colors
+            colorAdjust.setHue(normalizedHue);
+            colorAdjust.setSaturation(0.5);
+            colorAdjust.setBrightness(0.1);
 
-            Glow glow = new Glow();
-            glow.setLevel(0.2);
+            Glow glow = new Glow(0.1);
+            Bloom bloom = new Bloom(0.1);
 
-            Bloom bloom = new Bloom();
-            bloom.setThreshold(0.2);
-
-            // Combinación correcta de 3 efectos:
             Blend blend1 = new Blend();
             blend1.setTopInput(colorAdjust);
             blend1.setBottomInput(glow);
@@ -118,23 +102,28 @@ public class AnimationFishIdle extends Animation {
             finalBlend.setTopInput(blend1);
             finalBlend.setBottomInput(bloom);
 
-            gc.setEffect(finalBlend); // Aplicamos la combinación completa
-            gc.fillText("c", pos.x(), pos.y());
+            gc.setEffect(finalBlend);
 
-        } else if (isTurquoiseByRGB(color)) {
-            colorAdjust.setHue(hue / 20);
-            colorAdjust.setSaturation(0.3);
-            colorAdjust.setBrightness(0.1);
-            finalEffect = colorAdjust;
+        } else if (isPinkHue(hue)) {
+     
+            colorAdjust.setHue(0 + (hueRandom)*0.2 -0.1);//ajusted pink
+            colorAdjust.setSaturation(0.40);
+            colorAdjust.setBrightness(0.25);
+            gc.setEffect(colorAdjust);
+
+        } else if (isPurpleHue(hue)) {
+            colorAdjust.setHue(0 - (hueRandom * 0.8));//ajusted purples anb blues
+            colorAdjust.setSaturation(0.45);
+            colorAdjust.setBrightness(0.15);
+            gc.setEffect(colorAdjust);
 
         } else {
-            
-            colorAdjust.setHue(hue/30);
-            colorAdjust.setSaturation(0.2);
-            finalEffect = colorAdjust;
+            // Coral to golden
+            colorAdjust.setHue(0.12);
+            colorAdjust.setSaturation(0.68);
+            colorAdjust.setBrightness(0.12);
+            gc.setEffect(colorAdjust);
         }
-
-        gc.setEffect(finalEffect);
 
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());
