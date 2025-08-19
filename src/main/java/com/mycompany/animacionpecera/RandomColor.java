@@ -24,71 +24,68 @@ public class RandomColor {
         return color;
     }
 
-   private Color colorGenerator() {
-    int selector = random.nextInt(5);
-        
+    private Color colorGenerator() {
+        int selector = random.nextInt(5);
+
         switch (selector) {
-            case 0: // Azul turquesa brillante
+            case 0:
                 return generateTurquoise();
-                
-            case 1: // Rosa intenso
+
+            case 1:
                 return generateHotPink();
-                
-            case 2: // Lila/púrpura
+
+            case 2:
                 return generateLavender();
-                
-            case 3: // Rosa pastel
+
+            case 3:
                 return generatePastelPink();
-                
-            case 4: // Coral/anaranjado
+
+            case 4:
                 return generateCoral();
-                
+
             default:
-                return generateCoral(); // Por seguridad
+                return generateCoral();
         }
     }
-    // Caso 1: Azules turquesas (hue 170-200°)
+
     private Color generateTurquoise() {
         return Color.hsb(
-            170 + random.nextInt(30),   // Hue: 170-200°
-            0.7 + random.nextDouble() * 0.2, // Saturación: 0.7-0.9
-            0.8 + random.nextDouble() * 0.15 // Brillo: 0.8-0.95
+                170 + random.nextInt(30), // Hue: 170-200°
+                0.7 + random.nextDouble() * 0.2, // Saturación: 0.7-0.9
+                0.8 + random.nextDouble() * 0.15 // Brillo: 0.8-0.95
         );
     }
 
-    // Caso 2: Rosas intensos (hue 330-360°)
     private Color generateHotPink() {
         return Color.hsb(
-            330 + random.nextInt(30),   // Hue: 330-360°
-            0.8 + random.nextDouble() * 0.15, // Saturación: 0.8-0.95
-            0.9 + random.nextDouble() * 0.1  // Brillo: 0.9-1.0
+                320 + random.nextInt(20), // Hue: 320-340°
+                0.85 + random.nextDouble() * 0.15, // Saturación: 0.85-1.0
+                0.9 + random.nextDouble() * 0.1 // Brillo: 0.9-1.0
         );
     }
 
-    // Caso 3: Lilas/púrpuras (hue 270-310°)
     private Color generateLavender() {
         return Color.hsb(
-            270 + random.nextInt(40),   // Hue: 270-310°
-            0.6 + random.nextDouble() * 0.25, // Saturación: 0.6-0.85
-            0.85 + random.nextDouble() * 0.1 // Brillo: 0.85-0.95
+                270 + random.nextInt(20), // Hue: 270-290°
+                0.5 + random.nextDouble() * 0.25, // Saturación: 0.5-0.75
+                0.85 + random.nextDouble() * 0.15 // Brillo: 0.85-1.0
         );
     }
 
-    // Caso 4: Rosas pastel (hue 340-20°)
     private Color generatePastelPink() {
+        int hue = (340 + random.nextInt(40)) % 360; // → 340-359 o 0-19
         return Color.hsb(
-            340 + random.nextInt(40),   // Hue: 340-20° (se envuelve)
-            0.5 + random.nextDouble() * 0.2, // Saturación: 0.5-0.7
-            0.95 + random.nextDouble() * 0.05 // Brillo: 0.95-1.0
+                hue,
+                0.3 + random.nextDouble() * 0.2, // Saturación: 0.3-0.5
+                0.95 + random.nextDouble() * 0.05 // Brillo: 0.95-1.0
         );
     }
 
-    // Caso 5: Coral/anaranjado (hue 10-25°)
     private Color generateCoral() {
         return Color.hsb(
-            10 + random.nextInt(15),    // Hue: 10-25°
-            0.8 + random.nextDouble() * 0.15, // Saturación: 0.8-0.95
-            0.9 + random.nextDouble() * 0.08 // Brillo: 0.9-0.98
+                10 + random.nextInt(15), // Hue: 10-25°
+                0.8 + random.nextDouble() * 0.15, // Saturación: 0.8-0.95
+                0.9 + random.nextDouble() * 0.08 // Brillo: 0.9-0.98
         );
     }
 
