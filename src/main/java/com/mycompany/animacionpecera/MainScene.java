@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Principal Class wich creates the window and the canvas to draw the animation.
@@ -34,7 +36,7 @@ public class MainScene extends Application {
     private GraphicsContext gc; //Graphic context to draw in the canvas
     private final List<SceneObject> sceneObjectList = new ArrayList<>();
     BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(canvasWidth, 0),
-    new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
+            new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
     private boolean showBox;
     private boolean Running = true;
 
@@ -104,8 +106,39 @@ public class MainScene extends Application {
         // Creates MainScene
         new AnimationTimer() {
             private long lastUpdate = 0;
-            private final long frameInterval = 16_666_667;//60 fps
+            private final long FRAME_INTERVAL = 16_666_667; //60 fps
             public static final double FRAME_SKIP_THRESHOLD = 0.5;
+            private double elapsedTime = 0;
+            private int frames = 0;
+            private double fps;
+            private double msPerFrame;
+
+            private void renderScene(double deltaTime) {
+                // Gradient background simulates water 
+                LinearGradient background = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.rgb(127, 240, 220)),
+                        new Stop(1, Color.rgb(70, 130, 180)));
+                gc.setFill(background);
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+                // Rendering
+                for (SceneObject object : sceneObjectList) {
+                    object.draw(gc, showBox, deltaTime);
+                }
+
+            }
+
+            private void updateFpsStats(double deltaTime) {
+                elapsedTime += deltaTime;
+                frames++;
+
+                if (elapsedTime >= 0.5) {
+                    fps = frames / elapsedTime;
+                    msPerFrame = (elapsedTime / frames) * 1000;
+                    elapsedTime = 0;
+                    frames = 0;
+                }
+            }
 
             @Override
             public void handle(long now) {
@@ -120,11 +153,7 @@ public class MainScene extends Application {
                     return;
                 }
 
-                if (now - lastUpdate < frameInterval) {
-                    return;
-                }
-
-                //deltatime its seconds between current frame and the last
+                //Deltatime its seconds between current frame and the last
                 double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
 
@@ -134,24 +163,34 @@ public class MainScene extends Application {
                     lastUpdate = now;
                     return;
                 }
-                // Gradient background simulates water 
-                LinearGradient backgroundColor = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                        new Stop(0, Color.rgb(127, 240, 220)),
-                        new Stop(1, Color.rgb(70, 130, 180))); //Lighter blue
-                gc.setFill(backgroundColor);
-                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
                 // Logic
                 for (SceneObject object : sceneObjectList) {
                     object.move(deltaTime);
                 }
-
                 // Rendering
-                for (SceneObject object : sceneObjectList) {
-                    object.draw(gc, showBox, deltaTime);
+                renderScene(deltaTime);
+
+                // Updates fps stats
+                updateFpsStats(deltaTime);
+
+                // UI (FPS)
+                gc.setFill(Color.MAGENTA);
+                gc.fillText(String.format("%.2f FPS", fps), 10, 20);
+                gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
+
+                // Cap FPS to 60 (max 16.67 ms/frame)
+                long elapsed = now - lastUpdate;
+                if (elapsed < FRAME_INTERVAL) {
+                    try {
+                        Thread.sleep((FRAME_INTERVAL - elapsed) / 1_000_000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MainScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
             }
+
         }.start();
 
         // User interaction: adds fishes with a click
