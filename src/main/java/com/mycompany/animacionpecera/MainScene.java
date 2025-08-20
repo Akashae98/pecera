@@ -48,7 +48,8 @@ public class MainScene extends Application {
         gc = canvas.getGraphicsContext2D();
 
         // At initiate add scene objects
-        initializeSceneObjects(5);
+        final int initialFishes = 5;
+        initializeSceneObjects(initialFishes);
 
         //Creates the game loop
         gameLoop = new GameLoop(gc, canvas, sceneObjectList);
