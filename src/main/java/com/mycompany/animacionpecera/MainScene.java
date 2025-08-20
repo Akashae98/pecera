@@ -112,7 +112,6 @@ public class MainScene extends Application {
             private int frames = 0;
             private double fps;
             private double msPerFrame;
-            public double deltaTime;
 
             private void renderScene(double deltaTime) {
                 // Gradient background simulates water 
@@ -129,7 +128,7 @@ public class MainScene extends Application {
 
             }
 
-            private void updateFpsStats() {
+            private void updateFpsStats(double deltaTime) {
                 elapsedTime += deltaTime;
                 frames++;
 
@@ -145,7 +144,6 @@ public class MainScene extends Application {
             public void handle(long now) {
 
                 if (!Running) {
-                    renderScene(0);
                     lastUpdate = now;
                     return;
                 }
@@ -154,19 +152,9 @@ public class MainScene extends Application {
                     lastUpdate = now;
                     return;
                 }
-                
-               // Cap FPS to 60 (max 16.67 ms/frame)
-                long elapsed = now - lastUpdate;
-                if (elapsed < FRAME_INTERVAL) {
-                    try {
-                        Thread.sleep((FRAME_INTERVAL - elapsed) / 1_000_000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(MainScene.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
 
                 //Deltatime its seconds between current frame and the last
-                deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
+                double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
                 lastUpdate = now;
 
                 // clamping delta
@@ -184,12 +172,22 @@ public class MainScene extends Application {
                 renderScene(deltaTime);
 
                 // Updates fps stats
-                updateFpsStats();
+                updateFpsStats(deltaTime);
 
                 // UI (FPS)
                 gc.setFill(Color.MAGENTA);
                 gc.fillText(String.format("%.2f FPS", fps), 10, 20);
                 gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
+
+                // Cap FPS to 60 (max 16.67 ms/frame)
+                long elapsed = now - lastUpdate;
+                if (elapsed < FRAME_INTERVAL) {
+                    try {
+                        Thread.sleep((FRAME_INTERVAL - elapsed) / 1_000_000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MainScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 
             }
 
