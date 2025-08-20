@@ -3,7 +3,6 @@
  */
 package com.mycompany.animacionpecera;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -11,16 +10,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Principal Class wich creates the window and the canvas to draw the animation.
@@ -37,8 +30,9 @@ public class MainScene extends Application {
     private final List<SceneObject> sceneObjectList = new ArrayList<>();
     BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(canvasWidth, 0),
             new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
-    private boolean showBox;
-    private boolean Running = true;
+
+    //GameLoop instance
+    private GameLoop gameLoop;
 
     // Principal method to throw the application
     public static void main(String[] args) {
@@ -49,31 +43,17 @@ public class MainScene extends Application {
     public void start(Stage stage) {
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-        gc = canvas.getGraphicsContext2D(); //creates graphicContext in the Canvas
+        
+        //gc its the brush to paint in the Canvas, harcoded for each canvas
+        gc = canvas.getGraphicsContext2D();
 
-        // At initiate adds 10 fishes in random places
-        for (int i = 0; i < 5; i++) {
-            Position position = getRandomPoint();
-            addFish(position);
-            Position position2 = getRandomPoint();
-            addCoralFish(position2);
-        }
+        // At initiate add scene objects
+        initializeSceneObjects(5);
 
-        // little bubbles
-        for (int i = 0; i < 40; i++) {
-            addBubble(3 + Math.random() * 3, 140 + Math.random(), canvasBox);
-        }
+        //Creates the game loop
+        gameLoop = new GameLoop(gc, canvas, sceneObjectList);
 
-        // medium
-        for (int i = 0; i < 35; i++) {
-            addBubble(8 + Math.random() * 3, 100 + Math.random(), canvasBox);
-        }
-
-        //big
-        for (int i = 0; i < 20; i++) {
-            addBubble(13 + Math.random() * 3, 80 + Math.random(), canvasBox);
-        }
-
+        //buttons
         Button toggleBoxButton = new Button("Show Boxes");
         toggleBoxButton.setStyle(
                 "-fx-background-color: #e0aee0; "
@@ -84,8 +64,9 @@ public class MainScene extends Application {
                 + "-fx-padding: 10 10;"
         );
         toggleBoxButton.setOnAction(e -> {
-            showBox = !showBox;
-            toggleBoxButton.setText(showBox ? "Hide Boxes" : "Show Boxes");
+            boolean newShowBox = !gameLoop.isShowBox();
+            gameLoop.setShowBox(newShowBox);
+            toggleBoxButton.setText(newShowBox ? "Hide Boxes" : "Show Boxes");
         });
 
         Button playPauseButton = new Button("Pause");
@@ -99,99 +80,13 @@ public class MainScene extends Application {
         );
 
         playPauseButton.setOnAction(e -> {
-            Running = !Running;
-            playPauseButton.setText(Running ? "Pause" : "Play");
+            boolean runningState = !gameLoop.isRunning();
+            gameLoop.setRunning(runningState);
+            playPauseButton.setText(runningState ? "Pause" : "Play");
         });
 
-        // Creates MainScene
-        new AnimationTimer() {
-            private long lastUpdate = 0;
-            private final long FRAME_INTERVAL = 16_666_667; //60 fps
-            public static final double FRAME_SKIP_THRESHOLD = 0.5;
-            private double elapsedTime = 0;
-            private int frames = 0;
-            private double fps;
-            private double msPerFrame;
-
-            private void renderScene(double deltaTime) {
-                // Gradient background simulates water 
-                LinearGradient background = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                        new Stop(0, Color.rgb(127, 240, 220)),
-                        new Stop(1, Color.rgb(70, 130, 180)));
-                gc.setFill(background);
-                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-                // Rendering
-                for (SceneObject object : sceneObjectList) {
-                    object.draw(gc, showBox, deltaTime);
-                }
-
-            }
-
-            private void updateFpsStats(double deltaTime) {
-                elapsedTime += deltaTime;
-                frames++;
-
-                if (elapsedTime >= 0.5) {
-                    fps = frames / elapsedTime;
-                    msPerFrame = (elapsedTime / frames) * 1000;
-                    elapsedTime = 0;
-                    frames = 0;
-                }
-            }
-
-            @Override
-            public void handle(long now) {
-
-                if (!Running) {
-                    lastUpdate = now;
-                    return;
-                }
-
-                if (lastUpdate == 0) {
-                    lastUpdate = now;
-                    return;
-                }
-
-                //Deltatime its seconds between current frame and the last
-                double deltaTime = (now - lastUpdate) / 1_000_000_000.0; // nanoseconds per second
-                lastUpdate = now;
-
-                // clamping delta
-                if (deltaTime > FRAME_SKIP_THRESHOLD && DebugUtil.isDebugging()) {
-                    System.out.println("Skipping frame: " + deltaTime);
-                    lastUpdate = now;
-                    return;
-                }
-
-                // Logic
-                for (SceneObject object : sceneObjectList) {
-                    object.move(deltaTime);
-                }
-                // Rendering
-                renderScene(deltaTime);
-
-                // Updates fps stats
-                updateFpsStats(deltaTime);
-
-                // UI (FPS)
-                gc.setFill(Color.MAGENTA);
-                gc.fillText(String.format("%.2f FPS", fps), 10, 20);
-                gc.fillText(String.format("%.3f ms/frame", msPerFrame), 10, 35);
-
-                // Cap FPS to 60 (max 16.67 ms/frame)
-                long elapsed = now - lastUpdate;
-                if (elapsed < FRAME_INTERVAL) {
-                    try {
-                        Thread.sleep((FRAME_INTERVAL - elapsed) / 1_000_000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(MainScene.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-            }
-
-        }.start();
+        //Start the game loop
+        gameLoop.start();
 
         // User interaction: adds fishes with a click
         canvas.setOnMouseClicked(e
@@ -201,6 +96,7 @@ public class MainScene extends Application {
             addCoralFish(position);
         }
         );
+        
         // Horizontal layout contains the buttons
         HBox buttonLayout = new HBox();
         buttonLayout.getChildren().addAll(toggleBoxButton, playPauseButton);
@@ -215,6 +111,31 @@ public class MainScene extends Application {
         stage.setScene(new Scene(Layout));
         stage.setTitle("Acuario JavaFX");
         stage.show();
+    }
+
+    private void initializeSceneObjects(int fishes) {
+        // At initiate adds x fishes in random places
+        for (int i = 0; i < fishes; i++) {
+            Position position = getRandomPoint();
+            addFish(position);
+            Position position2 = getRandomPoint();
+            addCoralFish(position2);
+        }
+
+        // little bubbles
+        for (int i = 0; i < 40; i++) {
+            addBubble(3 + Math.random() * 3, 140 + Math.random(), canvasBox);
+        }
+
+        // medium bubbles
+        for (int i = 0; i < 35; i++) {
+            addBubble(8 + Math.random() * 3, 100 + Math.random(), canvasBox);
+        }
+
+        //big
+        for (int i = 0; i < 20; i++) {
+            addBubble(13 + Math.random() * 3, 80 + Math.random(), canvasBox);
+        }
     }
 
     //to create bubbles
