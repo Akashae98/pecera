@@ -9,7 +9,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -36,13 +35,9 @@ public class AnimationFishIdle extends Animation {
         String imagePath = "/Images/";
 
         double hue = color.getHue(); // de 0 a 360
-
-        if (isPinkHue(hue)) {
+        //we use the pink image base to color on using the hue
+        if (isPinkHue(hue)|| isTurquoiseHue(hue) || isPurpleHue(hue)) {
             imageName = "pink_fish.png";
-        } else if (isTurquoiseHue(hue)) {
-            imageName = "pink_fish.png";
-        } else if (isPurpleHue(hue)) {
-            imageName = "purple_fish.png";
         } else {
             imageName = "red_fish.png";
         }
@@ -60,11 +55,11 @@ public class AnimationFishIdle extends Animation {
     }
 
     private boolean isTurquoiseHue(double hue) {
-        return hue >= 330 || hue <= 20; 
+        return hue >= 330 || hue <= 20;
     }
 
     private boolean isPurpleHue(double hue) {
-        return hue >= 260 && hue < 330; 
+        return hue >= 260 && hue < 330;
     }
 
     private double getWidth() {
@@ -91,39 +86,35 @@ public class AnimationFishIdle extends Animation {
             colorAdjust.setSaturation(0.5);
             colorAdjust.setBrightness(0.1);
 
-            Glow glow = new Glow(0.1);
-            Bloom bloom = new Bloom(0.1);
-
-            Blend blend1 = new Blend();
-            blend1.setTopInput(colorAdjust);
-            blend1.setBottomInput(glow);
-
-            Blend finalBlend = new Blend();
-            finalBlend.setTopInput(blend1);
-            finalBlend.setBottomInput(bloom);
-
-            gc.setEffect(finalBlend);
-
         } else if (isPinkHue(hue)) {
-     
-            colorAdjust.setHue(0 + (hueRandom)*0.2 -0.1);//ajusted pink
-            colorAdjust.setSaturation(0.40);
-            colorAdjust.setBrightness(0.25);
-            gc.setEffect(colorAdjust);
+
+            colorAdjust.setHue(0 + (hueRandom) * 0.3 - 0.1);//ajusted pink
+            colorAdjust.setSaturation(0.45);
+            colorAdjust.setBrightness(0.35);
 
         } else if (isPurpleHue(hue)) {
-            colorAdjust.setHue(0 - (hueRandom * 0.8));//ajusted purples anb blues
-            colorAdjust.setSaturation(0.45);
-            colorAdjust.setBrightness(0.15);
-            gc.setEffect(colorAdjust);
+            colorAdjust.setHue(0 - (hueRandom * 0.5));//ajusted purples anb blues
+            colorAdjust.setSaturation(0.40);
+            colorAdjust.setBrightness(0.25);
 
         } else {
-            // Coral to golden
-            colorAdjust.setHue(0.12);
-            colorAdjust.setSaturation(0.68);
+            // Coral to golden colors
+            colorAdjust.setHue(hueRandom * 0.12);
+            colorAdjust.setSaturation(0.60);
             colorAdjust.setBrightness(0.12);
-            gc.setEffect(colorAdjust);
+
         }
+
+        Bloom bloom = new Bloom(0.2);
+
+        Blend blend1 = new Blend();
+        blend1.setTopInput(colorAdjust);
+
+        Blend finalBlend = new Blend();
+        finalBlend.setTopInput(blend1);
+        finalBlend.setBottomInput(bloom);
+
+        gc.setEffect(finalBlend);
 
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());

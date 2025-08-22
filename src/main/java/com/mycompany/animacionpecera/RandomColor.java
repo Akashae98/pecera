@@ -25,7 +25,7 @@ public class RandomColor {
     }
 
     private Color colorGenerator() {
-        int selector = random.nextInt(5);
+        int selector = random.nextInt(6);
 
         switch (selector) {
             case 0:
