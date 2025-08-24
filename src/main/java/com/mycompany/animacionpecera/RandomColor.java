@@ -48,6 +48,25 @@ public class RandomColor {
         }
     }
 
+    public static double coralHueGenerator() {
+        int selector = random.nextInt(3);
+        double hue;
+        switch (selector) {
+            case 0:
+                return hue = -0.08;
+
+            case 1:
+                return hue = -0.03;
+
+            case 2:
+                return hue = 0;
+
+            default:
+                return hue = 0;
+        }
+
+    }
+
     private Color generateTurquoise() {
         return Color.hsb(
                 170 + random.nextInt(30), // Hue: 170-200°

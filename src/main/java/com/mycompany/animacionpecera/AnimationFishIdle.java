@@ -6,8 +6,6 @@ package com.mycompany.animacionpecera;
 
 import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -36,7 +34,7 @@ public class AnimationFishIdle extends Animation {
 
         double hue = color.getHue(); // de 0 a 360
         //we use the pink image base to color on using the hue
-        if (isPinkHue(hue)|| isTurquoiseHue(hue) || isPurpleHue(hue)) {
+        if (isPinkHue(hue) || isTurquoiseHue(hue) || isPurpleHue(hue)) {
             imageName = "pink_fish.png";
         } else {
             imageName = "red_fish.png";
@@ -83,14 +81,13 @@ public class AnimationFishIdle extends Animation {
         if (isTurquoiseHue(hue)) {
             // turns the pink image to blue colors
             colorAdjust.setHue(normalizedHue);
-            colorAdjust.setSaturation(0.5);
-            colorAdjust.setBrightness(0.1);
+            colorAdjust.setSaturation(0.45);
+            colorAdjust.setBrightness(0.2);
 
         } else if (isPinkHue(hue)) {
-
             colorAdjust.setHue(0 + (hueRandom) * 0.3 - 0.1);//ajusted pink
             colorAdjust.setSaturation(0.45);
-            colorAdjust.setBrightness(0.35);
+            colorAdjust.setBrightness(0.37);
 
         } else if (isPurpleHue(hue)) {
             colorAdjust.setHue(0 - (hueRandom * 0.5));//ajusted purples anb blues
@@ -100,21 +97,12 @@ public class AnimationFishIdle extends Animation {
         } else {
             // Coral to golden colors
             colorAdjust.setHue(hueRandom * 0.12);
-            colorAdjust.setSaturation(0.60);
-            colorAdjust.setBrightness(0.12);
+            colorAdjust.setSaturation(0.55);
+            colorAdjust.setBrightness(0.15);
 
         }
 
-        Bloom bloom = new Bloom(0.2);
-
-        Blend blend1 = new Blend();
-        blend1.setTopInput(colorAdjust);
-
-        Blend finalBlend = new Blend();
-        finalBlend.setTopInput(blend1);
-        finalBlend.setBottomInput(bloom);
-
-        gc.setEffect(finalBlend);
+        gc.setEffect(colorAdjust);
 
         gc.drawImage(image, pos.x() - getWidth() / 2, pos.y() - getHeight() / 2,
                 getWidth(), getHeight());

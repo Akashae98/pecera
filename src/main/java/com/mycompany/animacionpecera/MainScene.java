@@ -43,7 +43,7 @@ public class MainScene extends Application {
     public void start(Stage stage) {
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-        
+
         //gc its the brush to paint in the Canvas, harcoded for each canvas
         gc = canvas.getGraphicsContext2D();
 
@@ -97,7 +97,7 @@ public class MainScene extends Application {
             addCoralFish(position);
         }
         );
-        
+
         // Horizontal layout contains the buttons
         HBox buttonLayout = new HBox();
         buttonLayout.getChildren().addAll(toggleBoxButton, playPauseButton);
@@ -119,10 +119,11 @@ public class MainScene extends Application {
         for (int i = 0; i < fishes; i++) {
             Position position = getRandomPoint();
             addFish(position);
-            Position position2 = getRandomPoint();
-            addCoralFish(position2);
         }
-
+        for (int i = 0; i < fishes / 2; i++) {
+            Position position = getRandomPoint();
+            addCoralFish(position);
+        }
         // little bubbles
         for (int i = 0; i < 40; i++) {
             addBubble(3 + Math.random() * 3, 140 + Math.random(), canvasBox);
@@ -152,7 +153,7 @@ public class MainScene extends Application {
     //creates normal fishes
     public void addFish(Position position) {
         RandomColor randomColor = new RandomColor();
-        Animation anim = new AnimationFishIdle(0.3 +random.nextDouble(0.45),
+        Animation anim = new AnimationFishIdle(0.3 + random.nextDouble(0.45),
                 randomColor.getColor());
 
         double dx = Math.random() * 80 - 1;
