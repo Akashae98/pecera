@@ -118,8 +118,8 @@ This experimental shift aims to prepare the simulation for **collision detection
 
 | **Requirement** | **Version** | **Purpose** |
 |-----------------|-------------|-------------|
-| ☕ **JDK** | 21+ | Core runtime and language features |
-| 🔨 **Maven** | 3.9.5+ | Dependency and build management |
+| ☕ **JDK** | 24+ | Core runtime and language features |
+| 🔨 **Maven Wrapper** | Bundled | Build and dependency management |
 | 🌐 **Internet** | - | Maven dependencies and Quantum API |
 
 **Recommended IDEs:**
@@ -134,6 +134,19 @@ This experimental shift aims to prepare the simulation for **collision detection
 ```
 
 For detailed setup, IDE instructions, and troubleshooting, see [`docs/RUNNING.md`](docs/RUNNING.md).
+
+---
+
+## 🚀 Desktop Releases
+
+The repository includes a GitHub Actions workflow that packages desktop builds for Windows, Linux, and macOS and publishes them to GitHub Releases when you push a version tag.
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+You can also run the workflow manually from the Actions tab to generate downloadable artifacts without creating a release.
 
 ---
 

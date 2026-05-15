@@ -1,0 +1,121 @@
+name: Build desktop artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Package on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+        include:
+          - os: windows-latest
+            maven_cmd: .\mvnw.cmd
+          - os: ubuntu-latest
+            maven_cmd: ./mvnw
+          - os: macos-latest
+            maven_cmd: ./mvnw
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 24
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "24"
+          cache: maven
+
+      - name: Make wrapper executable
+        if: runner.os != 'Windows'
+        run: chmod +x mvnw
+
+      - name: Build application jars
+        shell: pwsh
+        run: |
+          & "${{ matrix.maven_cmd }}" -B -DskipTests clean package dependency:copy-dependencies -DincludeScope=runtime
+
+      - name: Prepare jpackage input
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/input | Out-Null
+
+          $mainJar = Get-ChildItem target -Filter *.jar |
+            Where-Object { $_.Name -notmatch 'sources|javadoc|tests' } |
+            Select-Object -First 1
+
+          if (-not $mainJar) {
+            throw "Main application jar not found in target/"
+          }
+
+          Copy-Item $mainJar.FullName dist/input/
+
+          if (Test-Path target/dependency) {
+            Copy-Item target/dependency/* dist/input/
+          }
+
+          "MAIN_JAR=$($mainJar.Name)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Build app image
+        shell: pwsh
+        run: |
+          jpackage `
+            --type app-image `
+            --input dist/input `
+            --dest dist/out `
+            --name Aquarium `
+            --main-jar $env:MAIN_JAR `
+            --main-class com.mycompany.animacionpecera.MainScene `
+            --vendor "JavaFX Fish Simulation"
+
+      - name: Compress packaged app
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/release | Out-Null
+          $archivePath = Join-Path "dist/release" "aquarium-${{ matrix.os }}.zip"
+          Compress-Archive -Path "dist/out/Aquarium*" -DestinationPath $archivePath -Force
+
+      - name: Upload packaged app
+        uses: actions/upload-artifact@v4
+        with:
+          name: aquarium-${{ matrix.os }}
+          path: dist/release/aquarium-${{ matrix.os }}.zip
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download packaged apps
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/release-assets
+          pattern: aquarium-*
+          merge-multiple: true
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" dist/release-assets/* --clobber
+          else
+            gh release create "$TAG_NAME" dist/release-assets/* --generate-notes --title "$TAG_NAME"
+          fi
