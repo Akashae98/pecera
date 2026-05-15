@@ -52,6 +52,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist/input | Out-Null
+          New-Item -ItemType Directory -Force -Path dist/input/mods | Out-Null
 
           $mainJar = Get-ChildItem target -Filter *.jar |
             Where-Object { $_.Name -notmatch 'sources|javadoc|tests' } |
@@ -64,7 +65,7 @@ jobs:
           Copy-Item $mainJar.FullName dist/input/
 
           if (Test-Path target/dependency) {
-            Copy-Item target/dependency/* dist/input/
+            Copy-Item target/dependency/* dist/input/mods/
           }
 
           "MAIN_JAR=$($mainJar.Name)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -77,9 +78,51 @@ jobs:
             --input dist/input `
             --dest dist/out `
             --name Aquarium `
+            --module-path dist/input/mods `
+            --add-modules javafx.controls,javafx.graphics,javafx.base `
             --main-jar $env:MAIN_JAR `
             --main-class com.mycompany.animacionpecera.MainScene `
+            --java-options '--add-modules javafx.controls,javafx.graphics,javafx.base --enable-native-access=javafx.graphics' `
             --vendor "JavaFX Fish Simulation"
+
+      - name: Add Windows fallback launcher
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $fallbackLauncher = @(
+            '@echo off'
+            'setlocal'
+            'set "APP_HOME=%~dp0"'
+            'set "JAVA_CMD="'
+            ''
+            'if exist "%ProgramFiles%\Java\jdk-24\bin\java.exe" set "JAVA_CMD=%ProgramFiles%\Java\jdk-24\bin\java.exe"'
+            'if not defined JAVA_CMD if exist "%ProgramFiles%\Java\latest\bin\java.exe" set "JAVA_CMD=%ProgramFiles%\Java\latest\bin\java.exe"'
+            'if not defined JAVA_CMD set "JAVA_CMD=java"'
+            ''
+            '"%JAVA_CMD%" ^'
+            '  --module-path "%APP_HOME%app\mods" ^'
+            '  --add-modules javafx.controls,javafx.graphics,javafx.base ^'
+            '  --enable-native-access=javafx.graphics ^'
+            "  -cp `"%APP_HOME%app\$env:MAIN_JAR`" ^"
+            '  com.mycompany.animacionpecera.MainScene'
+            ''
+            'if errorlevel 1 ('
+            '  echo.'
+            '  echo Aquarium could not start with the fallback launcher.'
+            '  echo Install Java 24 and try again, or run Aquarium.exe instead.'
+            '  pause'
+            ')'
+          )
+          Set-Content -Path "dist/out/Aquarium/run-windows.bat" -Value $fallbackLauncher -Encoding ascii
+
+          $fallbackReadme = @(
+            'Windows launch options:'
+            '1. Double-click Aquarium.exe'
+            '2. If the launcher does not open, run run-windows.bat'
+            ''
+            'The fallback script requires Java 24 to be installed or available on PATH.'
+          )
+          Set-Content -Path "dist/out/Aquarium/WINDOWS-START.txt" -Value $fallbackReadme -Encoding ascii
 
       - name: Compress packaged app
         shell: pwsh
