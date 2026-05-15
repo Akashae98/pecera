@@ -93,12 +93,32 @@ jobs:
             '@echo off'
             'setlocal'
             'set "APP_HOME=%~dp0"'
+            'set "NATIVE_EXE=%APP_HOME%Aquarium.exe"'
             'set "JAVA_CMD="'
+            ''
+            'if exist "%NATIVE_EXE%" ('
+            '  start "" "%NATIVE_EXE%"'
+            '  timeout /t 5 /nobreak >nul'
+            '  tasklist /FI "IMAGENAME eq Aquarium.exe" | find /I "Aquarium.exe" >nul'
+            '  if not errorlevel 1 exit /b 0'
+            '  echo Native launcher did not stay open. Trying Java 24+ fallback...'
+            ')'
             ''
             'if exist "%ProgramFiles%\Java\jdk-24\bin\java.exe" set "JAVA_CMD=%ProgramFiles%\Java\jdk-24\bin\java.exe"'
             'if not defined JAVA_CMD if exist "%ProgramFiles%\Java\latest\bin\java.exe" set "JAVA_CMD=%ProgramFiles%\Java\latest\bin\java.exe"'
-            'if not defined JAVA_CMD set "JAVA_CMD=java"'
+            'if not defined JAVA_CMD for /f "delims=" %%I in (''where java 2^>nul'') do ('
+            '  set "JAVA_CMD=%%I"'
+            '  goto run_java'
+            ')'
             ''
+            'if not defined JAVA_CMD ('
+            '  echo Java 24+ was not found on this machine.'
+            '  echo Try Aquarium.exe directly, or install Java 24+ and run this script again.'
+            '  pause'
+            '  exit /b 1'
+            ')'
+            ''
+            ':run_java'
             '"%JAVA_CMD%" ^'
             '  --module-path "%APP_HOME%app\mods" ^'
             '  --add-modules javafx.controls,javafx.graphics,javafx.base ^'
@@ -108,8 +128,8 @@ jobs:
             ''
             'if errorlevel 1 ('
             '  echo.'
-            '  echo Aquarium could not start with the fallback launcher.'
-            '  echo Install Java 24 and try again, or run Aquarium.exe instead.'
+            '  echo Aquarium could not start with the Java fallback launcher.'
+            '  echo Check that Java 24+ is installed, then try again.'
             '  pause'
             ')'
           )
@@ -123,6 +143,48 @@ jobs:
             'The fallback script requires Java 24 to be installed or available on PATH.'
           )
           Set-Content -Path "dist/out/Aquarium/WINDOWS-START.txt" -Value $fallbackReadme -Encoding ascii
+
+      - name: Add Linux fallback launcher
+        if: runner.os == 'Linux'
+        shell: pwsh
+        run: |
+          $fallbackLauncher = @(
+            '#!/usr/bin/env bash'
+            'set -euo pipefail'
+            ''
+            'APP_HOME="$(cd -- "$(dirname -- "$0")" && pwd)"'
+            'JAVA_CMD=""'
+            ''
+            'if [[ -n "${JAVA_HOME:-}" && -x "${JAVA_HOME}/bin/java" ]]; then'
+            '  JAVA_CMD="${JAVA_HOME}/bin/java"'
+            'elif command -v java >/dev/null 2>&1; then'
+            '  JAVA_CMD="$(command -v java)"'
+            'fi'
+            ''
+            'if [[ -z "$JAVA_CMD" ]]; then'
+            '  echo "Java 24+ was not found on PATH."'
+            '  echo "Try the packaged launcher first, or install Java 24+ and run this script again."'
+            '  exit 1'
+            'fi'
+            ''
+            'exec "$JAVA_CMD" \'
+            '  --module-path "$APP_HOME/app/mods" \'
+            '  --add-modules javafx.controls,javafx.graphics,javafx.base \'
+            '  --enable-native-access=javafx.graphics \'
+            "  -cp `"$APP_HOME/app/$env:MAIN_JAR`" \"
+            '  com.mycompany.animacionpecera.MainScene'
+          )
+          Set-Content -Path "dist/out/Aquarium/run-linux.sh" -Value $fallbackLauncher -Encoding ascii
+
+          $fallbackReadme = @(
+            'Linux launch options:'
+            '1. Try the packaged launcher that ships with the app image'
+            '2. If it fails on your distro, run ./run-linux.sh'
+            ''
+            'The fallback script requires Java 24+ to be installed or available on PATH.'
+          )
+          Set-Content -Path "dist/out/Aquarium/LINUX-START.txt" -Value $fallbackReadme -Encoding ascii
+          chmod +x "dist/out/Aquarium/run-linux.sh"
 
       - name: Compress packaged app
         shell: pwsh
