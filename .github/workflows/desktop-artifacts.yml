@@ -1,0 +1,227 @@
+name: Build desktop artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Package on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+        include:
+          - os: windows-latest
+            maven_cmd: .\mvnw.cmd
+          - os: ubuntu-latest
+            maven_cmd: ./mvnw
+          - os: macos-latest
+            maven_cmd: ./mvnw
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 24
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "24"
+          cache: maven
+
+      - name: Make wrapper executable
+        if: runner.os != 'Windows'
+        run: chmod +x mvnw
+
+      - name: Build application jars
+        shell: pwsh
+        run: |
+          & "${{ matrix.maven_cmd }}" -B -DskipTests clean package dependency:copy-dependencies -DincludeScope=runtime
+
+      - name: Prepare jpackage input
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/input | Out-Null
+          New-Item -ItemType Directory -Force -Path dist/input/mods | Out-Null
+
+          $mainJar = Get-ChildItem target -Filter *.jar |
+            Where-Object { $_.Name -notmatch 'sources|javadoc|tests' } |
+            Select-Object -First 1
+
+          if (-not $mainJar) {
+            throw "Main application jar not found in target/"
+          }
+
+          Copy-Item $mainJar.FullName dist/input/
+
+          if (Test-Path target/dependency) {
+            Copy-Item target/dependency/* dist/input/mods/
+          }
+
+          "MAIN_JAR=$($mainJar.Name)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Build app image
+        shell: pwsh
+        run: |
+          jpackage `
+            --type app-image `
+            --input dist/input `
+            --dest dist/out `
+            --name Aquarium `
+            --module-path dist/input/mods `
+            --add-modules javafx.controls,javafx.graphics,javafx.base `
+            --main-jar $env:MAIN_JAR `
+            --main-class com.mycompany.animacionpecera.MainScene `
+            --java-options '--add-modules javafx.controls,javafx.graphics,javafx.base --enable-native-access=javafx.graphics' `
+            --vendor "JavaFX Fish Simulation"
+
+      - name: Add Windows fallback launcher
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $fallbackLauncher = @(
+            '@echo off'
+            'setlocal'
+            'set "APP_HOME=%~dp0"'
+            'set "NATIVE_EXE=%APP_HOME%Aquarium.exe"'
+            'set "JAVA_CMD="'
+            ''
+            'if exist "%NATIVE_EXE%" ('
+            '  start "" "%NATIVE_EXE%"'
+            '  timeout /t 5 /nobreak >nul'
+            '  tasklist /FI "IMAGENAME eq Aquarium.exe" | find /I "Aquarium.exe" >nul'
+            '  if not errorlevel 1 exit /b 0'
+            '  echo Native launcher did not stay open. Trying Java 24+ fallback...'
+            ')'
+            ''
+            'if exist "%ProgramFiles%\Java\jdk-24\bin\java.exe" set "JAVA_CMD=%ProgramFiles%\Java\jdk-24\bin\java.exe"'
+            'if not defined JAVA_CMD if exist "%ProgramFiles%\Java\latest\bin\java.exe" set "JAVA_CMD=%ProgramFiles%\Java\latest\bin\java.exe"'
+            'if not defined JAVA_CMD for /f "delims=" %%I in (''where java 2^>nul'') do ('
+            '  set "JAVA_CMD=%%I"'
+            '  goto run_java'
+            ')'
+            ''
+            'if not defined JAVA_CMD ('
+            '  echo Java 24+ was not found on this machine.'
+            '  echo Try Aquarium.exe directly, or install Java 24+ and run this script again.'
+            '  pause'
+            '  exit /b 1'
+            ')'
+            ''
+            ':run_java'
+            '"%JAVA_CMD%" ^'
+            '  --module-path "%APP_HOME%app\mods" ^'
+            '  --add-modules javafx.controls,javafx.graphics,javafx.base ^'
+            '  --enable-native-access=javafx.graphics ^'
+            "  -cp `"%APP_HOME%app\$env:MAIN_JAR`" ^"
+            '  com.mycompany.animacionpecera.MainScene'
+            ''
+            'if errorlevel 1 ('
+            '  echo.'
+            '  echo Aquarium could not start with the Java fallback launcher.'
+            '  echo Check that Java 24+ is installed, then try again.'
+            '  pause'
+            ')'
+          )
+          Set-Content -Path "dist/out/Aquarium/run-windows.bat" -Value $fallbackLauncher -Encoding ascii
+
+          $fallbackReadme = @(
+            'Windows launch options:'
+            '1. Double-click Aquarium.exe'
+            '2. If the launcher does not open, run run-windows.bat'
+            ''
+            'The fallback script requires Java 24 to be installed or available on PATH.'
+          )
+          Set-Content -Path "dist/out/Aquarium/WINDOWS-START.txt" -Value $fallbackReadme -Encoding ascii
+
+      - name: Add Linux fallback launcher
+        if: runner.os == 'Linux'
+        shell: pwsh
+        run: |
+          $fallbackLauncher = @(
+            '#!/usr/bin/env bash'
+            'set -euo pipefail'
+            ''
+            'APP_HOME="$(cd -- "$(dirname -- "$0")" && pwd)"'
+            'JAVA_CMD=""'
+            ''
+            'if [[ -n "${JAVA_HOME:-}" && -x "${JAVA_HOME}/bin/java" ]]; then'
+            '  JAVA_CMD="${JAVA_HOME}/bin/java"'
+            'elif command -v java >/dev/null 2>&1; then'
+            '  JAVA_CMD="$(command -v java)"'
+            'fi'
+            ''
+            'if [[ -z "$JAVA_CMD" ]]; then'
+            '  echo "Java 24+ was not found on PATH."'
+            '  echo "Try the packaged launcher first, or install Java 24+ and run this script again."'
+            '  exit 1'
+            'fi'
+            ''
+            'exec "$JAVA_CMD" \'
+            '  --module-path "$APP_HOME/app/mods" \'
+            '  --add-modules javafx.controls,javafx.graphics,javafx.base \'
+            '  --enable-native-access=javafx.graphics \'
+            "  -cp `"$APP_HOME/app/$env:MAIN_JAR`" \"
+            '  com.mycompany.animacionpecera.MainScene'
+          )
+          Set-Content -Path "dist/out/Aquarium/run-linux.sh" -Value $fallbackLauncher -Encoding ascii
+
+          $fallbackReadme = @(
+            'Linux launch options:'
+            '1. Try the packaged launcher that ships with the app image'
+            '2. If it fails on your distro, run ./run-linux.sh'
+            ''
+            'The fallback script requires Java 24+ to be installed or available on PATH.'
+          )
+          Set-Content -Path "dist/out/Aquarium/LINUX-START.txt" -Value $fallbackReadme -Encoding ascii
+          chmod +x "dist/out/Aquarium/run-linux.sh"
+
+      - name: Compress packaged app
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/release | Out-Null
+          $archivePath = Join-Path "dist/release" "aquarium-${{ matrix.os }}.zip"
+          Compress-Archive -Path "dist/out/Aquarium*" -DestinationPath $archivePath -Force
+
+      - name: Upload packaged app
+        uses: actions/upload-artifact@v4
+        with:
+          name: aquarium-${{ matrix.os }}
+          path: dist/release/aquarium-${{ matrix.os }}.zip
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download packaged apps
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/release-assets
+          pattern: aquarium-*
+          merge-multiple: true
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" dist/release-assets/* --clobber
+          else
+            gh release create "$TAG_NAME" dist/release-assets/* --generate-notes --title "$TAG_NAME"
+          fi

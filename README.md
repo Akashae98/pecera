@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk&logoColor=white)
-![JavaFX](https://img.shields.io/badge/JavaFX-21-blue?style=for-the-badge&logo=javafx&logoColor=white)
-![Maven](https://img.shields.io/badge/Apache%20Maven-3.6%2B-red?style=for-the-badge&logo=apache-maven&logoColor=white)
+![Java](https://img.shields.io/badge/Java-24-orange?style=for-the-badge&logo=openjdk&logoColor=white)
+![JavaFX](https://img.shields.io/badge/JavaFX-25-blue?style=for-the-badge&logo=openjfx&logoColor=white)
+![Maven](https://img.shields.io/badge/Apache%20Maven-Wrapper-red?style=for-the-badge&logo=apache-maven&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 *A simulation that explores software architecture paradigms and integrates real quantum randomness.*
@@ -118,8 +118,8 @@ This experimental shift aims to prepare the simulation for **collision detection
 
 | **Requirement** | **Version** | **Purpose** |
 |-----------------|-------------|-------------|
-| ☕ **JDK** | 21+ | Core runtime and language features |
-| 🔨 **Maven** | 3.9.5+ | Dependency and build management |
+| ☕ **JDK** | 24+ | Core runtime and language features |
+| 🔨 **Maven Wrapper** | Bundled | Build and dependency management |
 | 🌐 **Internet** | - | Maven dependencies and Quantum API |
 
 **Recommended IDEs:**
@@ -127,63 +127,26 @@ This experimental shift aims to prepare the simulation for **collision detection
 - 🔵 **NetBeans** (Full Java SE support)
 - 💚 **VS Code** + Java Extension Pack
 
----
+**Quick Start:**
 
-## 🚀 How to Run
-
-### 🎯 Method 1: Maven (Recommended)
-
-```bash
-# 1. Switch to desired version branch
-git checkout version-1
-
-# 2. Execute the Maven goal for JavaFX
-mvn clean javafx:run
+```powershell
+.\run.ps1
 ```
 
-### 🔵 Method 2: NetBeans
+For detailed setup, IDE instructions, and troubleshooting, see [`docs/RUNNING.md`](docs/RUNNING.md).
 
-<div align="center">
-<img src="https://img.shields.io/badge/NetBeans-Ready-blue?style=flat-square&logo=apache-netbeans-ide&logoColor=white" alt="NetBeans Ready">
-</div>
+---
 
-1. **Switch to desired branch** (`git checkout branch-name`)
-2. **Open project** in NetBeans
-3. **Click Run button** - that's it!
+## 🚀 Desktop Releases
 
-Each branch includes `nbactions.xml` that automatically triggers the Maven plugin.
+The repository includes a GitHub Actions workflow that packages desktop builds for Windows, Linux, and macOS and publishes them to GitHub Releases when you push a version tag.
 
-### 🚀 Method 3: IntelliJ IDEA
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
 
-<div align="center">
-<img src="https://img.shields.io/badge/IntelliJ-Configuration%20Required-orange?style=flat-square&logo=intellij-idea&logoColor=white" alt="IntelliJ Configuration Required">
-</div>
-
-> ⚠️ **Important**: Do **NOT** run directly from the IDE's run button.
-
-**Steps:**
-1. **Switch to desired branch** (`git checkout branch-name`)
-2. Open the **Maven Toolbar** (View → Tool Windows → Maven)
-3. Navigate to the **javafx plugin**
-4. Run the **javafx:run** goal
-
-<details>
-<summary><strong>🛠️ Alternative: Manual Run Configuration (Click to expand)</strong></summary>
-
-If you prefer to use IntelliJ's run configuration instead of Maven:
-
-1. **Create a new Application Run Configuration**
-2. **Set Main Class** to your application's main class
-3. **Configure VM Options**: Add the module path pointing to your Maven dependencies
-   - Go to VM Options field
-   - Add JavaFX module path (usually in `~/.m2/repository/org/openjfx/`)
-   - Set module path and add modules as needed
-4. **Run the configuration**
-
-> ⚠️ **Note**: Ensure Maven has downloaded all dependencies first (`mvn clean compile`).  
-> 💡 **Tip**: Maven method is usually simpler and more reliable.
-
-</details>
+You can also run the workflow manually from the Actions tab to generate downloadable artifacts without creating a release.
 
 ---
 
@@ -204,10 +167,10 @@ Each version branch contains its own source code, resources, and implementation 
 
 | Technology | Purpose | Version |
 |------------|---------|---------|
-| ☕ **Java 21** | Programming language | 21 |
-| 🎨 **JavaFX 21** | Graphics and UI library | 21 |
-| 🔨 **Apache Maven** | Build management | 3.9.5 |
-| 📄 **GSON** | JSON processing for Quantum API | Latest |
+| ☕ **Java** | Programming language | 24 |
+| 🎨 **JavaFX** | Graphics and UI library | 25 |
+| 🔨**Apache Maven Wrapper** | Build management | 3.9.14 |
+| 📄 **Maven** | Build tool executed by the wrapper | 3.9.14 |
 | ⚛️ **ANU Quantum API** | Source of true random numbers | v1 |
 
 </div>

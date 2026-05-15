@@ -3,33 +3,38 @@
  */
 package com.mycompany.animacionpecera;
 
+import com.mycompany.animacionpecera.Components.*;
+import com.mycompany.animacionpecera.System.RenderSystem;
+import com.mycompany.animacionpecera.System.MovementSystem;
+import com.mycompany.animacionpecera.System.CanvasBounceSystem;
+import com.mycompany.animacionpecera.System.DebugCollisionRender;
+import com.mycompany.animacionpecera.System.GameSystem;
+import com.mycompany.animacionpecera.System.VelocitySystem;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 /**
- * Principal Class wich creates the window and the canvas to draw the animation.
+ * Principal Class which creates the window and the canvas to draw the animation.
  * Controls the animation of fishes and bubbles. You can add fishes with a click
  * on the mousse.
  */
 public class MainScene extends Application {
 
-    public static final int canvasWidth = 1520;
-    public static final int canvasHeight = 780;
+    public static final int canvasWidth = 2200;
+    public static final int canvasHeight = 1200;
     public static final Random random = new Random();
 
-    private GraphicsContext gc; //Graphic context to draw in the canvas
-    private final List<SceneObject> sceneObjectList = new ArrayList<>();
-    BoundingBox canvasBox = new BoundingBox(new Position(0, 0), new Position(canvasWidth, 0),
-            new Position(canvasWidth, canvasHeight), new Position(0, canvasHeight));
+    List<Entity> entities = new ArrayList<>();
+    List<GameSystem> systems = new ArrayList<>();
 
     //GameLoop instance
     private GameLoop gameLoop;
@@ -43,16 +48,26 @@ public class MainScene extends Application {
     public void start(Stage stage) {
         // Canvas habilitates to draw
         Canvas canvas = new Canvas(canvasWidth, canvasHeight);
-        
-        //gc its the brush to paint in the Canvas, harcoded for each canvas
-        gc = canvas.getGraphicsContext2D();
 
-        // At initiate add scene objects
-        final int initialFishes = 5;
-        initializeSceneObjects(initialFishes);
+        // At initiate add entities
+        final int initialFishes = 22;
+        initialize(initialFishes);
+
+        CanvasBounceSystem canvasSystem = new CanvasBounceSystem(canvasWidth, canvasHeight);
+        MovementSystem movement = new MovementSystem();
+        RenderSystem render = new RenderSystem(canvas);
+        VelocitySystem vel = new VelocitySystem();
+        DebugCollisionRender debug = new DebugCollisionRender(canvas);
+
+        //add systems to the list
+        systems.add(movement);
+        systems.add(render);
+        systems.add(canvasSystem);
+        systems.add(vel);
+        systems.add(debug);
 
         //Creates the game loop
-        gameLoop = new GameLoop(gc, canvas, sceneObjectList);
+        gameLoop = new GameLoop(canvas, entities, systems);
 
         //buttons
         Button toggleBoxButton = new Button("Show Boxes");
@@ -93,11 +108,11 @@ public class MainScene extends Application {
         canvas.setOnMouseClicked(e
                 -> {
             Position position = new Position(e.getX(), e.getY());
-            addFish(position);
-            addCoralFish(position);
+            //addCoralECS(position);
+            addMulticolorFish(position);
         }
         );
-        
+
         // Horizontal layout contains the buttons
         HBox buttonLayout = new HBox();
         buttonLayout.getChildren().addAll(toggleBoxButton, playPauseButton);
@@ -114,65 +129,105 @@ public class MainScene extends Application {
         stage.show();
     }
 
-    private void initializeSceneObjects(int fishes) {
+    private void initialize(int fishes) {
         // At initiate adds x fishes in random places
         for (int i = 0; i < fishes; i++) {
             Position position = getRandomPoint();
-            addFish(position);
-            Position position2 = getRandomPoint();
-            addCoralFish(position2);
+            addCoralECS(position);
+            addMulticolorFish(position);
         }
 
         // little bubbles
-        for (int i = 0; i < 40; i++) {
-            addBubble(3 + Math.random() * 3, 140 + Math.random(), canvasBox);
+        for (int i = 0; i < 50; i++) {
+            addBubbleECS(0.15 + Math.random() * 0.1, 140 + Math.random());
         }
 
         // medium bubbles
-        for (int i = 0; i < 35; i++) {
-            addBubble(8 + Math.random() * 3, 100 + Math.random(), canvasBox);
+        for (int i = 0; i < 45; i++) {
+            addBubbleECS(0.25 + Math.random() * 0.2, 100 + Math.random());
         }
 
         //big
         for (int i = 0; i < 20; i++) {
-            addBubble(13 + Math.random() * 3, 80 + Math.random(), canvasBox);
+            addBubbleECS(0.4 + Math.random() * 0.3, 80 + Math.random());
         }
     }
 
-    //to create bubbles
-    private void addBubble(double size, double speed, BoundingBox canvasBox) {
+    public void addBubbleECS(double size, double speed) {
         Position pos = getRandomPoint();
-        Direction direction = new Direction(0, -speed);
-        Animation animation = new AnimationBubbleIdle(size);
-        Movement movement = new LinearMovement(direction);
-        Movement loop = new LoopOutOfBoundsMovement(movement, canvasBox);
-        sceneObjectList.add(new Bubble(size, pos, animation, loop));
+        Entity bubble = new Entity();
+        bubble.add(new Bubble());
+        Transform transform = new Transform(pos.x(), pos.y(),0, size, size);
+        bubble.add(transform);
+        String imageKey = "bubble";
+        if (!ImageManager.getInstance().hasImage(imageKey)) {
+            ImageManager.getInstance().loadImage(imageKey, "/Images/bubbleColor.png");
+        }
+
+        SpriteComponent sprite = new SpriteComponent("bubble");
+        bubble.add(sprite);
+
+        double width = ImageManager.getInstance().getWidth("bubble");
+        bubble.add(new CircleCollider(width));
+        bubble.add(new VelocityComponent(0, -speed));
+
+        entities.add(bubble);
     }
 
-    //creates normal fishes
-    public void addFish(Position position) {
-        RandomColor randomColor = new RandomColor();
-        Animation anim = new AnimationFishIdle(0.5 + random.nextDouble(1),
-                random.nextBoolean(), randomColor.getColor());
+    public void addCoralECS(Position pos) {
+        Entity fish = new Entity();
+        double scale = 0.3 + random.nextDouble(0.5);
+        Transform transform = new Transform(pos.x(), pos.y(),0, scale, scale);
+        fish.add(transform);
 
-        double dx = Math.random() * 80 - 1;
-        double dy = Math.random() * 80 - 1;
+        String imageKey = "coralfish";
+        if (!ImageManager.getInstance().hasImage(imageKey)) {
+            ImageManager.getInstance().loadImage(imageKey, "/Images/sketchPezCoral.png");
+        }
 
-        Direction direction = new Direction(dx, dy);
-        Movement movement = new LoopOutOfBoundsMovement(new LinearMovement(direction), canvasBox);
-        sceneObjectList.add(new Fish(position, movement, anim));
+        SpriteComponent sprite = new SpriteComponent("coralfish");
+        fish.add(sprite);
+        double width = ImageManager.getInstance().getWidth("coralfish");
+        double height = ImageManager.getInstance().getHeight("coralfish");
+        physics(fish, width, height);
     }
 
-    //Creates coralfish
-    public void addCoralFish(Position position) {
-        Animation anim_coral = new AnimationCoralFish(0.3 + random.nextDouble(0.5));
+    public void addMulticolorFish(Position pos) {
+        Entity fish = new Entity();
+        double scale = 0.3 + random.nextDouble(0.5);
+        Transform transform = new Transform(pos.x(), pos.y(), 0, scale, scale);
+        fish.add(transform);
 
-        double dx = Math.random() * 80 - 1;
-        double dy = Math.random() * 80 - 1;
+        if (!ImageManager.getInstance().hasImage("multicolorfish")) {
+            ImageManager.getInstance().loadImage("multicolorfish", "/Images/pink_fish.png");
+        }
+        if (!ImageManager.getInstance().hasImage("redfish")) {
+            ImageManager.getInstance().loadImage("redfish", "/Images/red_fish.png");
+        }
 
-        Direction direction = new Direction(dx, dy);
-        Movement movement = new MovementRebound(new LinearMovement(direction), canvasBox);
-        sceneObjectList.add(new Fish(position, movement, anim_coral));
+        Color color = new RandomColor().getColor();
+        String imageKey;
+        ColorSprite multi = new ColorSprite(color, random.nextDouble());
+        if (multi.getHueType().equals("TURQUOISE") || multi.getHueType().equals("PINK") || multi.getHueType().equals("PURPLE")) {
+            imageKey = "multicolorfish";
+        } else {
+            imageKey = "redfish";
+        }
+        fish.add(multi);
+        SpriteComponent sprite = new SpriteComponent(imageKey);
+        fish.add(sprite);
+        double width = ImageManager.getInstance().getWidth(imageKey);
+        double height = ImageManager.getInstance().getHeight(imageKey);
+        physics(fish, width, height);
+    }
+
+    private void physics(Entity fish, double width, double height) {
+        fish.add(new BoxCollider(width, height));
+        double velx = Math.random() * 80 - 40;
+        double vely = Math.random() * 80 - 40;
+        fish.add(new VelocityComponent(velx, vely));
+
+        entities.add(fish);
     }
 
     //to obtain a position inside canvas

@@ -2,14 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.animacionpecera;
+package com.mycompany.animacionpecera.Components;
+
 
 /**
  *
- * @author carol
+ * @author ivani
  */
-public abstract class Movement {
+public class Bubble extends Component {
 
-    public abstract Position nextPosition(SceneObject current, double deltaTime);
+    public Bubble() {
+       
+    }
 
 }
